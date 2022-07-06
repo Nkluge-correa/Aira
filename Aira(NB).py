@@ -168,20 +168,15 @@ app.layout = dbc.Container(
 
 @app.callback(
     Output('display-conversation', 'children'), 
-    [
-        Input('user-input', 'n_submit'), 
-        Input('store-conversation', 'data')]
-)
-def update_display(user_input, chat_history):
-    time.sleep(2)
-    if user_input is None or user_input == '':
-        return textbox(chat_history, box='other')
-    else:
-        return [
-            textbox(chat_history, box='self') if i % 2 == 0 else textbox(chat_history, box='other')
-            for i, chat_history in enumerate(chat_history)
-        ]
+    [Input('store-conversation', 'data')]
 
+)
+def update_display(chat_history):
+    time.sleep(2)
+    return [
+        textbox(chat_history, box='self') if i % 2 == 0 else textbox(chat_history, box='other')
+        for i, chat_history in enumerate(chat_history)
+    ]
 
 @app.callback(
     [
@@ -200,37 +195,42 @@ def update_display(user_input, chat_history):
     ]
 )
 
+
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     if n_clicks == 0:
         chat_history = []
+        chat_history.append('👋🤖')
         chat_history.append(answers[-1])
         return chat_history, ''
 
 
     if user_input is None or user_input == '':
         chat_history = []
+        chat_history.append('👋🤖')
         chat_history.append(answers[-1])
         return chat_history, ''
     
-    text = user_input
-    new_text = text.translate(str.maketrans('', '', string.punctuation))
-    new_text = new_text.lower()
-    new_text = unidecode.unidecode(new_text)
+    else:
+        
+        text = user_input
+        new_text = text.translate(str.maketrans('', '', string.punctuation))
+        new_text = new_text.lower()
+        new_text = unidecode.unidecode(new_text)
 
-    input_vector = bow_vectorizer.transform([new_text])
-    predict = classifier.predict(input_vector)
-    index = int(predict[0])
+        input_vector = bow_vectorizer.transform([new_text])
+        predict = classifier.predict(input_vector)
+        index = int(predict[0])
 
-    bot_input_ids = answers[index-1]
-    acc = ('Probabilidade: ',str(classifier.predict_proba(input_vector)[0][index-1] * 100)[:5] + '%')
-    chat_history = []
+        bot_input_ids = answers[index-1]
+        acc = ('Probabilidade: ',str(classifier.predict_proba(input_vector)[0][index-1] * 100)[:5] + '%')
+        chat_history = []
 
-    chat_history.append(user_input)
-    chat_history.append(bot_input_ids)
-    chat_history.append(acc)
-    
+        chat_history.append(user_input)
+        chat_history.append(bot_input_ids)
+        chat_history.append(acc)
 
-    return chat_history, ''
+
+        return chat_history, ''
 
 app.callback(
     Output('modal-body-scroll', 'is_open'),
