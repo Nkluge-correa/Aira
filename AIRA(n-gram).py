@@ -188,20 +188,15 @@ app.layout = dbc.Container(
 
 @app.callback(
     Output('display-conversation', 'children'), 
-    [
-        Input('user-input', 'n_submit'), 
-        Input('store-conversation', 'data')]
-)
-def update_display(user_input, chat_history):
-    time.sleep(2)
-    if user_input is None or user_input == '':
-        return textbox(chat_history, box='other')
-    else:
-        return [
-            textbox(chat_history, box='self') if i % 2 == 0 else textbox(chat_history, box='other')
-            for i, chat_history in enumerate(chat_history)
-        ]
+    [Input('store-conversation', 'data')]
 
+)
+def update_display(chat_history):
+    time.sleep(2)
+    return [
+        textbox(chat_history, box='self') if i % 2 == 0 else textbox(chat_history, box='other')
+        for i, chat_history in enumerate(chat_history)
+    ]
 
 @app.callback(
     [
@@ -224,60 +219,66 @@ def update_display(user_input, chat_history):
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     if n_clicks == 0:
         chat_history = []
+        chat_history.append('👋🤖')
         chat_history.append(answers[-1])
         return chat_history, ''
 
 
     if user_input is None or user_input == '':
         chat_history = []
+        chat_history.append('👋🤖')
         chat_history.append(answers[-1])
         return chat_history, ''
-
-    sentences = []
-    values=[]
-    text = user_input
-    new_text = text.translate(str.maketrans('', '', string.punctuation))
-    new_text = new_text.lower()
-    new_text = unidecode.unidecode(new_text)
-
-    if len(new_text.split()) == 1:
-        if new_text in sick.keys():
-                l = [sick[new_text]] * 100
-                values.append(l)
-        new_text = new_text + ' ' + new_text
-
-    elif len(new_text.split()) != 1:
-        if new_text in sick.keys():
-                l = [sick[new_text]] * 100
-                values.append(l)           
-    else:
-        pass
-
-    for i in range(1, len(new_text.split()) + 1):
-        sentence = make_keys(new_text, i)
-        sentences.append(sentence)
-
-    for i in range(0, len(sentences)):
-        attention = sentences[i]
-        for i in range(0, len(attention)):
-            if attention[i] in sick.keys():
-                l = [sick[attention[i]]] * i
-                values.append(l)
     
-    if len(sentences) == 0:
-        bot_input_ids = answers[-7]
-    if len(values) == 0:
-        bot_input_ids = answers[-7]
     else:
-        values = list(itertools.chain(*values))
-        prediction = mode(values)
-        bot_input_ids = answers[int(prediction)-1]
-    
-    chat_history = []
-    chat_history.append(user_input)
-    chat_history.append(bot_input_ids)
+        sentences = []
+        values=[]
+        text = user_input
+        new_text = text.translate(str.maketrans('', '', string.punctuation))
+        new_text = new_text.lower()
+        new_text = unidecode.unidecode(new_text)
 
-    return chat_history, ''
+        if len(new_text.split()) == 1:
+            if new_text in sick.keys():
+                    l = [sick[new_text]] * 100
+                    values.append(l)
+            new_text = new_text + ' ' + new_text
+
+        elif len(new_text.split()) != 1:
+            if new_text in sick.keys():
+                    l = [sick[new_text]] * 100
+                    values.append(l)           
+        else:
+            pass
+
+        for i in range(1, len(new_text.split()) + 1):
+            sentence = make_keys(new_text, i)
+            sentences.append(sentence)
+
+        for i in range(0, len(sentences)):
+            attention = sentences[i]
+            for i in range(0, len(attention)):
+                if attention[i] in sick.keys():
+                    l = [sick[attention[i]]] * i
+                    values.append(l)
+        
+        if len(values) == 0:
+            chat_history = []
+            chat_history.append(f"'{user_input}'")
+            bot_input_ids = answers[-7]
+            chat_history.append(bot_input_ids)
+            return chat_history, ''
+
+        elif len(values) != 0:
+            values = list(itertools.chain(*values))
+            prediction = mode(values)
+            bot_input_ids = answers[int(prediction)-1]
+        
+            chat_history = []
+            chat_history.append(user_input)
+            chat_history.append(bot_input_ids)
+
+            return chat_history, ''
 
 app.callback(
     Output('modal-body-scroll', 'is_open'),
