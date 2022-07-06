@@ -167,19 +167,15 @@ app.layout = dbc.Container(
 
 @app.callback(
     Output('display-conversation', 'children'), 
-    [
-        Input('user-input', 'n_submit'), 
-        Input('store-conversation', 'data')]
+    [Input('store-conversation', 'data')]
+
 )
-def update_display(user_input, chat_history):
+def update_display(chat_history):
     time.sleep(2)
-    if user_input is None or user_input == '':
-        return textbox(chat_history, box='other')
-    else:
-        return [
-            textbox(chat_history, box='self') if i % 2 == 0 else textbox(chat_history, box='other')
-            for i, chat_history in enumerate(chat_history)
-        ]
+    return [
+        textbox(chat_history, box='self') if i % 2 == 0 else textbox(chat_history, box='other')
+        for i, chat_history in enumerate(chat_history)
+    ]
 
 
 @app.callback(
@@ -199,44 +195,49 @@ def update_display(user_input, chat_history):
     ]
 )
 
+
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     if n_clicks == 0:
         chat_history = []
+        chat_history.append('👋🤖')
         chat_history.append(answers[-1])
         return chat_history, ''
 
 
     if user_input is None or user_input == '':
         chat_history = []
+        chat_history.append('👋🤖')
         chat_history.append(answers[-1])
         return chat_history, ''
     
-    texto = user_input
-    texto = texto.translate(str.maketrans('', '', string.punctuation))
-    texto = texto.lower()
-    texto = unidecode.unidecode(texto)
-    texto = [texto]
-    text = tokenizer.texts_to_sequences(texto)
-    padded_text = keras.preprocessing.sequence.pad_sequences(text,
-                                                            value=word_index["<PAD>"],
-                                                            padding='post',
-                                                            maxlen=20)
-
-    prediction = model.predict(padded_text)
-    l = list(prediction[0])
-    max_value = max(l)
-    index = l.index(max_value)
-    max_value = '{:.2f}'.format(max(l)*100)
-    bot_input_ids = answers[index-1]
-    acc = (f'Probabilidade: {max_value}%')
-    chat_history = []
-
-    chat_history.append(user_input)
-    chat_history.append(bot_input_ids)
-    chat_history.append(acc)
+    else:
     
+        texto = user_input
+        texto = texto.translate(str.maketrans('', '', string.punctuation))
+        texto = texto.lower()
+        texto = unidecode.unidecode(texto)
+        texto = [texto]
+        text = tokenizer.texts_to_sequences(texto)
+        padded_text = keras.preprocessing.sequence.pad_sequences(text,
+                                                                value=word_index["<PAD>"],
+                                                                padding='post',
+                                                                maxlen=20)
 
-    return chat_history, ''
+        prediction = model.predict(padded_text)
+        l = list(prediction[0])
+        max_value = max(l)
+        index = l.index(max_value)
+        max_value = '{:.2f}'.format(max(l)*100)
+        bot_input_ids = answers[index-1]
+        acc = (f'Probabilidade: {max_value}%')
+        chat_history = []
+
+        chat_history.append(user_input)
+        chat_history.append(bot_input_ids)
+        chat_history.append(acc)
+
+
+        return chat_history, ''
 
 app.callback(
     Output('modal-body-scroll', 'is_open'),
