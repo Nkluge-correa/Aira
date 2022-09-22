@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
-![image-gif](https://media1.giphy.com/media/S60CrN9iMxFlyp7uM8/giphy.gif)
+![image-gif](assets/gif_demo.gif)
 
 [Ai.ra](http://aira-expert-en.airespucrs.org/) is a `chatbot` (or "chatterbot"). We can also say that Ai.ra is a **language model**, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way a **human (expert)** would behave during a round of questions and answers (**Q&A**).
 
