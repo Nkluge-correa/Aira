@@ -187,14 +187,13 @@ def update_display(chat_history):
     ]
 )
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
+    chat_history = chat_history or []
     if n_clicks == 0:
-        chat_history = []
         chat_history.append('👋🤖')
         chat_history.append("Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, ''
 
     if user_input is None or user_input == '':
-        chat_history = []
         chat_history.append('👋🤖')
         chat_history.append("Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, ''
@@ -211,8 +210,6 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         index = int(predict[0])
 
         bot_input_ids = answers[index-1]
-        chat_history = []
-
         chat_history.append(user_input)
         chat_history.append(bot_input_ids)
 
