@@ -2,33 +2,27 @@ from dash.dependencies import Input, Output, State
 from dash import dcc, html, Output, Input, State
 import dash_bootstrap_components as dbc
 from statistics import mode
-import statistics
 import itertools
 import unidecode
 import string
+import json
 import time
 import dash
-import os
-import warnings
-warnings.filterwarnings('ignore')
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+with open('target_tags.json') as f:
+    sick = json.load(f)
 
-with open('tags.txt', encoding='utf8') as file_in:
-    questions = []
-    labels = []
-    for line in file_in:
-        labels.append(line.strip().split(' ')[-1])
-        questions.append(' '.join(line.strip().split(' ')[:-1]))
-
+# english version
 with open('answers_en.txt', encoding='utf8') as file_in:
     answers = []
     for line in file_in:
         answers.append(line.strip())
 
-sick = dict(zip(questions, labels))
-
-sick.keys()
+# portuguese version
+# with open('answers_pt.txt', encoding='utf8') as file_in:
+#    answers = []
+#    for line in file_in:
+#        answers.append(line.strip())
 
 
 def generate_ngrams(text, WordsToCombine):
@@ -251,7 +245,7 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
                     l = [sick[attention[i]]] * i
                     values.append(l)
 
-        if len(values) == 0:
+        if len(values[0]) == 0:
             chat_history.append(f"'{user_input}'")
             bot_input_ids = answers[-1]
             chat_history.append(bot_input_ids)

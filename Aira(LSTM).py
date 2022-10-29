@@ -22,9 +22,9 @@ with open('answers_en.txt', encoding='utf8') as file_in:
     for line in file_in:
         answers.append(line.strip())
 
-model = keras.models.load_model('pre_trained_aira')
+model = keras.models.load_model('pre_trained_aira\pre_trained_aira_lstm.h5')
 
-with open('aira_tokenizer_en.json') as f:
+with open('pre_trained_aira\\aira_tokenizer.json') as f:
     data = json.load(f)
     tokenizer = tokenizer_from_json(data)
     word_index = tokenizer.word_index
@@ -206,7 +206,7 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         text = tokenizer.texts_to_sequences([texto])
         padded_text = pad_sequences(text, maxlen=100, truncating='post')
 
-        prediction = model.predict(padded_text)
+        prediction = model.predict(padded_text, verbose=0)
         l = list(prediction[0])
         max_value = max(l)
         index = l.index(max_value)
