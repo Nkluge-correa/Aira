@@ -79,8 +79,8 @@ def textbox(text, box='other'):
 conversation = html.Div(
     style={
         'width': '80%',
-        'max-width': '800px',
-        'height': '55vh',
+        'max-width': '1200px',
+        'height': '65vh',
         'margin': 'auto',
         'overflow-y': 'auto',
     },
@@ -88,7 +88,7 @@ conversation = html.Div(
 )
 
 controls = dbc.InputGroup(
-    style={'width': '80%', 'max-width': '800px', 'margin': 'auto'},
+    style={'width': '80%', 'max-width': '1200px', 'margin': 'auto'},
     children=[
         dbc.Input(id='user-input', placeholder='Write to Ai.ra...', type='text'),
         dbc.InputGroup(dbc.Button('Submit', size='lg', id='submit')),
@@ -105,9 +105,9 @@ modal = html.Div(
                 dbc.ModalHeader(dbc.ModalTitle(dcc.Markdown(
                     '### What is Ai.ra? 🤔'), style={})),
                 dbc.ModalBody([
-                    dcc.Markdown("[Ai.ra](http://aira-expert-en.airespucrs.org/) is a **chatbot** (or chatterbot). We can also say that Ai.ra is a **language model**, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way a **human (expert)** would behave during a round of questions and answers (**Q&A**).", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                           'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                           'text-justify': 'inter-word'}), html.Br(),
+                    dcc.Markdown("`Ai.ra` is a **chatbot** (or chatterbot). We can also say that Ai.ra is a **language model**, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way a **human (expert)** would behave during a round of questions and answers (**Q&A**).", style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                                                                    'font-size': 20,
+                                                                                                                                                                                                                                                                                                                                    'text-justify': 'inter-word'}), html.Br(),
                     dcc.Markdown("We can classify this type of system (**CUS - Conversation Understanding System**) into '*open domain systems*' and '*closed domain systems*'. A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system encompasses (in principle) any topic. For example, **GPT-3** - the NLP model produced by OpenAI - **is capable of 'chatting about virtually anything.'**", style={'text-align': 'justify',
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             'font-size': 20,
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             'text-justify': 'inter-word'}), html.Br(),

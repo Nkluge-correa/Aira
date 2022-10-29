@@ -1,16 +1,16 @@
 /* unvisited link */
 a:link {
-  color: red;
+  color: #339ccb;
 }
 
 /* visited link */
 a:visited {
-  color: red;
+  color: #339ccb;
 }
 
 /* mouse over link */
 a:hover {
-  color: red;
+  color: #339ccb;
 }
 
 /* selected link */
