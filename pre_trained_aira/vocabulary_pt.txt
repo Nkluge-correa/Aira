@@ -1,0 +1,1362 @@
+
+[UNK]
+o
+que
+o que
+e
+que e
+de
+ia
+da
+sao
+que sao
+um
+do
+aprendizagem
+e um
+etica
+a
+uma
+voce
+e uma
+problema
+e o
+e a
+artificial
+da ia
+complexidade
+teoria
+valores
+alinhamento
+seguranca
+nao
+inteligencia
+humana
+direitos
+voce e
+principios
+funcao
+incerteza
+e aprendizagem
+redes
+problema de
+o problema
+justica
+gradiente
+em
+atencao
+aires
+qual
+por
+neural
+de ia
+dados
+teoria da
+supervisionada
+rede
+humanos
+etica da
+e do
+de valores
+complexidade de
+auto
+aprendizagem de
+tempo
+riscos
+p
+neurais
+multi
+monitoramento
+mesa
+idiota
+educacao
+e teoria
+das
+sistema
+seguranca externa
+robustez
+redes neurais
+rede neural
+problema do
+maquina
+loteria
+lei
+humano
+externa
+criancas
+ativacao
+adolescentes
+valor
+reforco
+pucrs
+perplexidade
+paridade
+para
+os
+np
+nan
+meta
+interno
+inteligencia artificial
+goodhart
+geral
+formacao
+estocastico
+e seguranca
+e ia
+e etica
+do adolescentes
+desinformacao
+de dados
+de alinhamento
+criancas e
+centralidade
+aperfeicoamento
+ambiente
+zumbi
+verdadeiro
+utilidade
+turing
+traicoeira
+term
+supervisao
+solomonoff
+short
+seu
+series
+sensivel
+risco
+responsabilizacao
+responsabilidade
+propriedade
+profunda
+processo
+previsao
+positivo
+poder
+objetiva
+negativo
+na
+moral
+maleficencia
+intelectual
+impacto
+hipotese
+heuristica
+funcao de
+falso
+em ia
+do gradiente
+discriminacao
+direitos humanos
+direito
+de turing
+de solomonoff
+das criancas
+alinhamento interno
+algoritmica
+acordo
+virtudes
+vies
+uma rede
+uma funcao
+transformador
+term memory
+teorema do
+teorema
+sustentabilidade
+short term
+ser humano
+ser
+semi
+sao os
+processo dual
+processamento
+probabilidades
+privacidade
+priori
+por reforco
+papel
+normativa
+no
+newcomb
+nao supervisionada
+metricas de
+metricas
+metaetica
+memory
+me
+maquinas
+long short
+long
+linhas
+linguagem
+lei de
+iterada
+informacao algoritmica
+informacao
+incerteza normativa
+incerteza moral
+imbecil
+hch
+governanca
+formacao humana
+federada
+externo
+explosivo
+expert
+existenciais
+equidade
+equalizadas
+entropia
+engenharia
+e monitoramento
+e direitos
+e complexidade
+dual
+do acordo
+direitos das
+dignidade
+deontica
+demografica
+defina
+decisao
+de valor
+de goodhart
+crianca
+consultando
+consequencialismo
+cerebro
+centralidade humana
+centrado
+catastrofico
+bilhete
+auto atencao
+aumann
+atributo
+armado
+aprendizagem por
+aprendizado
+agente
+adolescente
+visao
+verdade
+vanishing
+updateless
+um idiota
+transformadora
+teoria do
+tempo para
+sumario
+sobre etica
+sobre
+soberania
+sem
+se
+sao riscos
+sao redes
+sao principios
+riscos existenciais
+representacoes
+qual o
+quais
+protecao de
+protecao
+propriedade intelectual
+probabilidades equalizadas
+priori de
+principios de
+preservacao
+por poder
+polinomial
+para ia
+otimizacao
+ortogonalidade
+oq
+normatividade
+nome
+nao maleficencia
+nao deterministico
+multi armado
+moda
+meta analise
+liberdade
+kolmogorov
+justa
+infra
+humanos consultando
+hora
+gradiente explosivo
+funcao objetiva
+filosofico
+explicabilidade
+esquecimento
+espalhar desinformacao
+espalhar
+epistemologia
+engenharia de
+emulacao
+e paridade
+e nao
+e justica
+e inteligencia
+e incerteza
+e educacao
+e alinhamento
+discriminatorio
+deterministico
+destilacao
+de papel
+de impacto
+de caracteristicas
+de aumann
+de ativacao
+da informacao
+cruzada
+crianca e
+corrigivel
+cooperacao
+convergencia
+controle
+contrafactual
+consultando hch
+computacional
+competicao justa
+competicao
+clipes
+cite principios
+cite
+centrado no
+caracteristicas
+beneficencia
+bayesianismo
+basilisco
+bandido
+autonomia
+auto aperfeicoamento
+atributo sensivel
+armadilha
+aprendizagem semi
+aprendizagem profunda
+aplificacao
+anos
+analise
+alinhamento externo
+algoritmos
+aixi
+ai
+agentes
+acordo de
+a aires
+volicao coerente
+volicao
+virada traicoeira
+virada
+vies discriminatorio
+versus np
+versus
+veracidade
+variedade
+vagabundo
+vagabunda
+updateless decision
+udt
+treinado
+transformer
+trabalho
+trabalhistas
+trabalhador
+topicos
+theory
+tese da
+tese
+temporais
+tchau
+takeoff
+simplicidade
+series temporais
+semi supervisionada
+sem supervisao
+seguranca em
+seguranca da
+sao probabilidades
+sao metricas
+sao direitos
+sandboxing
+roko
+rnn
+riscos da
+retropropagacao
+retro propagacao
+retro
+relu
+recursivo
+recorrentes
+quem
+qual a
+puto
+puta
+propagacao
+programacao evolutiva
+programacao
+processamento de
+principios para
+presidente
+preditiva
+pre treinado
+pre
+positivo verdadeiro
+positivo falso
+pln
+patetico
+paridade demografica
+parametros
+palavra artificial
+palavra
+p versus
+otimizador
+online
+ok
+occam
+obrigado
+obrigada
+no ser
+negativo verdadeiro
+negativo falso
+navalha
+natural
+nao discriminacao
+na pucrs
+mundo
+mostre
+moda antiga
+mesa otimizador
+mesa otimizacao
+meio ambiente
+meio
+medidas de
+medidas
+maquina de
+lstm
+logica
+linhas de
+linguagem natural
+justica contrafactual
+jogos
+iteracao expert
+iteracao
+intrumental
+intelligence
+inteligencia humana
+infra bayesianismo
+inducao de
+inducao
+incorporada
+ia transformadora
+homem
+hipotese do
+gradiente estocastico
+gpt
+governanca da
+geneticos
+gelu
+gan
+funcao utilidade
+fnn
+fidedignidade
+extrapolada
+existencial
+evolutiva
+etica deontica
+etica das
+estupido
+estudo da
+estudo
+estado
+esquecimento catastrofico
+entropia cruzada
+educacao humana
+e se
+e governanca
+e formacao
+e esquecimento
+e epistemologia
+e consequencialismo
+e beneficencia
+e auto
+e aprendizado
+e aplificacao
+duplo
+dos
+do tempo
+do bilhete
+do adolescente
+dignidade e
+destilacao e
+descendente
+deontologica
+decodificador
+decision
+de tempo
+de maquina
+de loteria
+de linguagem
+de kolmogorov
+de justica
+de controle
+de cerebro
+das virtudes
+da ortogonalidade
+da etica
+da decisao
+da crianca
+da complexidade
+convolucional
+convergencia intrumental
+confiabilidade
+como
+coerente extrapolada
+coerente
+codificador
+clipes de
+cartesiano
+caracteristica
+busca por
+busca
+boxing
+bloco
+bilhete de
+bandido multi
+armadilha nan
+aprimoramento
+aprendizagem nao
+aprendizagem federada
+aprendizado de
+aplificacao iterada
+aperfeicoamento recursivo
+ao
+antiga
+amanha
+alinhamento de
+algoritmos geneticos
+aires na
+adversariais
+adam
+a lei
+é
+zumbi filosofico
+zoombie
+zombie
+xai
+wbe
+volta traicoeira
+volta
+voce gosta
+visao computacional
+virtude
+vieses
+vanishing gradient
+valores democraticos
+utilitarismo
+uma vagabunda
+uma puta
+um vies
+um vagabundo
+um transformador
+um problema
+um mesa
+um estado
+um atributo
+um agente
+turing neural
+transparencia
+transformador pre
+trabalhadores
+teoria dos
+temporal
+tecnologica
+são sistemas
+são
+sua
+soberania tecnologica
+sistemas
+sistema multi
+sgd
+seus
+seu nome
+seu idiota
+seria
+sensivel ao
+sao linhas
+rs
+robustez na
+robustez em
+risco existencial
+risco de
+regras
+redes generativas
+raca
+quem e
+que é
+que voce
+que são
+que seria
+que robustez
+que responsabilizacao
+que responsabilidade
+que lei
+que incerteza
+que horas
+que direitos
+quantos anos
+quantos
+qual seu
+quais as
+puc rs
+puc
+processamento duplo
+problema newcomb
+problem
+principios ia
+previsao temporal
+pretrained
+preservacao do
+preservacao ambiental
+pode me
+pode
+pluralismo
+paridade preditiva
+para a
+p zumbi
+p np
+os valores
+oq sao
+oq e
+on line
+on
+ol
+o teorema
+o sumario
+o seu
+o basilisco
+normatividade indireta
+no humano
+neural direta
+neural convolucional
+neurais convolucionais
+neurais artificiais
+navalha de
+na ia
+multi agentes
+multi agente
+muito
+mostre o
+moralidade
+monitoramento ia
+monitoramento de
+monitoramento da
+modelo e
+modelo
+metrica
+metaanalise
+meta etica
+melhoramento
+me mostre
+me ajudar
+maximizador de
+maximizador
+mas
+marcus hutter
+marcus
+maquinas de
+manifold hypothesis
+manifold
+maligna
+machine learning
+machine
+mab
+linhas do
+line
+lgpd
+lei geral
+learning
+jogo
+intra
+interpretabilidade
+indireta
+incorporados
+inclusao
+incerteza logica
+idade
+ida
+iag
+ia sandboxing
+ia fraca
+ia etica
+ia estreita
+hypothesis
+hutter
+horas sao
+horas
+hoje
+hipotese da
+hiperparametros
+hiperparametro
+gradient
+gostos
+gosta
+gofai
+geral de
+generative pretrained
+generative
+generativas adversariais
+generativas
+general
+gans
+fundador
+fraca
+forward
+formacao e
+fiabilidade
+feedforward
+feed forward
+feed
+externa ia
+exit
+etica ia
+etica em
+etica deontologica
+etica de
+ethics
+estreita
+estado de
+especialista
+envelhece
+emulacao de
+em regras
+educacao e
+e visao
+e verdade
+e sustentabilidade
+e risco
+e responsabilizacao
+e responsabilidade
+e propriedade
+e programacao
+e privacidade
+e previsao
+e preservacao
+e positivo
+e pln
+e perplexidade
+e p
+e normatividade
+e negativo
+e metrica
+e metaetica
+e mesa
+e maleficencia
+e liberdade
+e gradiente
+e funcao
+e fidedignidade
+e espalhar
+e entropia
+e engenharia
+e dignidade
+e desinformacao
+e cooperacao
+e competicao
+e autonomia
+e atributo
+e atencao
+e artificial
+dos jogos
+do processo
+do meio
+do bandido
+diversidade
+direta
+direitos trabalhistas
+direito da
+design
+descendente estocastico
+desaparecimento
+deontologia
+democraticos
+defina inteligencia
+defina artificial
+decision theory
+de utilidade
+de representacoes
+de protecao
+de occam
+de newcomb
+de mundo
+de maquinas
+de gradiente
+de equidade
+de clipes
+da variedade
+da inteligencia
+cv
+cronologicas
+corrigibilidade
+convolucionais
+consequencialista
+consequencia
+complexidade valores
+complexidade computacional
+comecou
+cnn
+clips
+chover
+chaitin
+caixa
+bilhete loteria
+bias
+beneficencia e
+bayesiana
+baseado em
+baseado
+auditabilidade
+ativacao relu
+ativacao gelu
+as
+artificial geral
+artificiais
+aprimoramento de
+aprendizagem supervisionada
+ao homem
+anos voce
+ann
+analise etica
+ambiental
+algo artificial
+algo
+ajudar
+ajuda
+aires pucrs
+agentes incorporados
+agente corrigivel
+agencia incorporada
+agencia
+ag
+acessibilidade
+a palavra
+a moda
+a ia
+a hora
+a hipotese
+é discriminacao
+é cv
+zoombie filosofico
+zombie filosofico
+voce tem
+voce se
+voce sabe
+voce raca
+voce pode
+voce imbecil
+voce estupido
+voce envelhece
+vieses discriminatorios
+velha moda
+velha
+vanishing problem
+valores democráticos
+valores ambientais
+vai chover
+vai
+updateless theory
+universal
+uma virada
+uma rnn
+uma redes
+uma puto
+uma propriedade
+uma nan
+uma mulher
+uma menina
+uma maquina
+uma lstm
+uma long
+uma heuristica
+uma gan
+uma cnn
+uma caracteristica
+uma ann
+um zumbi
+um transformer
+um sistema
+um risco
+um puto
+um p
+um modelo
+um mas
+um imbecil
+um homem
+um hiperparametro
+um heuristica
+um gpt
+um fnn
+um cartesiano
+um caixa
+um bias
+um ambiente
+turing neurais
+trap
+traicao
+trabalho humano
+total de
+total
+teoria processo
+teoria decisao
+teoremas de
+teoremas
+tempo polinomial
+temperatura
+tem
+tecnológica
+tchau tchau
+takeoff speeds
+take off
+take
+sustentavel
+supervisao de
+supervisao aprendizagem
+superinteligencia aixi
+superinteligencia
+super
+sua raca
+sua idade
+speeds
+sol
+society
+soberania tecnológica
+sistemas interpretaveis
+sistemas explicaveis
+sistema simbolico
+sistema expert
+sistema especialista
+sistema baseado
+sistema 2
+sistema 1
+simbolico
+simbolica
+sexo
+seus topicos
+seus gostos
+seu sumario
+seu sexo
+series cronologicas
+seria teoria
+seria inteligencia
+sensevel ao
+sensevel
+sem atualisacao
+seguranca de
+segundo
+se chama
+sao virtudes
+sao vieses
+sao takeoff
+sao series
+sao representacoes
+sao parametros
+sao medidas
+sao humanos
+sao hiperparametros
+sao gans
+sao etica
+sao dignidade
+sao algoritmos
+sao agentes
+sao ag
+sabe
+s
+rokos
+robustez ai
+robotics ethics
+robotics
+rl
+riscos de
+risco existensial
+redes recorrentes
+redes generativa
+rede convolucional
+rede artificial
+recorrente
+quem comecou
+que volicao
+que vies
+que um
+que tese
+que riscos
+que problema
+que perplexidade
+que hora
+que heuristica
+que etica
+que emulacao
+que dia
+que convergencia
+que aprendizagem
+que aixi
+que aires
+qual sua
+qual e
+quais seus
+quais os
+pspace
+profunda aprendizagem
+processo duplo
+privacidade de
+privacidade dados
+priori simplicidade
+principios da
+previsao do
+previsao de
+pretrained transformer
+presidente da
+presidente aires
+por maquina
+perplexidade perplexidade
+perda entropia
+perda
+parametro
+para amanha
+p polinomial
+otimizacao mesa
+os topicos
+os teoremas
+os seus
+os direitos
+os direito
+operacao de
+operacao
+ola
+ok obrigado
+ok obrigada
+off
+ocidental
+occams
+o vanishing
+o tempo
+o priori
+o presidente
+o multi
+o maximizador
+o mab
+o horario
+o ambiente
+o alinhamento
+nublado
+nevar
+neural recorrente
+neural feedforward
+neural de
+neurais recorrentes
+nan trap
+nan armadilha
+na ai
+multi dimensional
+mulher
+muito obrigado
+muito obrigada
+mostre os
+modelos e
+modelos
+minuto
+metrica justica
+metrica equidade
+metanalise
+meta analises
+mentiras
+mentira
+menina
+melhoramento dados
+medida de
+medida
+me ajude
+maquina neural
+mais
+lista de
+lista
+kasparov
+justica na
+intra atencao
+interpretaveis
+inteligencia geral
+instrumentalidade
+informação falsa
+informação
+ia maligna
+ia forte
+ia em
+ia a
+human intelligence
+human
+horario
+hora e
+hipotese bilhete
+heuristica heuristica
+gradiente descendente
+gradient problem
+governanca de
+goodhart s
+geral artificial
+genero
+generativa adversarial
+generativa
+general intelligence
+garry kasparov
+garry
+fundador aires
+funcao ativacao
+forte
+ffnn
+falsa
+externa em
+externa com
+exptime
+expspace
+explicaveis
+existensial
+evolutivos
+evolutivo
+etica ocidental
+etica consequencialista
+ethics society
+estatisticos sobre
+estatisticos
+estatistica
+escolas da
+escolas
+escola da
+escola
+emulacao total
+emulacao cerebro
+em um
+em tempo
+e xai
+e wbe
+e volicao
+e voce
+e virtude
+e veracidade
+e vanishing
+e utilitarismo
+e updateless
+e udt
+e transparencia
+e teorema
+e soberania
+e sgd
+e sem
+e sao
+e roko
+e robustez
+e rl
+e riscos
+e retropropagacao
+e retro
+e protecao
+e processamento
+e probabilidades
+e priori
+e poder
+e pluralismo
+e patetico
+e ol
+e np
+e moralidade
+e moral
+e meta
+e medidas
+e machine
+e lgpd
+e iteracao
+e interpretabilidade
+e intelectual
+e infra
+e inclusao
+e impacto
+e imbecil
+e ida
+e iag
+e humanos
+e hoje
+e hipotese
+e gpt
+e gofai
+e gan
+e fiabilidade
+e federada
+e explicabilidade
+e exit
+e ethics
+e estupido
+e equidade
+e dt
+e diversidade
+e direito
+e destilacao
+e design
+e descendencia
+e deontologia
+e corrigibilidade
+e convergencia
+e confiabilidade
+e cev
+e centralidade
+e centrado
+e catastrofico
+e busca
+e burro
+e boxing
+e bayesiana
+e bayes
+e auditabilidade
+e armadilha
+e aprimoramento
+e aperfeicoamento
+e algo
+e aixi
+e aires
+e ai
+e agencia
+e adolescente
+e adam
+e acessibilidade
+dt
+dos trabalhadores
+do trabalho
+do trabalhador
+do processamento
+do jogo
+do basilisco
+discriminatorios
+direitos do
+direitos da
+direito trabalho
+direito trabalhador
+direito dos
+direito do
+dimensoes
+dimensional
+dia e
+dia
+deterministico em
+destilacao aplificacao
+design sensivel
+design sensevel
+descendencia de
+descendencia
+desaparecimento de
+demografica paridade
+democráticos
+democratica
+defina a
+deep blue
+deep
+decodificador bloco
+decisoes
+de simplicidade
+de series
+de roko
+de principios
+de nan
+de convulacao
+de chaitin
+de busca
+de aprendizagem
+dados sobre
+dados estatisticos
+da normatividade
+da moralidade
+da aires
+counterfactual
+convulacao
+convolucao
+conficanca
+confiavel
+computacao visao
+computacao
+complexidade valor
+complexidade algoritmica
+como voce
+como e
+como a
+comecou a
+com ia
+com
+codificador decodificador
+codificador bloco
+cnns
+clips de
+chover amanha
+chama
+cev
+centrada
+caracteristica engenharia
+burro
+blue
+bloco transformador
+bayesiano
+bayes
+basilisco de
+autoatencao
+atualisacao
+ate mais
+ate
+as escolas
+as escola
+artificial intelligence
+artificial general
+artificial etica
+armadilha de
+argumento do
+argumento
+aproximacao universal
+aproximacao
+aprendizagem super
+aprendizagem sem
+aprendizado online
+aprendizado on
+ao ser
+anns
+analises sobre
+analises
+analise sobre
+amplificacao iterada
+amplificacao
+ambientais
+algoritmos evolutivos
+algoritimo evolutivo
+algoritimo
+ajude
+aires comecou
+aira
+ai robotics
+ai boxing
+agente cartesiano
+adversarial
+aditabilidade
+a virada
+a verdade
+a veracidade
+a tese
+a teoria
+a temperatura
+a sua
+a previsao
+a navalha
+a nao
+a manifold
+a inducao
+a etica
+a centralidade
+a ai
+2
+1

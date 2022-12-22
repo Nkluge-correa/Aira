@@ -1,28 +1,25 @@
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
-from dash.dependencies import Input, Output, State
-import dash_bootstrap_components as dbc
+from sklearn.naive_bayes import MultinomialNB
 from dash import dcc, html, Output, Input, State
-import dash
-import string
+import dash_bootstrap_components as dbc
+import numpy as np
 import unidecode
+import string
 import time
+import dash
 import os
 import warnings
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-with open('tags.txt', encoding='utf8') as file_in:
-    questions = []
-    labels = []
-    for line in file_in:
-        labels.append(line.strip().split(' ')[-1])
-        questions.append(' '.join(line.strip().split(' ')[:-1]))
+with open('data\\tags_en.txt', encoding='utf8') as file_in:
+    questions = [' '.join(line.strip().split(' ')[:-1]) for line in file_in]
 
-with open('answers_en.txt', encoding='utf8') as file_in:
-    answers = []
-    for line in file_in:
-        answers.append(line.strip())
+with open('data\\tags_en.txt', encoding='utf8') as file_in:
+    labels = [line.strip().split(' ')[-1] for line in file_in]
+
+with open('data\\answers_en.txt', encoding='utf8') as file_in:
+    answers = [line.strip() for line in file_in]
 
 bow_vectorizer = CountVectorizer()
 training_vectors = bow_vectorizer.fit_transform(questions)
@@ -206,10 +203,8 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         new_text = unidecode.unidecode(new_text)
 
         input_vector = bow_vectorizer.transform([new_text])
-        predict = classifier.predict(input_vector)
-        index = int(predict[0])
-
-        bot_input_ids = answers[index-1]
+        preds = classifier.predict(input_vector)[0]
+        bot_input_ids = answers[np.argmax(preds)]
         chat_history.append(user_input)
         chat_history.append(bot_input_ids)
 

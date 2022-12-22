@@ -9,20 +9,16 @@ import json
 import time
 import dash
 
-with open('target_tags.json') as f:
-    sick = json.load(f)
+with open('data\\tags_en.txt', encoding='utf8') as file_in:
+    X = [' '.join(line.strip().split(' ')[:-1]) for line in file_in]
+with open('data\\tags_en.txt', encoding='utf8') as file_in:
+    Y = [line.strip().split(' ')[-1] for line in file_in]
+
+vocabulary = dict(zip(X, Y))
 
 # english version
-with open('answers_en.txt', encoding='utf8') as file_in:
-    answers = []
-    for line in file_in:
-        answers.append(line.strip())
-
-# portuguese version
-# with open('answers_pt.txt', encoding='utf8') as file_in:
-#    answers = []
-#    for line in file_in:
-#        answers.append(line.strip())
+with open('data\\answers_en.txt', encoding='utf8') as file_in:
+    answers = [line.strip() for line in file_in]
 
 
 def generate_ngrams(text, WordsToCombine):
@@ -222,14 +218,14 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         new_text = unidecode.unidecode(new_text)
 
         if len(new_text.split()) == 1:
-            if new_text in sick.keys():
-                l = [sick[new_text]] * 100
+            if new_text in vocabulary.keys():
+                l = [vocabulary[new_text]] * 100
                 values.append(l)
             new_text = new_text + ' ' + new_text
 
         elif len(new_text.split()) != 1:
-            if new_text in sick.keys():
-                l = [sick[new_text]] * 100
+            if new_text in vocabulary.keys():
+                l = [vocabulary[new_text]] * 100
                 values.append(l)
         else:
             pass
@@ -241,8 +237,8 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         for i in range(0, len(sentences)):
             attention = sentences[i]
             for i in range(0, len(attention)):
-                if attention[i] in sick.keys():
-                    l = [sick[attention[i]]] * i
+                if attention[i] in vocabulary.keys():
+                    l = [vocabulary[attention[i]]] * i
                     values.append(l)
 
         if len(values[0]) == 0:
