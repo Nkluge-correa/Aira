@@ -8,9 +8,9 @@
 
 We can classify this type of system (**`CUS` - Conversation Understanding System**) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system encompasses (in principle) any topic. For example, **`GPT-3`** - the language model produced by OpenAI - **is capable of "chatting about virtually anything. "**
 
-**Ai.ra is a closed domain chatbot**, so don't even try to ask it what the square root of 25 is, it won't be able to help you (but its calculator can!). Ai.ra is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".
+**Ai.ra is a closed domain chatbot**, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). Ai.ra is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".
 
-Ai.ra has **three iterations**, the first and second iterations were trained by machine learning (it used a `Bayesian neural network` and a `Bi-directional LSTM` trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).
+Ai.ra has **four iterations**, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).`
 
 Tags and answers are available in this repository. You can change these variables to create your own chatbot if you want. If you have any questions concerning Ai.ra, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 
