@@ -543,7 +543,7 @@ aires na
 adversariais
 adam
 a lei
-È
+√©
 zumbi filosofico
 zoombie
 zombie
@@ -575,8 +575,8 @@ trabalhadores
 teoria dos
 temporal
 tecnologica
-s„o sistemas
-s„o
+s√£o sistemas
+s√£o
 sua
 soberania tecnologica
 sistemas
@@ -597,9 +597,9 @@ regras
 redes generativas
 raca
 quem e
-que È
+que √©
 que voce
-que s„o
+que s√£o
 que seria
 que robustez
 que responsabilizacao
@@ -848,8 +848,8 @@ a moda
 a ia
 a hora
 a hipotese
-È discriminacao
-È cv
+√© discriminacao
+√© cv
 zoombie filosofico
 zombie filosofico
 voce tem
@@ -864,7 +864,7 @@ vieses discriminatorios
 velha moda
 velha
 vanishing problem
-valores democr·ticos
+valores democr√°ticos
 valores ambientais
 vai chover
 vai
@@ -917,7 +917,7 @@ teoremas
 tempo polinomial
 temperatura
 tem
-tecnolÛgica
+tecnol√≥gica
 tchau tchau
 takeoff speeds
 take off
@@ -933,7 +933,7 @@ sua idade
 speeds
 sol
 society
-soberania tecnolÛgica
+soberania tecnol√≥gica
 sistemas interpretaveis
 sistemas explicaveis
 sistema simbolico
@@ -1089,8 +1089,8 @@ intra atencao
 interpretaveis
 inteligencia geral
 instrumentalidade
-informaÁ„o falsa
-informaÁ„o
+informa√ß√£o falsa
+informa√ß√£o
 ia maligna
 ia forte
 ia em
@@ -1255,7 +1255,7 @@ descendencia de
 descendencia
 desaparecimento de
 demografica paridade
-democr·ticos
+democr√°ticos
 democratica
 defina a
 deep blue
