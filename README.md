@@ -27,10 +27,10 @@ If you are not satisfied with Ai.ra's performance or would like to help us impro
   url = {https://github.com/Nkluge-correa/Aira-EXPERT},
   author = {Nicholas Kluge Corrêa and Carolina Del Pino},
   title = {Ai.ra - the AIRES Expert},
-  year = {2022},
+  year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last accessed 13 august 2022},
+  note = {Last updated in 20 january 2023},
 }
 
 ```
