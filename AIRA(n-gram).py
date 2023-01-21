@@ -8,15 +8,15 @@ import string
 import time
 import dash
 
-with open('data\\tags_en.txt', encoding='utf8') as file_in:
+with open('data\\tags_en.txt', encoding='utf-8') as file_in:
     X = [' '.join(line.strip().split(' ')[:-1]) for line in file_in]
-with open('data\\tags_en.txt', encoding='utf8') as file_in:
+with open('data\\tags_en.txt', encoding='utf-8') as file_in:
     Y = [line.strip().split(' ')[-1] for line in file_in]
 
 vocabulary = dict(zip(X, Y))
 
 # english version
-with open('data\\answers_en.txt', encoding='utf8') as file_in:
+with open('data\\answers_en.txt', encoding='utf-8') as file_in:
     answers = [line.strip() for line in file_in]
 
 
@@ -43,6 +43,7 @@ def textbox(text, box='other'):
         'width': 'max-content',
         'padding': '10px 15px',
         'border-radius': '25px',
+        'margin-bottom': '10px'
     }
 
     if box == 'self':
@@ -56,8 +57,8 @@ def textbox(text, box='other'):
         style['margin-left'] = 0
         style['margin-right'] = 'auto'
 
-        color = 'light'
-        inverse = False
+        color = 'secondary'
+        inverse = True
 
     else:
         raise ValueError('Incorrect option for `box`.')
@@ -87,7 +88,7 @@ controls = dbc.InputGroup(
 modal = html.Div(
     [
         dbc.Button(
-            'Information', id='open-body-scroll', outline=True, size='lg', color='primary', n_clicks=0
+            'Information', id='open-body-scroll', outline=True, size='lg', color='light', n_clicks=0
         ),
         dbc.Modal(
             [
@@ -106,9 +107,9 @@ modal = html.Div(
                     dcc.Markdown("**`Ai.ra` has **four iterations**, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).`**", style={'text-align': 'justify',
                                                                                                                                                                                                                                                                                                                                                                                     'font-size': 20,
                                                                                                                                                                                                                                                                                                                                                                                     'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown("**`Ai.ra` was developed by [Nicholas Kluge](https://nkluge-correa.github.io/) and [Carolina Del Pino](http://lattes.cnpq.br/6291330432531578). For more information visit [this repository](https://github.com/Nkluge-correa/Aira-EXPERT).**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                        'font-size': 20,
-                                                                                                                                                                                                                                                                                        'text-justify': 'inter-word'}),
+                    dcc.Markdown("**`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).**", style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                              'font-size': 20,
+                                                                                                                                                                                                                                                                                              'text-justify': 'inter-word'}),
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
@@ -142,7 +143,7 @@ def toggle_modal(n1, n2, is_open):
 app = dash.Dash(__name__,
                 meta_tags=[
                     {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}],
-                external_stylesheets=[dbc.themes.CYBORG])
+                external_stylesheets=[dbc.themes.SLATE])
 
 server = app.server
 app.title = 'Ai.ra - the AIRES Expert 🤖'

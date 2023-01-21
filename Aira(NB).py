@@ -8,14 +8,17 @@ import string
 import time
 import dash
 
-with open('data\\tags_en.txt', encoding='utf8') as file_in:
-    questions = [' '.join(line.strip().split(' ')[:-1]) for line in file_in]
+with open('data\\tags_en.txt', encoding='utf-8') as fp:
+    questions = [' '.join(line.strip().split(' ')[:-1]) for line in fp]
+    fp.close()
 
-with open('data\\tags_en.txt', encoding='utf8') as file_in:
-    labels = [line.strip().split(' ')[-1] for line in file_in]
+with open('data\\tags_en.txt', encoding='utf-8') as fp:
+    labels = [line.strip().split(' ')[-1] for line in fp]
+    fp.close()
 
-with open('data\\answers_en.txt', encoding='utf8') as file_in:
-    answers = [line.strip() for line in file_in]
+with open('data\\answers_en.txt', encoding='utf-8') as fp:
+    answers = [line.strip() for line in fp]
+    fp.close()
 
 bow_vectorizer = CountVectorizer()
 training_vectors = bow_vectorizer.fit_transform(questions)
@@ -29,6 +32,7 @@ def textbox(text, box='other'):
         'width': 'max-content',
         'padding': '10px 15px',
         'border-radius': '25px',
+        'margin-bottom': '10px'
     }
 
     if box == 'self':
@@ -42,8 +46,8 @@ def textbox(text, box='other'):
         style['margin-left'] = 0
         style['margin-right'] = 'auto'
 
-        color = 'light'
-        inverse = False
+        color = 'secondary'
+        inverse = True
 
     else:
         raise ValueError('Incorrect option for `box`.')
@@ -73,7 +77,7 @@ controls = dbc.InputGroup(
 modal = html.Div(
     [
         dbc.Button(
-            'Information', id='open-body-scroll', outline=True, size='lg', color='primary', n_clicks=0
+            'Information', id='open-body-scroll', outline=True, size='lg', color='light', n_clicks=0
         ),
         dbc.Modal(
             [
@@ -92,9 +96,9 @@ modal = html.Div(
                     dcc.Markdown("**`Ai.ra` has **four iterations**, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).`**", style={'text-align': 'justify',
                                                                                                                                                                                                                                                                                                                                                                                     'font-size': 20,
                                                                                                                                                                                                                                                                                                                                                                                     'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown("**`Ai.ra` was developed by [Nicholas Kluge](https://nkluge-correa.github.io/) and [Carolina Del Pino](http://lattes.cnpq.br/6291330432531578). For more information visit [this repository](https://github.com/Nkluge-correa/Aira-EXPERT).**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                        'font-size': 20,
-                                                                                                                                                                                                                                                                                        'text-justify': 'inter-word'}),
+                    dcc.Markdown("**`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).**", style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                              'font-size': 20,
+                                                                                                                                                                                                                                                                                              'text-justify': 'inter-word'}),
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
@@ -125,7 +129,7 @@ def toggle_modal(n1, n2, is_open):
     return is_open
 
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
 
 server = app.server
 app.title = 'Ai.ra - the AIRES Expert 🤖'
