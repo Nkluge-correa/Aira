@@ -4,9 +4,15 @@ from dash import dcc, html, Output, Input, State
 import dash_bootstrap_components as dbc
 import numpy as np
 import unidecode
+import random
 import string
 import time
 import dash
+
+avatars = ['🧒', '👧', '🧒🏿', '👱', '👨‍🦱', '👨🏿', '👩‍🦲',
+           '🧔', '👩', '👩🏿', '👩‍🦳', '👴', '👱‍♀️', '👨', '👩‍🦰']
+
+avatar = random.choice(avatars)
 
 with open('data\\tags_en.txt', encoding='utf-8') as fp:
     questions = [' '.join(line.strip().split(' ')[:-1]) for line in fp]
@@ -28,31 +34,23 @@ classifier.fit(training_vectors, labels)
 
 def textbox(text, box='other'):
     style = {
-        'max-width': '55%',
+        'max-width': '95%',
         'width': 'max-content',
-        'padding': '10px 15px',
-        'border-radius': '25px',
-        'margin-bottom': '10px'
+        'padding': '10px 10px',
+        'margin-bottom': '10px',
+        'text-align': 'justify',
+        'text-justify': 'inter-word',
+        'letter-spacing': '.10em',
+        'font-size': '1.2em'
     }
 
     if box == 'self':
-        style['margin-left'] = 'auto'
-        style['margin-right'] = 0
-
-        color = 'primary'
-        inverse = True
+        style['float'] = 'right'
 
     elif box == 'other':
-        style['margin-left'] = 0
-        style['margin-right'] = 'auto'
+        style['float'] = 'left'
 
-        color = 'secondary'
-        inverse = True
-
-    else:
-        raise ValueError('Incorrect option for `box`.')
-
-    return dbc.Card(text, style=style, body=True, color=color, inverse=inverse)
+    return html.P(text, style=style)
 
 
 conversation = html.Div(
@@ -82,23 +80,23 @@ modal = html.Div(
         dbc.Modal(
             [
                 dbc.ModalHeader(dbc.ModalTitle(dcc.Markdown(
-                    '### What is `Ai.ra`? 🤔'), style={})),
+                    '## What is `Ai.ra`? 🤔'), style={})),
                 dbc.ModalBody([
-                    dcc.Markdown("**`Ai.ra` is a chatbot (or chatterbot). We can also say that Ai.ra is a language model, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way an expert would behave during a round of questions and answers (Q&A).**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                 'font-size': 20,
-                                                                                                                                                                                                                                                                                                                 'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown("**We can classify this type of system (CUS - _Conversation Understanding System_) into '_open domain systems_' and '_closed domain systems_'. A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system encompasses (_in principle_) any topic. For example, GPT-3 - the NLP model produced by OpenAI - is capable of 'chatting about virtually anything.'**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown("**`Ai.ra` is a _closed domain chatbot_, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). Ai.ra is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her '_domain*_'.**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                                                           'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                                                           'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown("**`Ai.ra` has **four iterations**, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).`**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                                    'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                                    'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown("**`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).**", style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                              'font-size': 20,
-                                                                                                                                                                                                                                                                                              'text-justify': 'inter-word'}),
+                    dcc.Markdown('''**`Ai.ra` is a chatbot (or chatterbot). We can also say that `Ai.ra` is a language model, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way an expert would behave during a round of questions and answers (Q&A).**''', style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                                                       'font-size': 20,
+                                                                                                                                                                                                                                                                                                                       'text-justify': 'inter-word'}), html.Br(),
+                    dcc.Markdown('''**We can classify this type of system (CUS - `Conversation Understanding System`) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system encompasses (_in principle_) any topic. For example, `GPT-3` - the language model produced by OpenAI - is capable of "chatting about virtually anything."**''', style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   'font-size': 20,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   'text-justify': 'inter-word'}), html.Br(),
+                    dcc.Markdown('''**`Ai.ra` is a _closed domain chatbot_, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Ai.ra` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".**''', style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                                                                                                                                                'font-size': 20,
+                                                                                                                                                                                                                                                                                                                                                                                                                'text-justify': 'inter-word'}), html.Br(),
+                    dcc.Markdown('''**`Ai.ra` has **four iterations**, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).`**''', style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                                                                                                                        'font-size': 20,
+                                                                                                                                                                                                                                                                                                                                                                                        'text-justify': 'inter-word'}), html.Br(),
+                    dcc.Markdown('''**`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).**''', style={'text-align': 'justify',
+                                                                                                                                                                                                                                                                                                  'font-size': 20,
+                                                                                                                                                                                                                                                                                                  'text-justify': 'inter-word'}),
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
@@ -140,8 +138,8 @@ app.layout = dbc.Container(
     children=[
         html.H1('Ai.ra - AIRES artificial expert  🤖', style={'textAlign': 'center',
                                                              'margin-top': '20px'}),
-        html.Div([modal], style={'textAlign': 'center'}),
-        html.Hr(),
+        html.Div([modal], style={'textAlign': 'center',
+                 'margin-top': '20px', 'margin-bottom': '20px'}),
         dcc.Store(id='store-conversation', data=''),
         dcc.Loading(id='loading_0', type='circle', children=[conversation]),
         controls,
@@ -182,13 +180,13 @@ def update_display(chat_history):
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     chat_history = chat_history or []
     if n_clicks == 0:
-        chat_history.append('👋🤖')
-        chat_history.append("Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        chat_history.append(f'👋    {avatar}')
+        chat_history.append("🤖    Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, ''
 
     if user_input is None or user_input == '':
-        chat_history.append('👋🤖')
-        chat_history.append("Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        chat_history.append(f'👋    {avatar}')
+        chat_history.append("🤖    Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, ''
 
     else:
@@ -199,10 +197,12 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         new_text = unidecode.unidecode(new_text)
 
         input_vector = bow_vectorizer.transform([new_text])
-        preds = classifier.predict(input_vector)[0]
-        bot_input_ids = answers[np.argmax(preds)]
-        chat_history.append(user_input)
-        chat_history.append(bot_input_ids)
+        output = classifier.predict(input_vector)[0]
+        proba = classifier.predict_proba(input_vector)[0]
+        bot_input_ids = f'''{answers[int(output)]}
+        [Confidence: {max(proba) * 100: .2f} %]'''
+        chat_history.append(f'{user_input}    {avatar}')
+        chat_history.append(f'🤖    {bot_input_ids}')
 
         return chat_history, ''
 

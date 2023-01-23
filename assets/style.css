@@ -1,3 +1,16 @@
+
+/* Ttyping effect for the title */
+h1 {
+  overflow: hidden; 
+  border-right: .15em solid #dc3d87; 
+  white-space: nowrap; 
+  margin: 0 auto; 
+  letter-spacing: .15em;
+  animation: 
+    typing 4s steps(29) 1s 1 normal both,
+    blink-caret 500ms steps(29) infinite normal;
+}
+
 /* unvisited link */
 a:link {
   color: #dc3d87;
@@ -57,4 +70,16 @@ a:active {
 ::-webkit-scrollbar {
   width: 10px !important;
   display: block !important;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 20em }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from{border-right-color: #dc3d87;}
+  to{border-right-color: transparent;}
 }
