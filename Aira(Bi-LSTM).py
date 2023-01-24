@@ -47,7 +47,7 @@ def textbox(text, box='other'):
         style['float'] = 'right'
 
     elif box == 'other':
-        style['float'] = 'left'
+        style['float'] = 'right'
 
     return html.P(text, style=style)
 
@@ -58,7 +58,9 @@ conversation = html.Div(
         'max-width': '800px',
         'height': '60vh',
         'margin': 'auto',
-        'overflow-y': 'auto',
+        'overflow': 'auto',
+        'display': 'flex',
+        'flex-direction': 'column-reverse'
     },
     id='display-conversation',
 )
@@ -151,7 +153,7 @@ app.layout = dbc.Container(
 
 )
 def update_display(chat_history):
-    time.sleep(2)
+    time.sleep(1.5)
     return [
         textbox(chat_history, box='self') if i % 2 == 0 else textbox(
             chat_history, box='other')
@@ -162,7 +164,8 @@ def update_display(chat_history):
 @app.callback(
     [
         Output('store-conversation', 'data'),
-        Output('user-input', 'value')
+        Output('user-input', 'value'),
+        Output('display-conversation', 'value')
     ],
 
     [
@@ -178,14 +181,19 @@ def update_display(chat_history):
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     chat_history = chat_history or []
     if n_clicks == 0:
-        chat_history.append(f'👋     {avatar}')
-        chat_history.append("🤖     Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
-        return chat_history, ''
+        chat_history.insert(0, f'{avatar}    👋')
+        chat_history.insert(0, "🤖    Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        return chat_history, '', ''
 
     if user_input is None or user_input == '':
-        chat_history.append(f'👋     {avatar}')
-        chat_history.append("🤖     Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
-        return chat_history, ''
+        chat_history.insert(0, f'{avatar}    👋')
+        chat_history.insert(0, "🤖    Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        return chat_history, '', ''
+
+    if user_input is None or user_input.isspace() is True:
+        chat_history.insert(0, f'{avatar}    👋')
+        chat_history.insert(0, "🤖    Hello, how are you? My name is Ai.ra, but you can call me Ai. I am an artificial intelligence (AI). More specifically, I am an NLP (Natural Language Processing) model trained in conversation (a chatbot!). I have been specifically trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        return chat_history, '', ''
 
     else:
 
@@ -202,10 +210,10 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         output = answers[np.argmax(preds)]
         bot_input_ids = f'''{output}
         [Confidence: {max(preds) * 100: .2f} %]'''
-        chat_history.append(f'{user_input}    {avatar}')
-        chat_history.append(f'🤖    {bot_input_ids}')
+        chat_history.insert(0, f'''{avatar}    {user_input}''')
+        chat_history.insert(0, f'🤖    {bot_input_ids}')
 
-        return chat_history, ''
+        return chat_history, '', ''
 
 
 app.callback(
