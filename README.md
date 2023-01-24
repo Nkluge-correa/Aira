@@ -4,13 +4,15 @@
 
 ![image-gif](assets/gif_demo.gif)
 
-[Ai.ra](http://aira-expert-en.airespucrs.org/) is a `chatbot` (or "chatterbot"). We can also say that Ai.ra is a **language model**, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way a **human (expert)** would behave during a round of questions and answers (**Q&A**).
+[Ai.ra](http://aira-expert-en.airespucrs.org/) is a `chatbot`. We can also say that Ai.ra is a **language model**, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way a **human (expert)** would behave during a round of questions and answers (**Q&A**).
 
-We can classify this type of system (**`CUS` - Conversation Understanding System**) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system encompasses (in principle) any topic. For example, **`GPT-3`** - the language model produced by OpenAI - **is capable of "chatting about virtually anything. "**
+We can classify this type of system (**`CUS` - Conversation Understanding System**) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system could (_in principle_) sustain a dialog about any topic. For example, `GPT-3` - the language model produced by OpenAI - is capable of "_chatting about virtually anything_."
 
-**Ai.ra is a closed domain chatbot**, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). Ai.ra is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".
+**`Ai.ra` is a closed domain chatbot**, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Ai.ra` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".
 
 Ai.ra has **four iterations**, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search).`
+
+In our [demo](https://aira-expert.onrender.com/), we also provide the possibility to users to conduct conversations with a distilled version of [BlenderBot 3](https://geo-not-available.blenderbot.ai/) (`BB3`). The reason we make this model available in our application is so that people can compare the capabilities of small, closed-domain models (`Ai.ra`) and large language models created for open conversation (`BB3`). More information on `BB3` can be found [here](https://github.com/facebookresearch/ParlAI/blob/main/parlai/zoo/bb3/model_card.md) and in the `Information` section of our demo.
 
 Tags and answers are available in this repository. You can change these variables to create your own chatbot if you want. If you have any questions concerning Ai.ra, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 
@@ -30,7 +32,7 @@ If you are not satisfied with Ai.ra's performance or would like to help us impro
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated in 23 january 2023},
+  note = {Last updated in 24 january 2023},
 }
 
 ```
