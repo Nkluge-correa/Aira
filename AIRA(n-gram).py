@@ -1,4 +1,3 @@
-from dash.dependencies import Input, Output, State
 from dash import dcc, html, Output, Input, State
 import dash_bootstrap_components as dbc
 from statistics import mode

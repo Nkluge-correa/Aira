@@ -1,6 +1,6 @@
 from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
 from dash import dcc, html, Output, Input, State
+from sklearn.naive_bayes import MultinomialNB
 import dash_bootstrap_components as dbc
 import numpy as np
 import unidecode
