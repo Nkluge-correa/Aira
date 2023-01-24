@@ -7,8 +7,8 @@ h1 {
   margin: 0 auto; 
   letter-spacing: .15em;
   animation: 
-    typing 4s steps(29) 1s 1 normal both,
-    blink-caret 500ms steps(29) infinite normal;
+    typing 4s steps(15) 1s 1 normal both,
+    blink-caret 500ms steps(15) infinite normal;
 }
 
 /* unvisited link */
@@ -75,7 +75,7 @@ a:active {
 /* The typing effect */
 @keyframes typing {
   from { width: 0 }
-  to { width: 20em }
+  to { width: 10em }
 }
 
 /* The typewriter cursor effect */

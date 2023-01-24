@@ -137,17 +137,25 @@ conversation = html.Div(
 )
 
 controls = dbc.InputGroup(
-    style={'width': '80%', 'max-width': '800px', 'margin': 'auto'},
+    style={'width': '80%', 'max-width': '800px',
+           'margin': 'auto'},
     children=[
-        dbc.Input(id='user-input', placeholder='Write to Ai.ra...', type='text'),
-        dbc.InputGroup(dbc.Button('Submit', size='lg', id='submit')),
+        dbc.Input(id='user-input', placeholder='Write to Ai.ra...',
+                  type='text', style={'border-radius': '5px'}),
+        dbc.InputGroup(dbc.Button(
+            [html.I(className="bi bi-send")], size='lg', id='submit', style={
+                'position': 'absolute',
+                'width': '100%',
+                'max-width': '800px',
+                'margin': 'auto',
+                'background-color': 'none'})),
     ],
 )
 
 modal = html.Div(
     [
         dbc.Button(
-            'Information', id='open-body-scroll', outline=True, size='lg', color='light', n_clicks=0
+            ['Info ', html.I(className="bi bi-info-circle")], id='open-body-scroll', outline=True, size='lg', color='light', n_clicks=0
         ),
         dbc.Modal(
             [
@@ -172,7 +180,7 @@ modal = html.Div(
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
-                        'Fechar',
+                        html.I(className="bi bi-x-circle"),
                         id='close-body-scroll',
                         className='ms-auto',
                         n_clicks=0,
@@ -199,16 +207,20 @@ def toggle_modal(n1, n2, is_open):
     return is_open
 
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.SLATE])
+app = dash.Dash(__name__,
+                meta_tags=[
+                    {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}],
+                external_stylesheets=[dbc.themes.SLATE, dbc.icons.BOOTSTRAP])
 
 server = app.server
-app.title = 'Ai.ra - the AIRES Expert 🤖'
+app.title = 'Ai.ra Expert 🤖'
+
 
 app.layout = dbc.Container(
     fluid=True,
     children=[
-        html.H1('Ai.ra - AIRES artificial expert  🤖', style={'textAlign': 'center',
-                                                             'margin-top': '20px'}),
+        html.H1('Ai.ra Expert  🤖', style={'textAlign': 'center',
+                                          'margin-top': '20px'}),
         html.Div([modal], style={'textAlign': 'center',
                  'margin-top': '20px', 'margin-bottom': '20px'}),
         dcc.Store(id='store-conversation', data=''),
