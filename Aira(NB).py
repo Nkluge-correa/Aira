@@ -6,7 +6,6 @@ import numpy as np
 import unidecode
 import random
 import string
-import time
 import dash
 
 avatars = ['🧒', '👧', '🧒🏿', '👱', '👨‍🦱', '👨🏿', '👩‍🦲',
@@ -166,7 +165,6 @@ app.layout = dbc.Container(
 
 )
 def update_display(chat_history):
-    time.sleep(1.5)
     return [
         textbox(chat_history, box='self') if i % 2 == 0 else textbox(
             chat_history, box='other')
