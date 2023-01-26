@@ -32,7 +32,7 @@ If you are not satisfied with Ai.ra's performance or would like to help us impro
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated in 24 january 2023},
+  note = {Last updated in 26 january 2023},
 }
 
 ```
