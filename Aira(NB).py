@@ -208,12 +208,11 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
 
     else:
 
-        text = user_input
-        new_text = text.translate(str.maketrans('', '', string.punctuation))
-        new_text = new_text.lower()
-        new_text = unidecode.unidecode(new_text)
+        text = user_input.translate(str.maketrans('', '', string.punctuation))
+        text = text.lower()
+        text = unidecode.unidecode(text)
 
-        input_vector = bow_vectorizer.transform([new_text])
+        input_vector = bow_vectorizer.transform([text])
         output = classifier.predict(input_vector)[0]
         proba = classifier.predict_proba(input_vector)[0]
         bot_input_ids = f'''{answers[int(output)]}

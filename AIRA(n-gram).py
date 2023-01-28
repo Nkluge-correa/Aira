@@ -1,7 +1,6 @@
 from dash import dcc, html, Output, Input, State
 import dash_bootstrap_components as dbc
 from statistics import mode
-import itertools
 import unidecode
 import random
 import string
@@ -222,26 +221,24 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     else:
         sentences = []
         values = []
-        text = user_input
-        new_text = text.translate(str.maketrans('', '', string.punctuation))
-        new_text = new_text.lower()
-        new_text = unidecode.unidecode(new_text)
+        text = user_input.translate(
+            str.maketrans('', '', string.punctuation))
+        text = text.lower()
+        text = unidecode.unidecode(text)
 
-        if len(new_text.split()) == 1:
-            if new_text in vocabulary.keys():
-                l = [vocabulary[new_text]] * 100
+        if len(text.split()) == 1:
+            if text in vocabulary.keys():
+                l = [vocabulary[text]] * 100
                 values.append(l)
-            new_text = new_text + ' ' + new_text
+            text = text + ' ' + text
 
-        elif len(new_text.split()) != 1:
-            if new_text in vocabulary.keys():
-                l = [vocabulary[new_text]] * 100
-                values.append(l)
         else:
-            pass
+            if text in vocabulary.keys():
+                l = [vocabulary[text]] * 100
+                values.append(l)
 
-        for i in range(1, len(new_text.split()) + 1):
-            sentence = make_keys(new_text, i)
+        for i in range(1, len(text.split()) + 1):
+            sentence = make_keys(text, i)
             sentences.append(sentence)
 
         for i in range(len(sentences)):
@@ -251,14 +248,14 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
                     l = [vocabulary[attention[i]]]
                     values.append(l * i)
 
-        if len(values) == 0:
+        if len([item for sublist in values for item in sublist]) == 0:
             chat_history.insert(0, f'''{avatar}    "{user_input}"''')
             bot_input_ids = answers[-1]
             chat_history.insert(0, f'🤖    {bot_input_ids}')
             return chat_history, '', ''
 
-        elif len(values) != 0:
-            values = list(itertools.chain(*values))
+        else:
+            values = [item for sublist in values for item in sublist]
             prediction = mode(values)
             bot_input_ids = answers[int(prediction)-1]
             chat_history.insert(0, f'''{avatar}    {user_input}''')

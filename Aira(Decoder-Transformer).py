@@ -278,12 +278,11 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
 
     else:
 
-        texto = user_input
-        texto = texto.translate(str.maketrans('', '', string.punctuation))
-        texto = texto.lower()
-        texto = unidecode.unidecode(texto)
+        text = user_input.translate(str.maketrans('', '', string.punctuation))
+        text = text.lower()
+        text = unidecode.unidecode(text)
         encoded_sentence = text_vectorization(
-            texto.lower().translate(str.maketrans('', '', string.punctuation)))
+            text.lower().translate(str.maketrans('', '', string.punctuation)))
         encoded_sentence_padded = pad_sequences(
             [encoded_sentence], maxlen=10, truncating='post')
 
