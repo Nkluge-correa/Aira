@@ -84,7 +84,8 @@ controls = dbc.InputGroup(
         dbc.Input(id='user-input', placeholder='Write to Ai.ra...',
                   type='text', style={'border-radius': '5px'}),
         dbc.InputGroup(dbc.Button(
-            [html.I(className="bi bi-send")], size='lg', id='submit', style={
+            [html.I(className="bi bi-send")], size='lg', id='submit',
+            outline=True, color='light', style={
                 'position': 'absolute',
                 'width': '100%',
                 'max-width': '800px',
