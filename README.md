@@ -18,7 +18,7 @@ Tags and answers are available in this repository. You can change these variable
 
 If you are not satisfied with Ai.ra's performance or would like to help us improve the capabilities of our system, or if you would like to complain about any type of message produced by Ai.ra, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 
-## How to cite this repository 😊
+## Cite as 🤗
 
 ---
 
@@ -32,7 +32,7 @@ If you are not satisfied with Ai.ra's performance or would like to help us impro
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated in 06 february 2023},
+  note = {Last updated in 06 February 2023},
 }
 
 ```
