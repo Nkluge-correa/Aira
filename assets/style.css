@@ -1,35 +1,151 @@
+/* Loading */
 
-/* Ttyping effect for the title */
-h1 {
-  overflow: hidden; 
-  border-right: .15em solid #dc3d87; 
-  white-space: nowrap; 
-  margin: 0 auto; 
-  letter-spacing: .15em;
-  animation: 
-    typing 4s steps(15) 1s 1 normal both,
-    blink-caret 500ms steps(15) infinite normal;
+._dash-loading {
+  margin: auto;
+  color: transparent;
+  width: 0;
+  height: 0;
+  text-align: center;
 }
 
-/* unvisited link */
+._dash-loading::after {
+  content: '';
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  color: #dc3d87;
+  vertical-align: text-bottom;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: spinner-border 0.75s linear infinite;
+  animation: spinner-border 0.75s linear infinite;
+  margin-top: 12rem;
+}
+
+/* Body */
+
+body { 
+  margin: 0;
+  width: 100%; 
+}
+
+code {
+  font-weight: bold !important;
+}
+
 a:link {
   color: #dc3d87;
 }
 
-/* visited link */
 a:visited {
   color: #dc3d87;
 }
 
-/* mouse over link */
 a:hover {
   color: #dc3d87;
 }
 
-/* selected link */
 a:active {
   color: #dc3d87;
 }
+
+/* Pages */
+
+.title-style {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+.title-icon-style {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 1rem
+}
+
+.title-div {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-body-text-style {
+    text-align: justify;
+    text-justify: inter-word;
+    font-weight: bold;
+}
+
+.card-style {
+  margin-top: 15px; 
+  border: 0;
+}
+
+.card-body-style {
+  color: #aaaaaa;
+  overflow-y: scroll;
+  height: 400px;
+  text-align: justify;
+  text-justify: inter-word;
+  font-weight: bold;
+  padding: 5px
+}
+
+.card-header-style {
+  font-weight: bold;
+  text-align: center;
+  color: #dc3d87
+}
+
+.page-intro {
+  text-align: center; 
+  font-weight: bold
+}
+
+.page-intro-inner-div {
+  max-width: 800px;
+}
+
+.page-intro-outer-div {
+  width: 100%; 
+  display: flex; 
+  justify-content: center;
+}
+
+.middle-toggles {
+  text-align: center;
+  margin-top: 10px; 
+  margin-bottom: 10px;
+}
+
+.badges {
+  text-align: center;
+}
+
+.badges-div {
+  width: 100%; 
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+
+.icon-button {
+  border: none;
+  font-weight: bold;
+  margin-left: 5px;
+  margin-top: 20px;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+}
+
+.icon-button:hover {
+  color: #f4f5f5;
+  cursor: pointer;
+}
+
 
 /* Graph Control Objects ––––––––––––––––––––––––––––––––––––––––––––––––––*/
 
@@ -46,20 +162,22 @@ a:active {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #3a3f44 !important;  
+  background: #272b30 !important;  
   border-radius: 10px !important;
   display: block !important;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #aaaaaa !important; 
+  background: #3a3f44 !important; 
   border-radius: 3px; 
+  opacity: 0.5;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #aaaaaa !important; 
+  background: #3a3f44!important; 
+  opacity: 0.5;
 }
 
 /* width */
@@ -68,14 +186,10 @@ a:active {
   display: block !important;
 }
 
-/* The typing effect */
-@keyframes typing {
-  from { width: 0 }
-  to { width: 10em }
-}
+/* Mobile Version */
 
-/* The typewriter cursor effect */
-@keyframes blink-caret {
-  from{border-right-color: #dc3d87;}
-  to{border-right-color: transparent;}
+@media (max-width: 700px) {
+  .hidden-mobile {
+    display: none;
+  }
 }

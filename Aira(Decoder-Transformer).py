@@ -11,6 +11,12 @@ import random
 import string
 import dash
 
+OPEN_BUTTON = 'light'
+OUTLINE_BUTTON = True
+STYLE_BUTTON = {'border': 0}
+CLOSE_BUTTON = 'primary'
+FONT_SIZE = '1rem'
+
 avatars = ['🧒', '👧', '🧒🏿', '👱', '👨‍🦱', '👨🏿', '👩‍🦲',
            '🧔', '👩', '👩🏿', '👩‍🦳', '👴', '👱‍♀️', '👨', '👩‍🦰']
 
@@ -18,6 +24,10 @@ avatar = random.choice(avatars)
 
 
 class TransformerEncoder(layers.Layer):
+    """
+    Ai.ra's Encoder Block
+    """
+
     def __init__(self, embed_dim, dense_dim, num_heads, **kwargs):
         super().__init__(**kwargs)
         self.embed_dim = embed_dim
@@ -53,6 +63,10 @@ class TransformerEncoder(layers.Layer):
 
 
 class PositionalEmbedding(layers.Layer):
+    """
+    Ai.ra's `PositionalEmbedding` Layer.
+    """
+
     def __init__(self, sequence_length, input_dim, output_dim, **kwargs):
         super().__init__(**kwargs)
         self.token_embeddings = layers.Embedding(
@@ -83,15 +97,15 @@ class PositionalEmbedding(layers.Layer):
         return config
 
 
-with open('data\\answers_en.txt', encoding='utf-8') as fp:
+with open('data/answers_en.txt', encoding='utf-8') as fp:
     answers = [line.strip() for line in fp]
     fp.close()
 
-with open(r'pre_trained_aira\\vocabulary_bilingual.txt', encoding='utf-8') as fp:
+with open(r'aira/vocabulary_bilingual.txt', encoding='utf-8') as fp:
     vocabulary = [line[:-1] for line in fp]
     fp.close()
 
-model = keras.models.load_model("pre_trained_aira\\Aira_transformer_bilingual.keras",
+model = keras.models.load_model("aira/Aira_transformer_bilingual.keras",
                                 custom_objects={"TransformerEncoder": TransformerEncoder,
                                                 "PositionalEmbedding": PositionalEmbedding})
 
@@ -103,93 +117,88 @@ text_vectorization = TextVectorization(max_tokens=2500,
 
 def textbox(text, box='other'):
     style = {
-        'max-width': '95%',
+        'max-width': '100%',
         'width': 'max-content',
         'padding': '10px 10px',
-        'margin-bottom': '10px',
+        'margin-bottom': '20px',
         'text-align': 'justify',
         'text-justify': 'inter-word',
-        'letter-spacing': '.10em',
-        'font-size': '1.2em'
+        'font-size': '1.em',
+        'font-weight': 'bold'
     }
 
     if box == 'self':
         style['float'] = 'right'
 
     elif box == 'other':
-        style['float'] = 'left'
+        style['float'] = 'right'
 
     return dcc.Markdown(text, style=style)
 
 
 conversation = html.Div(
-    style={
-        'width': '80%',
-        'max-width': '800px',
-        'height': '60vh',
-        'margin': 'auto',
-        'overflow': 'auto',
-        'display': 'flex',
-        'flex-direction': 'column-reverse'
-    },
+    style={'width': '100%',
+           'max-width': '100vw',
+           'height': '70vh',
+           'margin': 'auto',
+           'overflow': 'auto',
+           'display': 'flex',
+           'flex-direction': 'column-reverse'},
     id='display-conversation',
 )
 
 controls = dbc.InputGroup(
-    style={'width': '80%', 'max-width': '800px',
+    style={'width': '100%', 'max-width': '100vw',
            'margin': 'auto'},
     children=[
         dbc.Input(id='user-input', placeholder='Write to Ai.ra...',
                   type='text', style={'border-radius': '5px'}),
-        dbc.InputGroup(dbc.Button(
-            [html.I(className="bi bi-send")], size='lg', id='submit', style={
-                'position': 'absolute',
+        dbc.Button(
+            [html.I(className="bi bi-send")], size='lg', id='submit',
+            outline=True, color='light', style={
                 'width': '100%',
-                'max-width': '800px',
+                'max-width': '100vw',
                 'margin': 'auto',
-                'background-color': 'none'})),
+                'background-color': 'none'}),
     ],
 )
 
 modal = html.Div(
     [
-        dbc.Button(
-            ['Info ', html.I(className="bi bi-info-circle")], id='open-body-scroll', outline=True, size='lg', color='light', n_clicks=0
-        ),
+        html.A([html.I(className='bi bi-info-circle')],
+               id="open-body-scroll", n_clicks=0, className="icon-button", style={'font-size': 25}),
         dbc.Modal(
             [
                 dbc.ModalHeader(dbc.ModalTitle(dcc.Markdown(
-                    '## What is `Ai.ra`? 🤔'), style={})),
+                    '## What is `Ai.ra`? 🤔'), style={'font-weight': 'bold'})),
                 dbc.ModalBody([
-                    dcc.Markdown('''**`Ai.ra` is a chatbot (or chatterbot). We can also say that `Ai.ra` is a language model, i.e. it is a software application capable of manipulating text. Ai.ra is designed to simulate the way an expert would behave during a round of questions and answers (Q&A).**''', style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                       'font-size': 20,
-                                                                                                                                                                                                                                                                                                                       'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown('''**We can classify this type of system (CUS - `Conversation Understanding System`) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system could (_in principle_) sustain a dialog about any topic. For example, `GPT-3` - the language model produced by OpenAI - is capable of "chatting about virtually anything."**''', style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown('''**`Ai.ra` is a _closed domain chatbot_, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Ai.ra` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".**''', style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                                                                'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                                                                'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown('''**`Ai.ra` has four iterations, the first three were trained as machine learning models (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the fourth iteration was created from `pre-set rules` (n-gram analysis + dictionary search).**''', style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                                                                                           'font-size': 20,
-                                                                                                                                                                                                                                                                                                                                                                           'text-justify': 'inter-word'}), html.Br(),
-                    dcc.Markdown('''**`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).**''', style={'text-align': 'justify',
-                                                                                                                                                                                                                                                                                                  'font-size': 20,
-                                                                                                                                                                                                                                                                                                  'text-justify': 'inter-word'}),
+                    dcc.Markdown('''`Ai.ra` is a chatbot (or chatterbot). We can also say that `Ai.ra` is a language model, i.e. it is a software application capable of manipulating text. `Ai.ra` is designed to simulate the way an expert would behave during a round of questions and answers (Q&A).''',
+                                 className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
+                    dcc.Markdown('''We can classify this type of system (CUS - `Conversation Understanding System`) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system could (_in principle_) sustain a dialog about any topic. For example, `GPT-3` - the language model produced by OpenAI - is capable of "chatting about virtually anything."''',
+                                 className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
+                    dcc.Markdown('''`Ai.ra` is a _closed domain chatbot_, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Ai.ra` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".''',
+                                 className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
+                    dcc.Markdown('''`Ai.ra` has four iterations, the first three were trained as machine learning models (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the fourth iteration was created from `pre-set rules` (n-gram analysis + dictionary search).''',
+                                 className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
+                    dcc.Markdown(
+                        '''`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).''', className='modal-body-text-style', style={'font-size': FONT_SIZE}),
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
                         html.I(className="bi bi-x-circle"),
                         id='close-body-scroll',
                         className='ms-auto',
+                        outline=True,
+                        size='xl',
                         n_clicks=0,
-                        size='lg'
+                        color=CLOSE_BUTTON,
+                        style=STYLE_BUTTON
                     )
                 ),
             ],
             id='modal-body-scroll',
             scrollable=True,
-            size='lg',
+            size='xl',
             is_open=False,
         ),
     ], style={
@@ -206,6 +215,17 @@ def toggle_modal(n1, n2, is_open):
     return is_open
 
 
+badges = html.Span([
+    dbc.Badge([html.I(className="bi bi-heart-fill"), "  Open-Source"], href="https://github.com/Nkluge-correa/",
+              color="dark", className="text-decoration-none", style={'margin-right': '5px'}),
+    dbc.Badge([html.I(className="bi bi-bank"), "  AIRES at PUCRS"], href="https://www.airespucrs.org/",
+              color="dark", className="text-decoration-none", style={'margin-right': '5px'}),
+    dbc.Badge([html.I(className="bi bi-filetype-py"), "  Made with Python"], href="https://www.python.org/",
+              color="dark", className="text-decoration-none", style={'margin-right': '5px'}),
+    dbc.Badge([html.I(className="bi bi-github"), "  Nkluge-correa"], href="https://nkluge-correa.github.io/",
+              color="dark", className="text-decoration-none", style={'margin-right': '5px'})
+])
+
 app = dash.Dash(__name__,
                 meta_tags=[
                     {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}],
@@ -218,13 +238,29 @@ app.title = 'Ai.ra Expert 🤖'
 app.layout = dbc.Container(
     fluid=True,
     children=[
-        html.H1('Ai.ra Expert  🤖', style={'textAlign': 'center',
-                                          'margin-top': '20px'}),
-        html.Div([modal], style={'textAlign': 'center',
-                 'margin-top': '20px', 'margin-bottom': '20px'}),
-        dcc.Store(id='store-conversation', data=''),
-        dcc.Loading(id='loading_0', type='circle', children=[conversation]),
-        controls,
+        dbc.Row([
+            dbc.Col([
+                html.Div([dcc.Markdown('# `Ai.ra Expert`', className='title-style'),
+                          html.Img(src=dash.get_asset_url(
+                              'robot.svg'), height="50px", className='title-icon-style')],
+                    className='title-div'),
+                html.Div([
+                    html.Div([
+                        dcc.Markdown('''
+                _Ai.ra is a chatbot designed to simulate the way an expert would behave during a round of questions and answers (Q&A). Ai.ra is a small decoder-only transformer model that basically does text classification (classifies your question into one of her domain answers). For comparison reasons, we allow users to toggle between talking to Ai.ra (close-domain) and Distill-Blenderbot (open-domain) on this page._
+                ''', className='page-intro')
+                    ], className='page-intro-inner-div'),
+                ], className='page-intro-outer-div'),
+                html.Div([modal], className='middle-toggles'),
+                dcc.Store(id='store-conversation', data=''),
+                dcc.Loading(id='loading_0', type='circle',
+                            children=[conversation]),
+                html.Div([controls], style={'margin-bottom': '20px'}),
+                html.Div([
+                    html.Div([badges], className='badges'),
+                ], className='badges-div'),
+            ], width=12)
+        ], justify='center'),
     ],
 )
 
@@ -260,6 +296,9 @@ def update_display(chat_history):
     ]
 )
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
+    """
+    Runs the Aira_BiLSTM_bilingual.
+    """
     chat_history = chat_history or []
     if n_clicks == 0:
         chat_history.insert(0, f'{avatar}    👋')
