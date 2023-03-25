@@ -33,10 +33,17 @@ with open('data/answers_en.txt', encoding='utf-8') as fp:
 
 def generate_ngrams(text, WordsToCombine):
     """
-    This function takes as input a string of text,
-    and a number (int) to generate n-grams of that order.
-    Returns a list of n-grams from the input
-     string of int-order. 
+    Returns a list of n-grams of length WordsToCombine generated from the input text.
+    Each n-gram is a list of WordsToCombine consecutive words from the input text.
+
+    Parameters:
+    -----------
+        text (str): the input text to be split into n-grams.
+        WordsToCombine (int): the number of words to be combined in each n-gram.
+
+    Returns:
+    ----------
+        list: a list of n-grams generated from the input text.
     """
     words = text.split()
     output = []
@@ -47,11 +54,17 @@ def generate_ngrams(text, WordsToCombine):
 
 def make_keys(text, WordsToCombine):
     """
-    This fuction takes as input a string and an
-    int. From the splited n-grams (`generate_ngrams`), 
-    this fuction joins every split ["the", "dog" = "the dog"]
-    and appends to the `sentences` list. This list is then used
-    for dictionary search.
+    Returns a list of keys generated from n-grams of length WordsToCombine in the input text.
+    Each key is a string of WordsToCombine consecutive words from the input text.
+
+    Parameters:
+    -----------
+        text (str): the input text to generate keys from.
+        WordsToCombine (int): the number of words to combine in each key.
+
+    Returns:
+    ----------
+        list: a list of keys generated from the input text.
     """
     gram = generate_ngrams(text, WordsToCombine)
     sentences = []
@@ -243,13 +256,22 @@ def update_display(chat_history):
 )
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     """
-    Runs Ai.ra. Ai.ra takes the input string and breaks it into
-    a series of n-grams of the order 1 up to input_text.split(). All divided
-    n-grams are then matched with the keys in our vocabulary dictionary to find
-    what is the most probable question. Matches that have an n-gram of higher order
-    receive a bigger value/weight. The most common matched key is then used to generate
-    a response from the answers list. We use `langdetect` to decide if we should use
-    the English or Portuguese dictionary/answers.
+    A function that runs a chatbot that can answer questions about AI Ethics and AI Safety. 
+
+    Parameters:
+    ------------
+        - n_clicks (int): The number of clicks on the submit button. 
+        - n_submit (int): The number of times the user has submitted a message. 
+        - user_input (str): The input provided by the user. 
+        - chat_history (list): The chat history of the conversation between 
+            the user and the chatbot. 
+
+    Returns:
+    ------------
+        - chat_history (list): The updated chat history of the conversation between 
+            the user and the chatbot.
+        - '' (str): An empty string.
+        - '' (str): An empty string.
     """
     chat_history = chat_history or []
     if n_clicks == 0:
@@ -292,7 +314,7 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
 
         for i in range(len(sentences)):
             attention = sentences[i]
-            for i in range(0, len(attention)):
+            for i in range(len(attention)):
                 if attention[i] in vocabulary.keys():
                     l = [vocabulary[attention[i]]]
                     values.append(l * i)

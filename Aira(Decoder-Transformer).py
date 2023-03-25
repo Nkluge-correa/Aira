@@ -1,8 +1,6 @@
 from keras_preprocessing.sequence import pad_sequences
+from tblocks import PositionalEmbedding, TransformerEncoder
 from dash import dcc, html, Output, Input, State
-from keras.layers import TextVectorization
-from tensorflow import keras
-from keras import layers
 import dash_bootstrap_components as dbc
 import tensorflow as tf
 import numpy as np
@@ -23,80 +21,6 @@ avatars = ['🧒', '👧', '🧒🏿', '👱', '👨‍🦱', '👨🏿', '👩�
 avatar = random.choice(avatars)
 
 
-class TransformerEncoder(layers.Layer):
-    """
-    Ai.ra's Encoder Block
-    """
-
-    def __init__(self, embed_dim, dense_dim, num_heads, **kwargs):
-        super().__init__(**kwargs)
-        self.embed_dim = embed_dim
-        self.dense_dim = dense_dim
-        self.num_heads = num_heads
-        self.attention = layers.MultiHeadAttention(
-            num_heads=num_heads, key_dim=embed_dim)
-        self.dense_proj = keras.Sequential(
-            [layers.Dense(dense_dim, activation="relu"),
-             layers.Dense(embed_dim), ]
-        )
-
-        self.layernorm_1 = layers.LayerNormalization()
-        self.layernorm_2 = layers.LayerNormalization()
-
-    def call(self, inputs, mask=None):
-        if mask is not None:
-            mask = mask[:, tf.newaxis, :]
-        attention_output = self.attention(
-            inputs, inputs, attention_mask=mask)
-        proj_input = self.layernorm_1(inputs + attention_output)
-        proj_output = self.dense_proj(proj_input)
-        return self.layernorm_2(proj_input + proj_output)
-
-    def get_config(self):
-        config = super().get_config()
-        config.update({
-            "embed_dim": self.embed_dim,
-            "num_heads": self.num_heads,
-            "dense_dim": self.dense_dim,
-        })
-        return config
-
-
-class PositionalEmbedding(layers.Layer):
-    """
-    Ai.ra's `PositionalEmbedding` Layer.
-    """
-
-    def __init__(self, sequence_length, input_dim, output_dim, **kwargs):
-        super().__init__(**kwargs)
-        self.token_embeddings = layers.Embedding(
-            input_dim=input_dim, output_dim=output_dim)
-        self.position_embeddings = layers.Embedding(
-            input_dim=sequence_length, output_dim=output_dim)
-        self.sequence_length = sequence_length
-        self.input_dim = input_dim
-        self.output_dim = output_dim
-
-    def call(self, inputs):
-        length = tf.shape(inputs)[-1]
-        positions = tf.range(start=0, limit=length, delta=1)
-        embedded_tokens = self.token_embeddings(inputs)
-        embedded_positions = self.position_embeddings(positions)
-        return embedded_tokens + embedded_positions
-
-    def compute_mask(self, inputs, mask=None):
-        return tf.math.not_equal(inputs, 0)
-
-    def get_config(self):
-        config = super().get_config()
-        config.update({
-            "output_dim": self.output_dim,
-            "sequence_length": self.sequence_length,
-            "input_dim": self.input_dim,
-        })
-        return config
-
-
 with open('data/answers_en.txt', encoding='utf-8') as fp:
     answers = [line.strip() for line in fp]
     fp.close()
@@ -105,14 +29,15 @@ with open(r'aira/vocabulary_bilingual.txt', encoding='utf-8') as fp:
     vocabulary = [line[:-1] for line in fp]
     fp.close()
 
-model = keras.models.load_model("aira/Aira_transformer_bilingual.keras",
-                                custom_objects={"TransformerEncoder": TransformerEncoder,
-                                                "PositionalEmbedding": PositionalEmbedding})
+model = tf.keras.models.load_model("aira/Aira_transformer_bilingual.keras",
+                                   custom_objects={"TransformerEncoder": TransformerEncoder,
+                                                   "PositionalEmbedding": PositionalEmbedding})
 
-text_vectorization = TextVectorization(max_tokens=2500,
-                                       output_mode="int",
-                                       ngrams=2,
-                                       vocabulary=vocabulary)
+text_vectorization = tf.keras.layers.TextVectorization(max_tokens=4000,
+                                                       output_mode="int",
+                                                       ngrams=3,
+                                                       vocabulary=vocabulary,
+                                                       output_sequence_length=10)
 
 
 def textbox(text, box='other'):
@@ -296,9 +221,6 @@ def update_display(chat_history):
     ]
 )
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
-    """
-    Runs the Aira_BiLSTM_bilingual.
-    """
     chat_history = chat_history or []
     if n_clicks == 0:
         chat_history.insert(0, f'{avatar}    👋')
@@ -320,15 +242,17 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         text = user_input.translate(str.maketrans('', '', string.punctuation))
         text = text.lower()
         text = unidecode.unidecode(text)
-        encoded_sentence = text_vectorization(
-            text.lower().translate(str.maketrans('', '', string.punctuation)))
-        encoded_sentence_padded = pad_sequences(
-            [encoded_sentence], maxlen=10, truncating='post')
 
-        preds = model.predict(encoded_sentence_padded, verbose=0)[0]
+        encoded_sentence = text_vectorization(text)
+
+        INPUT = tf.keras.backend.expand_dims(encoded_sentence, axis=0)
+
+        preds = model.predict(INPUT, verbose=0)[0]
         output = answers[np.argmax(preds)]
+
         bot_input_ids = f'''{output}
         [Confidence: {max(preds) * 100: .2f} %]'''
+
         chat_history.insert(0, f'''{avatar}    {user_input}''')
         chat_history.insert(0, f'🤖    {bot_input_ids}')
 

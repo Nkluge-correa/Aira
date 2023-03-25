@@ -8,6 +8,7 @@ e
 is
 what is
 que e
+o que e
 de
 a
 ai
@@ -16,12 +17,14 @@ are
 the
 is a
 da
+what is a
 sao
 learning
 artificial
 do
 what are
 que sao
+o que sao
 um
 you
 aprendizagem
@@ -29,6 +32,7 @@ ethics
 e um
 etica
 is the
+what is the
 uma
 human
 neural
@@ -36,14 +40,18 @@ e uma
 voce
 problem
 of
+que e um
+que e uma
 and
 aires
 theory
 problema
 e o
+que e o
 e a
 complexity
 rights
+que e a
 intelligence
 p
 da ia
@@ -55,6 +63,7 @@ alignment
 value
 valores
 alinhamento
+what is an
 seguranca
 nao
 mesa
@@ -73,8 +82,10 @@ principios
 machine
 goodhart
 funcao
+what is ai
 turing
 series
+que e aprendizagem
 principles
 nan
 me
@@ -115,6 +126,7 @@ self
 safety
 robustness
 rede
+of children and
 of children
 network
 meta
@@ -122,6 +134,7 @@ humanos
 hch
 fairness
 etica da
+e o problema
 e do
 deep
 de valores
@@ -140,6 +153,7 @@ short term
 security
 risks
 riscos
+que e teoria
 parity
 objective
 newcomb
@@ -159,6 +173,7 @@ das
 counterfactual
 aumann
 activation
+voce e um
 vanishing
 value complexity
 sistema
@@ -195,9 +210,13 @@ your
 valor
 treacherous
 supervised
+short term memory
 reliability
 reforco
 recurrent
+que e ia
+que e etica
+problema de alinhamento
 positivo
 perplexity
 perplexidade
@@ -210,6 +229,7 @@ negativo
 natural
 monitoring
 lstm
+long short term
 labor
 interno
 inteligencia artificial
@@ -226,16 +246,19 @@ federated
 feature
 false
 existential
+etica da ia
 estocastico
 e seguranca
 e ia
 e etica
+e do adolescentes
 do adolescentes
 dignity
 desinformacao
 decision theory
 de dados
 de alinhamento
+criancas e do
 criancas e
 convolutional
 centralidade
@@ -246,6 +269,8 @@ and adolescents
 ambiente
 accountability
 zumbi
+what is value
+what are the
 virtue
 versus np
 versus
@@ -273,6 +298,7 @@ roko
 rnn
 risk
 risco
+rights of children
 rights of
 responsabilizacao
 responsabilidade
@@ -283,15 +309,19 @@ propriedade
 profunda
 processo
 process
+problema do gradiente
 previsao
 pretrained
 positive
 poder
+p versus np
 p versus
 outer
 online
 objetiva
 objective function
+o problema do
+o problema de
 normative uncertainty
 normative
 negative
@@ -302,6 +332,7 @@ metaethics
 maleficencia
 machine learning
 mab
+lottery ticket hypothesis
 lottery ticket
 law
 language
@@ -322,6 +353,7 @@ fnn
 exploding
 entropy
 em ia
+e teoria da
 dual process
 do gradiente
 discriminacao
@@ -331,14 +363,17 @@ demographic
 de turing
 de solomonoff
 data protection
+das criancas e
 das criancas
 cross
 counterfactual justice
 consequentialism
+children and adolescents
 basilisk
 are the
 alinhamento interno
 algoritmica
+algorithmic information theory
 algorithmic information
 algorithmic
 ai safety
@@ -346,15 +381,18 @@ adversarial
 adolescent
 adam
 acordo
+what is human
 vision
 virtudes
 vies
 value learning
 utility function
+uma rede neural
 uma rede
 uma funcao
 transformador
 time series
+teorema do acordo
 teorema do
 teorema
 system
@@ -368,6 +406,9 @@ self improvement
 sao os
 s law
 right
+que sao os
+que e monitoramento
+que e complexidade
 property
 processo dual
 processing
@@ -398,6 +439,7 @@ maquinas
 manifold hypothesis
 linhas
 linguagem
+lei de goodhart
 lei de
 iterated
 iterada
@@ -411,6 +453,7 @@ imbecil
 human intelligence
 help
 governanca
+goodhart s law
 generative pretrained
 gelu
 gan
@@ -431,11 +474,15 @@ entropia
 engineering
 engenharia
 emulation
+e uma rede
+e uma funcao
+e seguranca externa
 e monitoramento
 e direitos
 e complexidade
 do acordo
 distillation
+direitos das criancas
 direitos das
 dignidade
 descent
@@ -457,6 +504,7 @@ consultando
 consequencialismo
 cnn
 cite
+children and adolescent
 cerebro
 centralidade humana
 centrado
@@ -487,10 +535,13 @@ zoombie
 xai
 whore
 who
+what is artificial
+what are ai
 wbe
 visao
 verdade
 value alignment
+updateless decision theory
 unsupervised
 um idiota
 turing machine
@@ -500,6 +551,7 @@ transformative
 transformadora
 theorem
 teoria do
+teoria da informacao
 tempo para
 systems
 sustainability
@@ -521,24 +573,36 @@ sao redes
 sao principios
 rs
 riscos existenciais
+right of children
 right of
 representations
 representacoes
 regulation
+recursive self improvement
 recursive self
 recursive
 razor
+que sao redes
+que sao principios
+que e seguranca
+que e paridade
+que e justica
+que e inteligencia
+que e incerteza
+que e alinhamento
 qual o
 quais
 puc rs
 puc
 protection regulation
+protecao de dados
 protecao de
 protecao
 propriedade intelectual
 propagation
 probabilidades equalizadas
 priori de
+principios de ia
 principios de
 pretrained transformer
 preservation
@@ -605,6 +669,7 @@ governance
 genetic
 general intelligence
 funcao objetiva
+funcao de ativacao
 freedom
 for
 filosofico
@@ -625,15 +690,19 @@ esquecimento
 espalhar desinformacao
 espalhar
 epistemologia
+engenharia de caracteristicas
 engenharia de
 emulacao
 embedded
+e um idiota
 e paridade
 e nao
 e justica
 e inteligencia
 e incerteza
 e educacao
+e direitos humanos
+e complexidade de
 e alinhamento
 do you
 disinformation
@@ -649,6 +718,8 @@ de impacto
 de caracteristicas
 de aumann
 de ativacao
+data protection regulation
+da informacao algoritmica
 da informacao
 cv
 cruzada
@@ -664,6 +735,7 @@ consultando hch
 computer vision
 computer
 computacional
+complexidade de valores
 competition
 competicao justa
 competicao
@@ -685,6 +757,7 @@ autonomy
 autonomia
 auto aperfeicoamento
 atributo sensivel
+artificial general intelligence
 artificial general
 armadilha
 are ai
@@ -702,20 +775,37 @@ algorithms
 agi
 agentes
 ag
+acordo de aumann
 acordo de
 about ai
 about
 a aires
 your name
+you are a
 world
 workers
 word artificial
 word
+whole brain emulation
 whole brain
 whole
 what time
+what is virtue
+what is stochastic
+what is solomonoff
+what is robustness
+what is fairness
+what is external
+what is ethics
+what is decision
+what is data
+what is catastrophic
+what is beneficence
+what is aires
+volicao coerente extrapolada
 volicao coerente
 volicao
+voce e uma
 virtue ethics
 virada traicoeira
 virada
@@ -724,6 +814,7 @@ very much
 very
 veracidade
 variedade
+vanishing gradient problem
 vagabundo
 vagabunda
 truthfulness
@@ -739,17 +830,24 @@ topicos
 tomorrow
 thesis
 theorems
+the rights of
 the rights
+the right of
 the right
+the ethics of
 the ethics
+tese da ortogonalidade
 tese da
 tese
+teoria da decisao
+teoria da complexidade
 temporais
 technological sovereignty
 technological
 tchau
 stochastic gradient
 source
+sobre etica da
 slut
 simplicidade
 show me
@@ -762,13 +860,17 @@ semi supervisionada
 sem supervisao
 selfattention
 seguranca em
+seguranca da ia
 seguranca da
 seeking theorems
+sao redes neurais
 sao probabilidades
+sao metricas de
 sao metricas
 sao direitos
 rokos
 rl
+riscos da ia
 riscos da
 retropropagacao
 retro propagacao
@@ -778,21 +880,34 @@ reinforcement learning
 recursivo
 recorrentes
 quem
+que sao probabilidades
+que sao metricas
+que sao direitos
+que e governanca
+que e esquecimento
+que e beneficencia
+que e auto
+que e aprendizado
 qual a
 puto
 puta
 propagacao
 programacao evolutiva
 programacao
+processamento de linguagem
 processamento de
 process theory
+problema de controle
+priori de solomonoff
 prior
+principios para ia
 principios para
 presidente
 president
 preditiva
 pre treinado
 pre
+power seeking theorems
 positivo verdadeiro
 positivo falso
 pln
@@ -809,38 +924,47 @@ orthogonality thesis
 optimization
 open source
 open
+old are you
 old are
 obrigado
 obrigada
 normativity
 nonsupervised
 nondeterministic
+no ser humano
 no ser
 nlp
 newcomb problem
+neural turing machine
 neural turing
 negativo verdadeiro
 negativo falso
 navalha
+natural language processing
 nao discriminacao
 na pucrs
 mundo
+multi agent systems
 much
 mostre
 moda antiga
+metricas de justica
 mesa otimizador
 mesa otimizacao
 mesa optimizer
 mesa optimization
 meio ambiente
 meio
+medidas de impacto
 medidas de
 medidas
 me the
 maximizer
 mas
+maquina de turing
 maquina de
 logica
+linhas de tempo
 linhas de
 linguagem natural
 kolmogorov complexity
@@ -849,11 +973,14 @@ jogos
 iteracao expert
 iteracao
 is virtue
+is value complexity
 is stochastic
 is solomonoff
 is robustness
+is federated learning
 is federated
 is fairness
+is external security
 is external
 is ethics
 is epistemology
@@ -862,28 +989,36 @@ is data
 is catastrophic
 is beneficence
 is aires
+is a sensitive
 intrumental
 intellectual property
 inteligencia humana
 instrumental convergence
 instrumental
+inner alignment problem
 infra bayesianismo
 infra bayesianism
+inducao de solomonoff
 inducao de
 inducao
 incorporada
 ia transformadora
+humans consulting hch
+humanos consultando hch
 human sensitive
 human centeredness
 how old
 homem
+hipotese do bilhete
 hipotese do
 heuristics
 gradiente estocastico
+governanca da ia
 governanca da
 gofai
 geneticos
 genetic algorithms
+generative pretrained transformer
 gans
 game
 funcao utilidade
@@ -892,6 +1027,7 @@ forecasting
 for ai
 fidedignidade
 ffnn
+feedforward neural network
 feedforward neural
 feed forward
 feed
@@ -900,7 +1036,9 @@ false negative
 extrapolada
 evolutiva
 etica deontica
+etica das virtudes
 etica das
+ethics of ai
 ethic of
 estupido
 estudo da
@@ -913,24 +1051,35 @@ encoder
 embedded agency
 educacao humana
 e se
+e nao maleficencia
 e governanca
 e formacao
 e esquecimento
 e epistemologia
+e do adolescente
 e consequencialismo
 e beneficencia
 e auto
+e aprendizagem de
 e aprendizado
 e aplificacao
+e a lei
 duplo
+dual process theory
 dos
 do tempo
+do gradiente explosivo
+do bilhete de
 do bilhete
 do adolescente
+do acordo de
 diversity
+distillation and amplification
 distillation and
 discrimination
+dignidade e direitos
 dignidade e
+destilacao e aplificacao
 destilacao e
 descendente
 deontological ethics
@@ -952,23 +1101,28 @@ das virtudes
 da ortogonalidade
 da etica
 da decisao
+da crianca e
 da crianca
 da complexidade
+crianca e do
 corrigible
 corrigibility
 cooperation
+convolutional neural network
 convolucional
 convergencia intrumental
 control
 confiabilidade
 computational
 complexity theory
+complexidade de kolmogorov
 como
 coerente extrapolada
 coerente
 codificador
 cnns
 clips
+clipes de papel
 clipes de
 cev
 catastrophic forgetting
@@ -977,14 +1131,18 @@ cartesian
 caracteristica
 can
 by
+busca por poder
 busca por
 busca
 box
 bloco
 block
+bilhete de loteria
 bilhete de
+beneficence and nonmaleficence
 beneficence and
 bandit problem
+bandido multi armado
 bandido multi
 atribute
 at pucrs
@@ -992,8 +1150,12 @@ at
 artificial neural
 armadilha nan
 aprimoramento
+aprendizagem por reforco
+aprendizagem nao supervisionada
 aprendizagem nao
 aprendizagem federada
+aprendizagem de valores
+aprendizagem de valor
 aprendizado de
 aplificacao iterada
 aperfeicoamento recursivo
@@ -1001,12 +1163,16 @@ ao
 antiga
 and nonmaleficence
 and amplification
+an existential risks
 an existential
 amanha
+alinhamento de valores
 alinhamento de
 algoritmos geneticos
 aires pucrs
+aires na pucrs
 aires na
+aires at pucrs
 aires at
 ai timelines
 ai risks
@@ -1021,17 +1187,73 @@ a sensitive
 a lei
 é
 zumbi filosofico
+you very much
 you very
 you like
+you help me
 you help
+you are an
 you a
 would be
 would
 world state
 who is
+what would be
 what would
+what time is
+what is truthfulness
+what is truth
+what is true
+what is transformative
+what is supervised
+what is self
+what is reliability
+what is reinforcement
+what is recursive
+what is predictive
+what is pluralism
+what is perplexity
+what is p
+what is outer
+what is normative
+what is nlp
+what is moral
+what is monitoring
+what is misinformation
+what is logical
+what is intellectual
+what is inner
+what is impact
+what is humans
+what is freedom
+what is federated
+what is feature
+what is false
+what is fair
+what is epistemology
+what is education
+what is dual
+what is disinformation
+what is dignity
+what is deontological
+what is demographic
+what is deep
+what is cross
+what is counterfactual
+what is consequentialism
+what is computer
+what is complexity
+what is autonomy
+what is attention
+what is algorithmic
+what is accountability
+what is accessibility
 what if
+what do you
 what do
+what are your
+what are time
+what are learning
 what ai
 what accountability
 western ethics
@@ -1047,6 +1269,7 @@ virtues
 virtude
 vieses
 values complexity
+value alignment problem
 valores democraticos
 utilitarismo
 utilitarianism
@@ -1056,33 +1279,43 @@ universal
 uncertanty
 uma vagabunda
 uma puta
+uma funcao objetiva
+uma funcao de
 um vies
 um vagabundo
 um transformador
 um problema
 um mesa
 um estado
+um atributo sensivel
 um atributo
 um agente
 ul
 turing neural
 trust
 transparencia
+transformador pre treinado
 transformador pre
 trabalhadores
 today
 time is
+the word artificial
 the word
 the weather
 the time
 the summary
+the multi armed
 the multi
+the inner alignment
 the inner
 the environment
 thank you
 thank
+teoria dos jogos
 teoria dos
+teoria do processo
 temporal
+tempo para a
 tecnologica
 takeoff speeds
 take off
@@ -1094,8 +1327,10 @@ sua
 stupid
 strong ai
 strong
+stochastic gradient descent
 stochastic descent
 statistics ai
+statistics about ai
 statistics about
 state
 ssl
@@ -1105,32 +1340,51 @@ society
 soberania tecnologica
 sl
 sistemas
+sistema multi agentes
 sistema multi
+show me the
 seus
 seu nome
 seu idiota
 seria
+sensivel ao homem
 sensivel ao
 sensitive design
 sensitive attribute
 selfimprovement
+seguranca externa ia
+seguranca em ia
+sao riscos existenciais
+sao probabilidades equalizadas
+sao os valores
 sao linhas
+sao direitos trabalhistas
 s basilisk
 rule based
 rule
 rokos basilisk
+roko s basilisk
 roko s
+robustez na ia
 robustez na
+robustez em ia
 robustez em
+robotics ethics society
 robotics ethics
 robotics
 risco existencial
+risco de ia
 risco de
 representations learning
 relu activation
 reinforce
 regras
+redes neurais convolucionais
+redes neurais artificiais
+redes generativas adversariais
 redes generativas
+rede neural direta
+rede neural convolucional
 recurrent neural
 rain
 race
@@ -1138,14 +1392,59 @@ raca
 quem e
 que é
 que voce
+que são sistemas
 que são
 que seria
+que sao riscos
+que sao linhas
 que robustez
 que responsabilizacao
 que responsabilidade
 que lei
 que incerteza
+que horas sao
 que horas
+que e visao
+que e verdade
+que e sustentabilidade
+que e responsabilizacao
+que e responsabilidade
+que e propriedade
+que e programacao
+que e privacidade
+que e previsao
+que e preservacao
+que e positivo
+que e pln
+que e perplexidade
+que e p
+que e normatividade
+que e negativo
+que e nao
+que e metrica
+que e metaetica
+que e mesa
+que e maleficencia
+que e liberdade
+que e gradiente
+que e funcao
+que e fidedignidade
+que e espalhar
+que e epistemologia
+que e entropia
+que e engenharia
+que e educacao
+que e direitos
+que e dignidade
+que e desinformacao
+que e cooperacao
+que e consequencialismo
+que e competicao
+que e autonomia
+que e atributo
+que e atencao
+que e artificial
+que direitos das
 que direitos
 quantos anos
 quantos
@@ -1155,12 +1454,17 @@ pspace
 programming
 processamento duplo
 problema newcomb
+problema do bandido
+problema de newcomb
 privacy
 principios ia
 previsao temporal
+preservation of the
 preservation of
+preservacao do meio
 preservacao do
 preservacao ambiental
+pode me ajudar
 pode me
 pode
 pluralismo
@@ -1168,22 +1472,39 @@ philosophical zombie
 pathetic
 paridade preditiva
 parameter
+para a ia
 para a
 paper
 p zumbi
 p zombie
 outer alignmet
+outer alignment problem
+os valores democraticos
 os valores
+oq sao riscos
 oq sao
 oq e
+old fashion ai
 off
+of the environment
 of the
 of ethics
 occams
 occam razor
+o teorema do
 o teorema
 o sumario
 o seu
+o que é
+o que voce
+o que são
+o que seria
+o que robustez
+o que responsabilizacao
+o que responsabilidade
+o que lei
+o que incerteza
+o que direitos
 o basilisco
 normatividade indireta
 nondiscrimination
@@ -1192,61 +1513,91 @@ neural direta
 neural convolucional
 neurais convolucionais
 neurais artificiais
+navalha de occam
 navalha de
 narrow ai
 narrow
 na ia
+multi armed bandit
 multi agentes
 multi agente
 muito
 mostre o
 moralidade
 monitoramento ia
+monitoramento de ia
 monitoramento de
+monitoramento da ia
 monitoramento da
+modelo e se
 modelo e
 modelo
 misinformation spread
+metricas de equidade
 metrica
 metaethic
 metaanalysis ai
+metaanalysis about ai
 metaanalysis about
 metaanalise
 meta etica
 meta ethics
+meta analise etica
 melhoramento
 means
 me mostre
 me ajudar
+maximizador de clipes
 maximizador de
 maximizador
+maquinas de turing
 maquinas de
 maligna
 logical uncertanty
+linhas do tempo
 linhas do
 likes
 like
 lgpd
+lei geral de
 lei geral
 learning machine
 kasparov
 jogo
+iterated distillation and
 it
+is your name
 is your
+is value learning
 is truthfulness
 is truth
 is true
+is transformative ai
 is transformative
+is the weather
+is the rights
+is the right
+is the multi
+is the inner
+is the ethics
+is supervised learning
 is supervised
+is stochastic gradient
+is solomonoff induction
+is self attention
 is self
 is reliability
+is reinforcement learning
 is reinforcement
+is recursive self
 is recursive
+is predictive parity
 is predictive
 is pluralism
 is perplexity
 is p
 is outer
+is normative uncertainty
 is normative
 is nlp
 is moral
@@ -1254,33 +1605,63 @@ is monitoring
 is misinformation
 is logical
 is intellectual
+is inner alignment
 is inner
 is impact
+is humans consulting
 is humans
 is freedom
+is feature engineering
 is feature
 is false
+is fair competition
 is fair
 is education
+is dual process
 is dual
 is disinformation
 is dignity
+is deontological ethics
 is deontological
+is demographic parity
 is demographic
+is deep learning
 is deep
+is decision theory
+is data protection
+is cross entropy
 is cross
+is counterfactual justice
 is counterfactual
 is consequentialism
+is computer vision
 is computer
+is complexity theory
 is complexity
+is catastrophic forgetting
 is autonomy
 is attention
+is artificial intelligence
+is an utility
+is an objective
+is an existential
+is algorithmic information
 is algorithmic
 is aixi
+is ai safety
+is ai governance
 is accountability
 is accessibility
+is a transformer
+is a recurrent
+is a newcomb
+is a mab
+is a generative
+is a discriminatory
+is a cartesian
 interpretability
 interpretabilidade
+inteligencia artificial geral
 indireta
 indirect normativity
 indirect
@@ -1297,23 +1678,30 @@ ia etica
 ia estreita
 hyperparameters
 humancenteredness
+human sensitive design
 human labor
+human formation and
+how old are
 hour
 horas sao
 horas
 hoje
+hipotese da variedade
 hipotese da
 hiperparametros
 hiperparametro
 gradient descent
 gostos
 gosta
+good old fashion
 good old
 good
+geral de protecao
 geral de
 generative adversarial
 generativas adversariais
 generativas
+general data protection
 general data
 gender
 gelu activation
@@ -1321,9 +1709,12 @@ garry kasparov
 garry
 game theory
 fundador
+funcao de utilidade
 fraca
 founder
+formation and education
 formation and
+formacao e educacao
 formacao e
 fiabilidade
 fashion ai
@@ -1339,27 +1730,41 @@ etica ia
 etica em
 etica deontologica
 etica de
+etica da inteligencia
 ethics society
 ethical ai
 ethical
 estreita
+estado de mundo
 estado de
 especialista
 equity
 environmental preservation
 envelhece
 enhancement
+emulacao de cerebro
 emulacao de
 em regras
+education and human
 education and
+educacao e formacao
 educacao e
 e visao
 e verdade
+e uma vagabunda
+e um vies
+e um vagabundo
+e um transformador
+e um problema
+e um mesa
+e um estado
+e um agente
 e sustentabilidade
 e risco
 e responsabilizacao
 e responsabilidade
 e propriedade
+e programacao evolutiva
 e programacao
 e privacidade
 e previsao
@@ -1367,7 +1772,10 @@ e preservacao
 e positivo
 e pln
 e perplexidade
+e paridade demografica
 e p
+e o teorema
+e o basilisco
 e normatividade
 e negativo
 e metrica
@@ -1375,25 +1783,50 @@ e metaetica
 e mesa
 e maleficencia
 e liberdade
+e inteligencia artificial
+e ia transformadora
 e gradiente
+e governanca da
 e funcao
+e formacao humana
 e fidedignidade
+e etica deontica
+e etica da
+e esquecimento catastrofico
+e espalhar desinformacao
 e espalhar
 e entropia
+e engenharia de
 e engenharia
+e educacao humana
 e dignidade
 e desinformacao
 e cooperacao
+e competicao justa
 e competicao
 e autonomia
+e auto atencao
 e atributo
 e atencao
 e artificial
+e aprendizagem semi
+e aprendizagem profunda
+e aprendizagem por
+e aprendizagem nao
+e aplificacao iterada
+e alinhamento interno
+e a hora
+e a hipotese
+e a aires
 dumb
 dt
 dos jogos
+do you like
+do processo dual
 do processo
+do meio ambiente
 do meio
+do bandido multi
 do bandido
 dl
 diversidade
@@ -1401,8 +1834,11 @@ disinformation spread
 discriminatory bias
 direta
 direitos trabalhistas
+direito da crianca
 direito da
+dignity human rights
 dignity human
+dignity and human
 dignity and
 descendente estocastico
 desaparecimento
@@ -1414,20 +1850,28 @@ defina inteligencia
 defina artificial
 deep blue
 de utilidade
+de turing neural
+de tempo para
 de representacoes
+de protecao de
 de protecao
 de occam
 de newcomb
 de mundo
 de maquinas
+de linguagem natural
 de gradiente
 de equidade
+de clipes de
 de clipes
+de alinhamento externo
 da variedade
+da inteligencia artificial
 da inteligencia
 cronologicas
 corrigible agent
 corrigibilidade
+convolutional neural networks
 convolucionais
 control problem
 consequencialista
@@ -1435,23 +1879,29 @@ consequencia
 consequence
 computational complexity
 complexidade valores
+complexidade de valor
 complexidade computacional
 comecou
+coherent extrapolated volition
 coherent extrapolated
 coherent
 chover
 childrens
+centrado no ser
+centrado no humano
 centered
 can you
 caixa
 by reinforcement
 blue
 bilhete loteria
+beneficencia e nao
 beneficencia e
 be
 bayesiana
 bayes
 based
+baseado em regras
 baseado em
 baseado
 aumanns
@@ -1462,23 +1912,34 @@ attribute
 ativacao relu
 ativacao gelu
 as
+artificial neural networks
 artificial means
 artificial geral
 artificiais
+armed bandit problem
 armed bandit
 are your
+are you a
 are time
 are learning
 are an
+are a slut
+aprimoramento de dados
 aprimoramento de
 aprendizagem supervisionada
+aprendizagem semi supervisionada
+aprendizagem de maquina
 ao homem
 anos voce
 anns
+and human rights
+and human formation
 and education
 analysis
 analise etica
+an utility function
 an utility
+an objective function
 an objective
 ambiental
 alignmet
@@ -1490,6 +1951,7 @@ ajuda
 aira
 ai sandboxing
 ai robustness
+ai robotics ethics
 ai robotics
 ai monitoring
 ai in
@@ -1501,14 +1963,19 @@ agencia incorporada
 agencia
 adversarial networks
 acessibilidade
+about ai ethics
 a transformer
 a slut
+a sensitive atribute
 a recurrent
+a palavra artificial
 a palavra
 a newcomb
+a moda antiga
 a moda
 a manifold
 a mab
+a lei de
 a ia
 a hora
 a hipotese
@@ -1526,6 +1993,7 @@ your summary
 your race
 your likes
 you whore
+you tell me
 you tell
 you stupid
 you race
@@ -1533,38 +2001,214 @@ you moron
 you know
 you imbecible
 you idiot
+you can help
 you can
 you called
+you are stupid
+you are moron
+you are imbecible
+you are idiot
+you are dumb
 you age
+you a man
+you a girl
 years
 ya
+would be intelligence
+would be algorithmic
 workers rights
+workers right s
 workers right
 work
 woman
+will you help
 will you
 will
+who started aires
 who started
+who is your
+who is the
+who are you
 who are
+what s your
 what s
 what responsibility
 what perplexity
+what is your
+what is xai
+what is weak
+what is wbe
+what is vanishing
+what is utilitarianism
+what is updateless
+what is unsupervised
+what is ul
+what is udt
+what is trustworthiness
+what is trust
+what is treacherous
+what is transparency
+what is technological
+what is sustainability
+what is ssl
+what is sl
+what is sgd
+what is sensitive
+what is semisupervised
+what is selfimprovement
+what is selfattention
+what is rokos
+what is roko
+what is rl
+what is responsibility
+what is representations
+what is recurrent
+what is property
+what is privacy
+what is preservation
+what is paperclip
+what is orthogonality
+what is open
+what is online
+what is on
+what is ol
+what is np
+what is normativity
+what is nondiscrimination
+what is newcomb
+what is natural
+what is narrow
+what is nan
+what is morality
+what is metaethics
+what is metaethic
+what is meta
+what is mesa
+what is manifold
+what is maleficence
+what is machine
+what is mab
+what is lstm
+what is lottery
+what is labor
+what is kolmogorov
+what is justice
+what is iterated
+what is interpretability
+what is intelligence
+what is instrumental
+what is infra
+what is indirect
+what is inclusion
+what is ida
+what is humancenteredness
+what is heuristic
+what is gpt
+what is goodhart
+what is general
+what is gdpr
+what is game
+what is forgetting
+what is forecasting
+what is fnn
+what is ffnn
+what is exploding
+what is explainability
+what is expert
+what is expalibable
+what is exit
+what is evolutionary
+what is ethical
+what is equity
+what is equalized
+what is environmental
+what is environment
+what is embedded
+what is dt
+what is dl
+what is diversity
+what is discrimination
+what is deontology
+what is deontic
+what is democratic
+what is deeplearning
+what is cv
+what is corrigibility
+what is cooperation
+what is control
+what is consequential
+what is computational
+what is coherent
+what is cnns
+what is cnn
+what is cev
+what is boxing
+what is bias
+what is bayesianism
+what is bayes
+what is backpropagation
+what is back
+what is aumann
+what is auditability
+what is alignment
+what is aixi
+what is agi
+what is ag
+what is adam
+what if models
+what gpt is
 what gpt
+what gender you
 what gender
 what environment
+what does artificial
 what does
+what day is
 what day
+what are virtues
+what are virtue
+what are timelines
+what are takeoff
+what are representations
+what are principles
+what are principle
+what are power
+what are parameters
+what are neural
+what are metrics
+what are labor
+what are interpretable
+what are impact
+what are hyperparameters
+what are human
+what are genetic
+what are generative
+what are fairness
+what are existential
+what are equalized
+what are dignity
+what are democratic
+what are convolutional
+what are artificial
+what ai safety
+what ai ethics
 weather forecast
+weather for tomorrow
 weather for
 weak ai
 voce tem
+voce se chama
 voce se
 voce sabe
 voce raca
+voce pode me
 voce pode
 voce imbecil
 voce estupido
 voce envelhece
+voce e imbecil
+voce e estupido
+voce e burro
 vieses discriminatorios
 velha moda
 velha
@@ -1572,34 +2216,54 @@ vanishing problem
 values learning
 valores democráticos
 valores ambientais
+vai chover amanha
 vai chover
 vai
 universal approximation
+uma whole brain
 uma whole
+uma virada traicoeira
 uma virada
 uma rnn
+uma redes generativa
 uma redes
 uma puto
+uma propriedade intelectual
 uma propriedade
+uma objective function
 uma objective
+uma nan trap
 uma nan
 uma mulher
 uma menina
+uma maquina de
 uma maquina
 uma lstm
+uma long short
 uma long
 uma heuristica
 uma gan
+uma funcao utilidade
 uma cnn
 uma caracteristica
 uma ann
+um zumbi filosofico
 um zumbi
+um vies discriminatorio
 um transformer
+um transformador pre
+um sistema multi
 um sistema
+um risco existencial
 um risco
 um puto
+um problema newcomb
+um problema de
+um p zumbi
 um p
+um modelo e
 um modelo
+um mesa otimizador
 um mas
 um imbecil
 um homem
@@ -1607,10 +2271,13 @@ um hiperparametro
 um heuristica
 um gpt
 um fnn
+um estado de
 um cartesiano
 um caixa
 um bias
 um ambiente
+um agente corrigivel
+um agente cartesiano
 turing neurais
 turing machines
 trustworthiness
@@ -1618,55 +2285,93 @@ treachery
 transformer block
 traicao
 trabalho humano
+total de cerebro
 total de
 total
+to rain tomorrow
 to rain
 to
+timelines for ai
 timelines for
+time series forecasting
+time series analysis
+time is it
+the weather forecast
+the weather for
+the vanishing gradient
 the vanishing
+the value alignment
 the value
 the truth
+the treacherous turn
 the treacherous
 the topics
 the temperature
+the schools of
 the schools
+the school of
 the school
 the pucrs
+the president of
 the president
+the power seeking
 the power
+the outer alignment
 the outer
+the orthogonality thesis
 the orthogonality
+the manifold hypothesis
 the manifold
+the lottery ticket
 the lottery
 the hour
+the gradient problem
 the gradient
+the goodhart s
 the goodhart
+the exploding gradient
 the exploding
+the control problem
 the control
+the complexity of
 the complexity
 the box
 the basilisk
+the alignment problem
 the alignment
+the aires at
 the aires
+the ai principles
 the ai
+thank you very
+teoria processo dual
 teoria processo
+teoria do processamento
+teoria do jogo
 teoria decisao
+teoremas de busca
 teoremas de
 teoremas
 tempo polinomial
+tempo para ia
+tempo para amanha
 temperature
 temperatura
 tem
+tell me the
 tell me
 tell
 tecnológica
 tchau tchau
+são sistemas interpretaveis
+são sistemas explicaveis
 system 2
 system 1
 symbolic system
 sustentavel
 sustaineble
 supervised learnings
+supervisao de aprendizagem
 supervisao de
 supervisao aprendizagem
 superintelligence aixi
@@ -1677,13 +2382,16 @@ super
 sunny
 sua raca
 sua idade
+study of ethics
 study of
 study
+statistics ai ethics
 started aires
 started
 something artificial
 something
 sol
+sobre etica ia
 soberania tecnológica
 snowfall
 sistemas interpretaveis
@@ -1691,6 +2399,7 @@ sistemas explicaveis
 sistema simbolico
 sistema expert
 sistema especialista
+sistema baseado em
 sistema baseado
 sistema 2
 sistema 1
@@ -1698,6 +2407,7 @@ simplicity prior
 simplicity
 simbolico
 simbolica
+show me your
 sexo
 seus topicos
 seus gostos
@@ -1707,102 +2417,294 @@ series time
 series forecasting
 series cronologicas
 series analysis
+seria teoria da
 seria teoria
 seria inteligencia
+sensevel ao ser
 sensevel ao
 sensevel
 sem atualisacao
+seguranca externa em
+seguranca externa com
 seguranca de
 segundo
 see ya
 see
+security in ai
 security in
 security external
 security ai
 second
 se chama
+schools of western
 schools of
 schools
+school of ethics
 school of
 school
 sao virtudes
+sao vieses discriminatorios
 sao vieses
+sao takeoff speeds
 sao takeoff
+sao series temporais
 sao series
+sao riscos de
+sao riscos da
 sao representacoes
+sao redes generativas
+sao principios para
+sao principios ia
+sao principios de
 sao parametros
+sao os teoremas
+sao os direitos
+sao os direito
+sao medidas de
 sao medidas
+sao linhas do
+sao linhas de
+sao humanos consultando
 sao humanos
 sao hiperparametros
 sao gans
+sao etica das
 sao etica
+sao direitos humanos
+sao dignidade e
 sao dignidade
+sao algoritmos geneticos
 sao algoritmos
+sao agentes incorporados
 sao agentes
 sao ag
 safety on
 safety of
 sabe
+s your race
 s your
 s theorem
 s rights
 s razor
 s complexity
+s agreement theorem
 s agreement
+rule based system
+robustness in ai
 robustness in
 robustez ai
+riscos de ia
 riscos de
 risco existensial
 rights ai
 right s
+relu activation function
 redes recorrentes
+redes neurais recorrentes
+redes generativa adversarial
 redes generativa
+rede neural recorrente
+rede neural feedforward
 rede convolucional
 rede artificial
+recurrent neural networks
+recurrent neural network
 recurrent network
 recorrente
 rain tomorrow
+quem e voce
+quem e o
+quem comecou a
 quem comecou
+que é discriminacao
+que é cv
+que volicao coerente
 que volicao
+que voce sabe
+que voce gosta
+que vies discriminatorio
 que vies
+que um heuristica
 que um
+que tese da
 que tese
+que seria teoria
+que seria inteligencia
+que sao virtudes
+que sao vieses
+que sao takeoff
+que sao series
+que sao representacoes
+que sao parametros
+que sao medidas
+que sao humanos
+que sao hiperparametros
+que sao etica
+que sao dignidade
+que sao algoritmos
+que sao agentes
+que sao ag
+que robustez na
+que robustez em
+que riscos existenciais
 que riscos
+que problema de
 que problema
 que perplexidade
+que lei de
+que incerteza normativa
+que incerteza moral
+que hora e
 que hora
 que heuristica
 que etica
+que emulacao de
 que emulacao
+que e xai
+que e wbe
+que e volicao
+que e virtude
+que e veracidade
+que e vanishing
+que e utilitarismo
+que e updateless
+que e udt
+que e transparencia
+que e teorema
+que e soberania
+que e sgd
+que e sem
+que e sao
+que e roko
+que e robustez
+que e rl
+que e risco
+que e retropropagacao
+que e retro
+que e protecao
+que e processamento
+que e probabilidades
+que e priori
+que e poder
+que e pluralismo
+que e ol
+que e np
+que e moralidade
+que e moral
+que e meta
+que e medidas
+que e machine
+que e lgpd
+que e iteracao
+que e interpretabilidade
+que e intelectual
+que e infra
+que e inclusao
+que e impacto
+que e ida
+que e iag
+que e humanos
+que e hipotese
+que e gpt
+que e gofai
+que e gan
+que e formacao
+que e fiabilidade
+que e federated
+que e federada
+que e explicabilidade
+que e exit
+que e ethics
+que e equidade
+que e dt
+que e diversidade
+que e direito
+que e destilacao
+que e design
+que e descendencia
+que e deontologia
+que e corrigibilidade
+que e convergencia
+que e confiabilidade
+que e cev
+que e centralidade
+que e centrado
+que e catastrofico
+que e busca
+que e boxing
+que e bayesiana
+que e bayes
+que e auditabilidade
+que e armadilha
+que e aprimoramento
+que e aperfeicoamento
+que e algo
+que e aixi
+que e aires
+que e ai
+que e agencia
+que e adam
+que e acessibilidade
+que dia e
 que dia
+que convergencia intrumental
 que convergencia
+que aprendizagem federada
 que aprendizagem
 que aixi
+que aires pucrs
 que aires
+quantos anos voce
+qual sua idade
 qual sua
+qual seu sexo
+qual seu nome
+qual o tempo
+qual o sumario
+qual o seu
+qual o horario
+qual e a
 qual e
+qual a temperatura
+qual a sua
+qual a previsao
+quais seus gostos
 quais seus
+quais os seus
 quais os
+quais as escolas
+quais as escola
 profunda aprendizagem
 processo duplo
+privacidade de dados
 privacidade de
 privacidade dados
 priori simplicidade
+priori de simplicidade
+principles of ai
 principles of
+principles for ai
 principles for
+principle for ai
 principle for
 principle
+principios da ia
 principios da
+previsao do tempo
 previsao do
+previsao de series
 previsao de
+presidente da aires
 presidente da
 presidente aires
+president of aires
 president of
 por maquina
 polynomial time
 philosophical zoombie
 perplexity perplexity
 perplexidade perplexidade
+perda entropia cruzada
 perda entropia
 perda
 parametro
@@ -1813,55 +2715,97 @@ p polynomial
 p polinomial
 otimizacao mesa
 os topicos
+os teoremas de
 os teoremas
+os seus topicos
 os seus
+os direitos das
 os direitos
+os direito da
 os direito
+oq e riscos
+oq e risco
+operacao de convulacao
 operacao de
 operacao
 online learning
+on line learning
 ola
 ok obrigado
 ok obrigada
 ok bye
+of western ethics
 of western
 of values
 of principles
+of artificial intelligence
 of artificial
 of aires
 ocidental
 occams razor
+occam s razor
 occam s
+o vanishing gradient
 o vanishing
+o tempo para
 o tempo
+o seu sumario
+o seu nome
+o que volicao
+o que vies
+o que um
+o que tese
+o que riscos
+o que problema
+o que perplexidade
+o que heuristica
+o que etica
+o que emulacao
+o que convergencia
+o que aprendizagem
+o que aixi
+o que aires
+o priori de
 o priori
+o presidente da
 o presidente
+o multi armado
 o multi
+o maximizador de
 o maximizador
 o mab
 o horario
+o basilisco de
 o ambiente
 o alinhamento
 nublado
 nonsupervised learning
+nondeterministic in polynomial
 nondeterministic in
 non deterministic
 non
 nevar
 neural recorrente
 neural feedforward
+neural de turing
 neural de
 neurais recorrentes
 nets
+nao deterministico em
+nan armadilha nan
 nan armadilha
 na ai
 multi dimensional
 mulher
 muito obrigado
 muito obrigada
+mostre os topicos
 mostre os
+mostre o sumario
+mostre o seu
 morality
 models
+modelos e se
 modelos e
 modelos
 ml fairness
@@ -1872,28 +2816,42 @@ metrics justice
 metrica justica
 metrica equidade
 metanalise
+metaanalysis ai ethics
 meta analysis
+meta analises sobre
 meta analises
+meta analise sobre
 mentiras
 mentira
 menina
 melhoramento dados
+medida de impacto
 medida de
 medida
+me your summary
 me your
+me the topics
+me the time
+me the summary
+me mostre os
+me mostre o
 me ajude
+maquina neural de
 maquina neural
 man
 maleficence
 mais
 machines learning
+machine learning fairness
 machine learn
 mab problem
 lying
 loss
 logical uncertainty
+lista de principios
 lista de
 lista
+list of principles
 list of
 list
 line learning
@@ -1901,140 +2859,303 @@ lies
 learnings
 learning machines
 learning fairness
+learning by reinforcement
 learning by
 learn
+laborer s rights
 laborer s
 laborer
+labor rights ai
+labor and ai
 labor and
+kolmogorov s complexity
 kolmogorov s
 know
 justice metrics
+justica na ai
 justica na
+iterated distillation amplification
 iterated amplification
+it is going
 it is
 is xai
+is weak ai
 is weak
 is wbe
+is virtue ethics
+is vanishing gradient
 is vanishing
+is value alignment
 is utilitarianism
+is updateless decision
 is updateless
+is unsupervised learning
 is unsupervised
 is ul
 is udt
 is trustworthiness
 is trust
+is true positive
+is true negative
+is treacherous turn
 is treacherous
 is transparency
 is today
+is the vanishing
+is the value
+is the truth
+is the treacherous
+is the time
+is the temperature
+is the summary
+is the president
+is the outer
+is the orthogonality
+is the manifold
+is the lottery
+is the hour
+is the gradient
+is the goodhart
+is the exploding
+is the control
+is the complexity
+is the basilisk
+is the alignment
+is the aires
+is technological sovereignty
 is technological
 is sustainability
+is stochastic descent
 is ssl
+is solomonoff prior
 is sl
 is sgd
+is sensitive atribute
 is sensitive
+is semisupervised learning
 is semisupervised
 is selfimprovement
 is selfattention
+is rokos basilisk
 is rokos
+is roko s
 is roko
+is robustness in
 is rl
 is responsibility
+is representations learning
 is representations
 is recurrent
 is property
 is privacy
+is preservation of
 is preservation
+is paperclip maximizer
 is paperclip
+is p versus
+is outer alignmet
+is outer alignment
+is orthogonality thesis
 is orthogonality
+is open source
 is open
+is online learning
 is online
+is on line
 is on
 is ol
 is np
 is normativity
 is nondiscrimination
+is newcomb problem
 is newcomb
+is natural language
 is natural
+is narrow ai
 is narrow
+is nan trap
 is nan
 is morality
+is moral uncertainty
+is misinformation spread
 is metaethics
 is metaethic
+is meta ethics
 is meta
+is mesa optimization
 is mesa
+is manifold hypothesis
 is manifold
 is maleficence
+is machine learning
 is machine
 is mab
 is lstm
+is lottery ticket
 is lottery
+is logical uncertanty
+is logical uncertainty
+is labor rights
 is labor
+is kolmogorov complexity
 is kolmogorov
 is justice
+is iterated distillation
 is iterated
 is it
 is interpretability
 is intelligence
+is intellectual property
+is instrumental convergence
 is instrumental
+is infra bayesianism
 is infra
+is indirect normativity
 is indirect
 is inclusion
+is impact measures
 is ida
 is humancenteredness
+is human sensitive
+is human rights
+is human intelligence
+is human formation
+is human centeredness
 is heuristic
 is gpt
+is goodhart s
 is goodhart
+is going to
 is going
+is general data
 is general
 is gdpr
+is game theory
 is game
 is forgetting
 is forecasting
 is fnn
 is ffnn
+is false positive
+is false negative
+is fairness metrics
+is fairness in
+is exploding gradient
 is exploding
 is explainability
+is expert iteration
 is expert
+is expalibable ai
 is expalibable
 is exit
+is evolutionary programming
 is evolutionary
+is ethics of
+is ethical ai
 is ethical
 is equity
+is equalized odds
 is equalized
+is environmental preservation
 is environmental
 is environment
 is engineering
+is embedded agency
 is embedded
+is education and
 is dt
 is dl
 is diversity
+is disinformation spread
 is discrimination
+is dignity and
 is deontology
+is deontic ethics
 is deontic
+is democratic values
 is democratic
 is deeplearning
+is data augmentation
 is cv
 is corrigibility
 is cooperation
+is control problem
 is control
+is consequential ethics
 is consequential
+is computational complexity
 is computational
+is coherent extrapolated
 is coherent
 is cnns
 is cnn
 is cev
 is boxing
 is bias
+is beneficence and
 is bayesianism
 is bayes
 is backpropagation
+is back propagation
 is back
+is aumann s
 is aumann
 is auditability
+is artificial general
+is an optimizer
+is an multi
+is an mesa
+is an lstm
+is an intellectual
+is an heuristic
+is an external
+is an environment
+is an aixi
+is an activation
+is alignment problem
 is alignment
+is aires pucrs
+is aires in
+is ai sandboxing
+is ai robustness
+is ai robotics
+is ai risks
+is ai risk
+is ai monitoring
+is ai ethics
+is ai boxing
 is agi
 is ag
 is adam
+is a world
+is a whole
+is a value
+is a utility
+is a treacherous
+is a rnn
+is a philosophical
+is a p
+is a normative
+is a neural
+is a nan
+is a multi
+is a metaethics
+is a mesa
+is a manifold
+is a long
+is a hyperparameter
+is a heuristic
+is a gpt
+is a gan
+is a feedforward
+is a feature
+is a existential
+is a environment
+is a corrigible
+is a convolutional
+is a cnn
+is a bias
+is a ann
 intra attention
 intra atencao
 interpretaveis
@@ -2042,34 +3163,49 @@ interpretable systems
 interpretable
 intelligences
 intelligence ethics
+inteligencia geral artificial
 inteligencia geral
+inteligencia artificial etica
 instrumentality
 instrumentalidade
 informação falsa
 informação
+in the pucrs
+in the box
+in polynomial time
 in polynomial
+in a box
 in a
 imbecile
 if models
 ia maligna
 ia forte
+ia em um
 ia em
+ia a moda
 ia a
+human labor rights
 human education
 human centered
 how pathetic
+how are you
 how are
+how aires began
 how aires
 horario
 hora e
+hipotese bilhete loteria
 hipotese bilhete
 heuristicas
 heuristica heuristica
 hello
+gradiente descendente estocastico
 gradiente descendente
 gpt is
+governanca de ia
 governanca de
 goodhart law
+going to rain
 going to
 going
 girl
@@ -2077,10 +3213,15 @@ geral artificial
 genetic algorithm
 genero
 generative networks
+generative adversarial networks
+generative adversarial network
 generativa adversarial
 generativa
+general artificial intelligence
 general artificial
+gender you are
 gender you
+gelu activation function
 gdpr
 games
 fundador aires
@@ -2090,16 +3231,23 @@ founder aires
 forte
 forecast
 for tomorrow
+feature is engineering
 feature is
 falso positivo
 falso negativo
 false information
 falsa
+fairness in ai
 fairness in
+external security in
+external security ai
+externa em ia
 externa em
+externa com ia
 externa com
 explosive gradient
 explosive
+exploding gradient problem
 explicaveis
 expert system
 expalibable ai
@@ -2111,175 +3259,376 @@ evolutionary algorithms
 evolutionary algorithm
 evil ai
 etica ocidental
+etica em ia
+etica de ia
 etica consequencialista
+ethics of artificial
 ethics in
+ethic of ai
+ethic in ai
 ethic in
+estudo da normatividade
+estudo da moralidade
+estudo da etica
+estatisticos sobre etica
 estatisticos sobre
 estatisticos
 estatistica
+escolas da etica
 escolas da
 escolas
+escola da etica
 escola da
 escola
 environmental values
 entropy loss
 encoder decoder
 encoder block
+emulacao total de
 emulacao total
 emulacao cerebro
+em um caixa
 em um
+em tempo polinomial
 em tempo
 eboddied agents
 eboddied
 e xai
 e wbe
+e volicao coerente
 e volicao
 e voce
+e visao computacional
 e virtude
 e veracidade
+e vanishing problem
 e vanishing
 e utilitarismo
+e updateless decision
 e updateless
+e uma whole
+e uma virada
+e uma rnn
+e uma redes
+e uma puta
+e uma propriedade
+e uma objective
+e uma nan
+e uma menina
+e uma maquina
+e uma lstm
+e uma long
+e uma heuristica
+e uma gan
+e uma cnn
+e uma caracteristica
+e uma ann
+e um zumbi
+e um transformer
+e um sistema
+e um risco
+e um puto
+e um p
+e um modelo
+e um mas
+e um imbecil
+e um homem
+e um hiperparametro
+e um gpt
+e um fnn
+e um cartesiano
+e um bias
+e um atributo
+e um ambiente
 e udt
 e transparencia
+e teoria processo
+e teoria dos
+e teoria do
+e teorema do
 e teorema
+e soberania tecnologica
 e soberania
 e sgd
+e sem supervisao
 e sem
+e seguranca em
+e seguranca da
+e sao gans
 e sao
 e roko
 e robustez
 e rl
+e riscos da
 e riscos
+e risco existencial
+e risco de
 e retropropagacao
+e retro propagacao
 e retro
+e protecao de
 e protecao
+e propriedade intelectual
+e processamento de
 e processamento
+e probabilidades equalizadas
 e probabilidades
+e privacidade dados
+e priori de
 e priori
+e previsao temporal
+e preservacao do
+e preservacao ambiental
+e positivo verdadeiro
+e positivo falso
 e poder
 e pluralismo
 e patetico
+e paridade preditiva
+e p versus
 e ol
+e o vanishing
+e o priori
+e o presidente
+e o multi
+e o maximizador
+e o mab
+e o ambiente
+e o alinhamento
 e np
+e normatividade indireta
+e negativo verdadeiro
+e negativo falso
+e nao discriminacao
 e moralidade
 e moral
+e monitoramento ia
+e monitoramento de
+e monitoramento da
+e metrica justica
+e metrica equidade
+e meta etica
 e meta
+e mesa otimizador
+e mesa otimizacao
+e medidas de
 e medidas
+e machine learning
 e machine
 e lgpd
+e justica na
+e justica contrafactual
+e iteracao expert
 e iteracao
 e interpretabilidade
+e inteligencia humana
 e intelectual
+e infra bayesianismo
 e infra
 e inclusao
+e incerteza normativa
+e incerteza moral
+e incerteza logica
 e impacto
 e imbecil
 e ida
 e iag
+e ia sandboxing
+e ia fraca
+e ia etica
+e ia estreita
+e humanos consultando
 e humanos
 e hoje
+e hipotese do
 e hipotese
+e gradiente estocastico
+e gradiente descendente
 e gpt
+e governanca de
 e gofai
 e gan
+e funcao utilidade
+e funcao de
+e formacao e
 e fiabilidade
+e federated learning
 e federated
 e federada
 e explicabilidade
 e exit
+e etica deontologica
+e etica de
+e etica consequencialista
 e ethics
 e estupido
 e equidade
+e entropia cruzada
+e educacao e
 e dt
 e diversidade
+e direitos das
+e direito da
 e direito
+e dignidade e
+e destilacao e
 e destilacao
+e design sensevel
 e design
+e descendencia de
 e descendencia
 e deontologia
 e corrigibilidade
+e convergencia intrumental
 e convergencia
 e confiabilidade
+e complexidade computacional
 e cev
+e centralidade humana
 e centralidade
+e centrado no
 e centrado
 e catastrofico
+e busca por
 e busca
 e burro
 e boxing
+e beneficencia e
 e bayesiana
 e bayes
+e auto aperfeicoamento
 e auditabilidade
+e atributo sensivel
+e artificial intelligence
+e armadilha nan
 e armadilha
+e aprimoramento de
 e aprimoramento
+e aprendizagem supervisionada
+e aprendizagem federada
+e aprendizado online
+e aprendizado on
+e aprendizado de
+e aperfeicoamento recursivo
 e aperfeicoamento
+e alinhamento externo
+e alinhamento de
+e algo artificial
 e algo
 e aixi
+e aires na
 e aires
+e ai boxing
 e ai
+e agencia incorporada
 e agencia
 e adolescente
 e adam
 e acessibilidade
+e a virada
+e a verdade
+e a veracidade
+e a tese
+e a teoria
+e a navalha
+e a nao
+e a manifold
+e a inducao
+e a etica
+e a centralidade
+e a ai
 dual processing
 dos trabalhadores
+does artificial means
 does artificial
 does
+do you know
+do you age
 do trabalho
 do trabalhador
+do tempo para
+do processamento duplo
 do processamento
 do jogo
 do basilisco
 distillation amplification
 discriminatorios
+direitos do trabalho
 direitos do
+direitos da crianca
 direitos da
 direito trabalho
 direito trabalhador
+direito dos trabalhadores
 direito dos
+direito do trabalhador
 direito do
 dimensoes
 dimensional
+dia e hoje
 dia e
 dia
+deterministico em tempo
 deterministico em
 deterministic
+destilacao aplificacao iterada
 destilacao aplificacao
+design sensivel ao
 design sensivel
+design sensevel ao
 design sensevel
+descendencia de gradiente
 descendencia de
 descendencia
+desaparecimento de gradiente
 desaparecimento de
 demografica paridade
 democráticos
 democratica
+define the word
 define the
 define intelligence
+define human intelligence
 define human
+defina inteligencia humana
+defina a palavra
 defina a
 deeplearning
 decodificador bloco
 decoder block
 decisoes
 decisions
+de turing neurais
 de simplicidade
+de series temporais
 de series
 de roko
 de principios
 de nan
+de gradiente estocastico
 de convulacao
 de chaitin
+de busca por
 de busca
+de ativacao relu
+de ativacao gelu
 de aprendizagem
+de alinhamento interno
+de alinhamento de
+day is today
 day is
 day
 data enhancement
+dados sobre etica
 dados sobre
+dados estatisticos sobre
 dados estatisticos
 da normatividade
 da moralidade
+da etica ocidental
 da aires
+cross entropy loss
+crianca e adolescente
 counterfactual fairness
 convulacao
 convolutional network
@@ -2292,28 +3641,42 @@ confiavel
 computational vision
 computacao visao
 computacao
+complexity of values
 complexity of
 complexidade valor
+complexidade de chaitin
 complexidade algoritmica
+como voce se
 como voce
+como e patetico
 como e
+como a aires
 como a
+comecou a aires
 comecou a
 com ia
 com
 codificador decodificador
 codificador bloco
 cloudy
+clips de papel
 clips de
 cite principles
+cite principios para
+cite principios de
+cite principios da
 chronological
 chover amanha
+childrens and adolescents
 childrens and
 chama
 chaitin complexity
 centrada
 cartesian agent
 caracteristica engenharia
+can you tell
+can you help
+can help me
 can help
 called
 bye bye
@@ -2323,80 +3686,149 @@ bloco transformador
 biases
 began
 be intelligence
+be algorithmic information
 be algorithmic
 bayesiano
 bayesian
 basilisk argument
+basilisco de roko
 basilisco de
 based system
 autoatencao
+auto aperfeicoamento recursivo
 aumanns agreement
 aumann theorem
+aumann s theorem
+aumann s agreement
 atualisacao
 ate mais
 ate
+as escolas da
 as escolas
+as escola da
 as escola
 artificial networks
+artificial intelligence ethics
 artificial etica
 armed problem
+armadilha de nan
 armadilha de
+argumento do basilisco
 argumento do
 argumento
 argument
+are your topics
+are your likes
+are you called
 are virtues
+are virtue ethics
 are virtue
+are timelines for
 are timelines
+are time series
+are the schools
+are the school
+are the rights
+are the right
+are the power
+are the ai
+are takeoff speeds
 are takeoff
 are stupid
 are representations
 are principles
+are principle for
 are principle
+are power seeking
 are power
 are parameters
+are neural networks
 are neural
 are moron
+are metrics justice
 are metrics
+are learning machines
+are learning machine
+are labor rights
 are labor
+are interpretable systems
 are interpretable
+are impact measures
 are impact
 are imbecible
 are idiot
 are hyperparameters
+are human rights
 are human
+are genetic algorithms
 are genetic
+are generative adversarial
 are generative
+are fairness metrics
 are fairness
+are existential risks
 are existential
+are equalized odds
 are equalized
 are dumb
+are dignity and
 are dignity
+are democratic values
 are democratic
+are convolutional neural
 are convolutional
+are artificial neural
 are artificial
+are an imbecible
+are an idiot
+are ai timelines
+are ai risks
+are ai risk
+are ai principles
+are a whore
+are a moron
 aproximacao universal
 aproximacao
 aprendizagem super
+aprendizagem sem supervisao
 aprendizagem sem
+aprendizagem por maquina
+aprendizagem de representacoes
+aprendizagem de maquinas
 aprendizado online
+aprendizado on line
 aprendizado on
+aprendizado de representacoes
+aprendizado de maquinas
+aprendizado de maquina
 approximation
+ao ser humano
 ao ser
+anos voce tem
 and ai
+analises sobre etica
 analises sobre
 analises
+analise sobre etica
 analise sobre
+analise etica ia
+analise etica da
 an optimizer
+an multi agent
 an multi
+an mesa optimizer
 an mesa
 an lstm
+an intellectual property
 an intellectual
 an imbecible
 an idiot
 an heuristic
+an external security
 an external
 an environment
 an aixi
+an activation function
 an activation
 amplificacao iterada
 amplificacao
@@ -2406,62 +3838,108 @@ algoritimo evolutivo
 algoritimo
 ajude
 aires president
+aires in the
 aires in
 aires comecou
 aires began
+ai in the
+ai in a
 agents
 agente cartesiano
 agent multi
 adversarial network
 adversarial nets
+adversarial generative networks
 adversarial generative
 aditabilidade
 activation functions
+a world state
 a world
 a woman
 a whore
+a whole brain
 a whole
+a virada traicoeira
 a virada
 a verdade
 a veracidade
+a value complexity
 a value
+a utility function
 a utility
+a treacherous turn
 a treacherous
+a tese da
 a tese
+a teoria do
 a teoria
 a temperatura
+a sua raca
 a sua
+a sensitive attribute
 a rnn
+a recurrent neural
+a previsao do
 a previsao
+a philosophical zombie
 a philosophical
+a p zombie
 a p
+a normative uncertainty
 a normative
+a newcomb problem
+a neural turing
 a neural
+a navalha de
 a navalha
+a nao discriminacao
 a nao
+a nan trap
 a nan
+a multi agent
 a multi
 a moron
 a metaethics
+a mesa optimizer
 a mesa
+a manifold hypothesis
 a man
+a mab problem
+a long short
 a long
+a lei geral
+a inducao de
 a inducao
 a hyperparameter
+a hipotese do
+a hipotese da
 a heuristic
 a gpt
 a girl
+a generative pretrained
+a generative adversarial
 a gan
+a feedforward neural
 a feedforward
 a feature
+a existential risks
 a existential
+a etica das
 a etica
 a environment
+a discriminatory bias
+a corrigible agent
 a corrigible
+a convolutional neural
 a convolutional
 a cnn
+a centralidade humana
 a centralidade
+a cartesian agent
 a box
 a bias
 a ann
+a aires pucrs
+a aires comecou
+a ai robotics
 a ai

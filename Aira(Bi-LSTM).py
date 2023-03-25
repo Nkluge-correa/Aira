@@ -1,8 +1,6 @@
-from keras_preprocessing.sequence import pad_sequences
 from dash import dcc, html, Output, Input, State
-from keras.layers import TextVectorization
-from tensorflow import keras
 import dash_bootstrap_components as dbc
+import tensorflow as tf
 import numpy as np
 import unidecode
 import random
@@ -28,12 +26,13 @@ with open(r'aira/vocabulary_bilingual.txt', encoding='utf-8') as fp:
     vocabulary = [line[:-1] for line in fp]
     fp.close()
 
-model = keras.models.load_model('aira/Aira_BiLSTM_bilingual.keras')
+model = tf.keras.models.load_model('aira/Aira_BiLSTM_bilingual.keras')
 
-text_vectorization = TextVectorization(max_tokens=2500,
-                                       output_mode="int",
-                                       ngrams=2,
-                                       vocabulary=vocabulary)
+text_vectorization = tf.keras.layers.TextVectorization(max_tokens=4000,
+                                                       output_mode="int",
+                                                       ngrams=3,
+                                                       vocabulary=vocabulary,
+                                                       output_sequence_length=10)
 
 
 def textbox(text, box='other'):
@@ -217,9 +216,6 @@ def update_display(chat_history):
     ]
 )
 def run_chatbot(n_clicks, n_submit, user_input, chat_history):
-    """
-    Runs the Aira_BiLSTM_bilingual.
-    """
     chat_history = chat_history or []
     if n_clicks == 0:
         chat_history.insert(0, f'{avatar}    👋')
@@ -241,15 +237,17 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         text = user_input.translate(str.maketrans('', '', string.punctuation))
         text = text.lower()
         text = unidecode.unidecode(text)
-        encoded_sentence = text_vectorization(
-            text.lower().translate(str.maketrans('', '', string.punctuation)))
-        encoded_sentence_padded = pad_sequences(
-            [encoded_sentence], maxlen=10, truncating='post')
 
-        preds = model.predict(encoded_sentence_padded, verbose=0)[0]
+        encoded_sentence = text_vectorization(text)
+
+        INPUT = tf.keras.backend.expand_dims(encoded_sentence, axis=0)
+
+        preds = model.predict(INPUT, verbose=0)[0]
         output = answers[np.argmax(preds)]
+
         bot_input_ids = f'''{output}
         [Confidence: {max(preds) * 100: .2f} %]'''
+
         chat_history.insert(0, f'''{avatar}    {user_input}''')
         chat_history.insert(0, f'🤖    {bot_input_ids}')
 

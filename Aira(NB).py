@@ -241,10 +241,14 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
         text = unidecode.unidecode(text)
 
         input_vector = bow_vectorizer.transform([text])
+
         output = classifier.predict(input_vector)[0]
+
         proba = classifier.predict_proba(input_vector)[0]
+
         bot_input_ids = f'''{answers[int(output)]}
         [Confidence: {max(proba) * 100: .2f} %]'''
+
         chat_history.insert(0, f'''{avatar}    {user_input}''')
         chat_history.insert(0, f'🤖    {bot_input_ids}')
 

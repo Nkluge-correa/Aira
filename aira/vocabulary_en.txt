@@ -8,11 +8,13 @@ are
 a
 the
 is a
+what is a
 learning
 what are
 you
 is the
 ethics
+what is the
 human
 of
 problem
@@ -26,11 +28,13 @@ neural
 alignment
 value
 intelligence
+what is an
 is an
 function
 time
 s
 gradient
+what is ai
 principles
 is ai
 uncertainty
@@ -46,6 +50,7 @@ self
 safety
 robustness
 p
+of children and
 of children
 network
 fairness
@@ -110,6 +115,8 @@ convolutional
 are you
 and adolescents
 accountability
+what is value
+what are the
 virtue
 utility
 turn
@@ -121,6 +128,7 @@ ticket
 stochastic
 solomonoff
 risk
+rights of children
 rights of
 reinforcement
 protection
@@ -136,6 +144,7 @@ moral
 metrics
 metaethics
 manifold
+lottery ticket hypothesis
 lottery ticket
 law
 language
@@ -156,15 +165,18 @@ data protection
 cross
 counterfactual justice
 consequentialism
+children and adolescents
 bias
 basilisk
 artificial intelligence
 are the
+algorithmic information theory
 algorithmic information
 algorithmic
 aixi
 ai safety
 adolescent
+what is human
 vision
 value learning
 utility function
@@ -197,6 +209,7 @@ intellectual
 help
 hch
 gradient problem
+goodhart s law
 goodhart s
 feedforward
 federated learning
@@ -217,6 +230,7 @@ decision theory
 cross entropy
 convolutional neural
 consulting
+children and adolescent
 centeredness
 catastrophic
 brain emulation
@@ -233,6 +247,8 @@ activation function
 accessibility
 whore
 who
+what is artificial
+what are ai
 vanishing gradient
 vanishing
 value alignment
@@ -252,9 +268,11 @@ solomonoff induction
 short term
 self attention
 seeking
+right of children
 right of
 representations
 regulation
+recursive self improvement
 recursive self
 recursive
 razor
@@ -327,6 +345,7 @@ disinformation
 discriminatory
 deontic
 democratic
+data protection regulation
 convergence
 consulting hch
 computer vision
@@ -347,13 +366,27 @@ agi
 about ai
 about
 your name
+you are a
 world
 workers
 word artificial
 word
+whole brain emulation
 whole brain
 whole
 what time
+what is virtue
+what is stochastic
+what is solomonoff
+what is robustness
+what is fairness
+what is external
+what is ethics
+what is decision
+what is data
+what is catastrophic
+what is beneficence
+what is aires
 virtue ethics
 very much
 very
@@ -369,8 +402,11 @@ topics
 tomorrow
 thesis
 theorems
+the rights of
 the rights
+the right of
 the right
+the ethics of
 the ethics
 technological sovereignty
 technological
@@ -380,6 +416,7 @@ source
 slut
 show me
 show
+short term memory
 sensitive atribute
 semisupervised learning
 semisupervised
@@ -397,8 +434,10 @@ process theory
 prior
 pretrained transformer
 president
+power seeking theorems
 philosophical
 paperclip maximizer
+p versus np
 p versus
 p np
 outer alignment
@@ -408,7 +447,9 @@ open source
 open
 online
 on
+old are you
 old are
+o que e
 o que
 o
 normativity
@@ -416,7 +457,10 @@ nonsupervised
 nondeterministic
 nlp
 newcomb problem
+neural turing machine
 neural turing
+natural language processing
+multi agent systems
 much
 meta
 mesa optimizer
@@ -424,13 +468,17 @@ mesa optimization
 me the
 maximizer
 manifold hypothesis
+long short term
 kolmogorov complexity
 is virtue
+is value complexity
 is stochastic
 is solomonoff
 is robustness
+is federated learning
 is federated
 is fairness
+is external security
 is external
 is ethics
 is epistemology
@@ -439,10 +487,13 @@ is data
 is catastrophic
 is beneficence
 is aires
+is a sensitive
 intellectual property
 instrumental convergence
 instrumental
+inner alignment problem
 infra bayesianism
+humans consulting hch
 human sensitive
 human centeredness
 how old
@@ -454,15 +505,19 @@ game
 forecasting
 for ai
 fnn
+feedforward neural network
 feedforward neural
 false positive
 false negative
+ethics of ai
 ethic of
 environmental
 encoder
 embedded agency
 e
+dual process theory
 diversity
+distillation and amplification
 distillation and
 discrimination
 deontological ethics
@@ -473,6 +528,7 @@ data augmentation
 corrigible
 corrigibility
 cooperation
+convolutional neural network
 control
 computational
 complexity theory
@@ -483,16 +539,20 @@ can
 by
 box
 block
+beneficence and nonmaleficence
 beneficence and
 bandit problem
 atribute
 at pucrs
 at
 artificial neural
+artificial general intelligence
 artificial general
 and nonmaleficence
 and amplification
+an existential risks
 an existential
+aires at pucrs
 aires at
 ai timelines
 ai risks
@@ -505,18 +565,74 @@ age
 adam
 a sensitive
 zoombie
+you very much
 you very
 you like
+you help me
 you help
+you are an
 you a
 xai
 would be
 would
 world state
 who is
+what would be
 what would
+what time is
+what is truthfulness
+what is truth
+what is true
+what is transformative
+what is supervised
+what is self
+what is reliability
+what is reinforcement
+what is recursive
+what is predictive
+what is pluralism
+what is perplexity
+what is p
+what is outer
+what is normative
+what is nlp
+what is moral
+what is monitoring
+what is misinformation
+what is logical
+what is intellectual
+what is inner
+what is impact
+what is humans
+what is freedom
+what is federated
+what is feature
+what is false
+what is fair
+what is epistemology
+what is education
+what is dual
+what is disinformation
+what is dignity
+what is deontological
+what is demographic
+what is deep
+what is cross
+what is counterfactual
+what is consequentialism
+what is computer
+what is complexity
+what is autonomy
+what is attention
+what is algorithmic
+what is accountability
+what is accessibility
 what if
+what do you
 what do
+what are your
+what are time
+what are learning
 what ai
 what accountability
 western ethics
@@ -526,8 +642,11 @@ weak
 wbe
 volition
 virtues
+vanishing gradient problem
 values complexity
+value alignment problem
 utilitarianism
+updateless decision theory
 unsupervised learning
 uncertanty
 uma
@@ -535,11 +654,14 @@ ul
 trust
 today
 time is
+the word artificial
 the word
 the weather
 the time
 the summary
+the multi armed
 the multi
+the inner alignment
 the inner
 the environment
 thank you
@@ -548,13 +670,16 @@ symbolic
 stupid
 strong ai
 strong
+stochastic gradient descent
 stochastic descent
 statistics ai
+statistics about ai
 statistics about
 state
 ssl
 solomonoff prior
 sl
+show me the
 sgd
 sensitive design
 sensitive attribute
@@ -565,6 +690,7 @@ rule
 rs
 rokos basilisk
 rokos
+roko s basilisk
 roko s
 rl
 representations learning
@@ -573,10 +699,12 @@ reinforce
 recurrent neural
 rain
 race
+que e uma
 puc rs
 puc
 programming
 privacy
+preservation of the
 preservation of
 philosophical zombie
 pathetic
@@ -584,18 +712,23 @@ parameter
 paper
 p zombie
 outer alignmet
+outer alignment problem
 on line
+old fashion ai
 ol
 ok
+of the environment
 of the
 of ethics
 occam razor
 nondiscrimination
 narrow ai
 narrow
+multi armed bandit
 misinformation spread
 metaethic
 metaanalysis ai
+metaanalysis about ai
 metaanalysis about
 meta ethics
 means
@@ -606,22 +739,40 @@ line
 likes
 like
 learning machine
+iterated distillation and
 it
+is your name
 is your
+is value learning
 is truthfulness
 is truth
 is true
+is transformative ai
 is transformative
+is the weather
+is the rights
+is the right
+is the multi
+is the inner
+is the ethics
+is supervised learning
 is supervised
+is stochastic gradient
+is solomonoff induction
+is self attention
 is self
 is reliability
+is reinforcement learning
 is reinforcement
+is recursive self
 is recursive
+is predictive parity
 is predictive
 is pluralism
 is perplexity
 is p
 is outer
+is normative uncertainty
 is normative
 is nlp
 is moral
@@ -629,31 +780,60 @@ is monitoring
 is misinformation
 is logical
 is intellectual
+is inner alignment
 is inner
 is impact
+is humans consulting
 is humans
 is freedom
+is feature engineering
 is feature
 is false
+is fair competition
 is fair
 is education
+is dual process
 is dual
 is disinformation
 is dignity
+is deontological ethics
 is deontological
+is demographic parity
 is demographic
+is deep learning
 is deep
+is decision theory
+is data protection
+is cross entropy
 is cross
+is counterfactual justice
 is counterfactual
 is consequentialism
+is computer vision
 is computer
+is complexity theory
 is complexity
+is catastrophic forgetting
 is autonomy
 is attention
+is artificial intelligence
+is an utility
+is an objective
+is an existential
+is algorithmic information
 is algorithmic
 is aixi
+is ai safety
+is ai governance
 is accountability
 is accessibility
+is a transformer
+is a recurrent
+is a newcomb
+is a mab
+is a generative
+is a discriminatory
+is a cartesian
 intra
 interpretability
 indirect normativity
@@ -664,12 +844,18 @@ ida
 hyperparameters
 hutter
 humancenteredness
+human sensitive design
 human labor
+human formation and
+how old are
 hour
 gradient descent
+good old fashion
 good old
 good
+generative pretrained transformer
 generative adversarial
+general data protection
 general data
 gender
 gelu activation
@@ -677,6 +863,7 @@ gelu
 gan
 game theory
 founder
+formation and education
 formation and
 ffnn
 fashion ai
@@ -692,22 +879,28 @@ ethical
 equity
 environmental preservation
 enhancement
+education and human
 education and
 e uma
 dumb
+do you like
 dl
 disinformation spread
 discriminatory bias
+dignity human rights
 dignity human
+dignity and human
 dignity and
 design
 deontic ethics
 define artificial
 cv
 corrigible agent
+convolutional neural networks
 control problem
 consequence
 computational complexity
+coherent extrapolated volition
 coherent extrapolated
 coherent
 cnns
@@ -724,16 +917,24 @@ aumanns
 aumann s
 auditability
 attribute
+artificial neural networks
 artificial means
+armed bandit problem
 armed bandit
 are your
+are you a
 are time
 are learning
 are an
+are a slut
 ann
+and human rights
+and human formation
 and education
 analysis
+an utility function
 an utility
+an objective function
 an objective
 alignmet
 algorithm
@@ -744,8 +945,10 @@ ai in
 agreement theorem
 ag
 adversarial networks
+about ai ethics
 a transformer
 a slut
+a sensitive atribute
 a recurrent
 a newcomb
 a mab
@@ -757,6 +960,7 @@ your summary
 your race
 your likes
 you whore
+you tell me
 you tell
 you stupid
 you race
@@ -764,70 +968,271 @@ you moron
 you know
 you imbecible
 you idiot
+you can help
 you can
 you called
+you are stupid
+you are moron
+you are imbecible
+you are idiot
+you are dumb
 you age
+you a man
+you a girl
 years
 ya
+would be intelligence
+would be algorithmic
 workers rights
+workers right s
 workers right
 work
 woman
+will you help
 will you
 will
+who started aires
 who started
+who is your
+who is the
+who are you
 who are
+what s your
 what s
 what responsibility
 what perplexity
+what is your
+what is xai
+what is weak
+what is wbe
+what is vanishing
+what is utilitarianism
+what is updateless
+what is unsupervised
+what is ul
+what is udt
+what is trustworthiness
+what is trust
+what is treacherous
+what is transparency
+what is technological
+what is sustainability
+what is ssl
+what is sl
+what is sgd
+what is sensitive
+what is semisupervised
+what is selfimprovement
+what is selfattention
+what is rokos
+what is roko
+what is rl
+what is responsibility
+what is representations
+what is recurrent
+what is property
+what is privacy
+what is preservation
+what is paperclip
+what is orthogonality
+what is open
+what is online
+what is on
+what is ol
+what is np
+what is normativity
+what is nondiscrimination
+what is newcomb
+what is natural
+what is narrow
+what is nan
+what is morality
+what is metaethics
+what is metaethic
+what is meta
+what is mesa
+what is manifold
+what is maleficence
+what is machine
+what is mab
+what is lstm
+what is lottery
+what is labor
+what is kolmogorov
+what is justice
+what is iterated
+what is interpretability
+what is intelligence
+what is instrumental
+what is infra
+what is indirect
+what is inclusion
+what is ida
+what is humancenteredness
+what is heuristic
+what is gpt
+what is goodhart
+what is general
+what is gdpr
+what is game
+what is forgetting
+what is forecasting
+what is fnn
+what is ffnn
+what is exploding
+what is explainability
+what is expert
+what is expalibable
+what is exit
+what is evolutionary
+what is ethical
+what is equity
+what is equalized
+what is environmental
+what is environment
+what is embedded
+what is dt
+what is dl
+what is diversity
+what is discrimination
+what is deontology
+what is deontic
+what is democratic
+what is deeplearning
+what is cv
+what is corrigibility
+what is cooperation
+what is control
+what is consequential
+what is computational
+what is coherent
+what is cnns
+what is cnn
+what is cev
+what is boxing
+what is bias
+what is bayesianism
+what is bayes
+what is backpropagation
+what is back
+what is aumann
+what is auditability
+what is alignment
+what is aixi
+what is agi
+what is ag
+what is adam
+what if models
+what gpt is
 what gpt
+what gender you
 what gender
 what environment
+what does artificial
 what does
+what day is
 what day
+what are virtues
+what are virtue
+what are timelines
+what are takeoff
+what are representations
+what are principles
+what are principle
+what are power
+what are parameters
+what are neural
+what are metrics
+what are labor
+what are interpretable
+what are impact
+what are hyperparameters
+what are human
+what are genetic
+what are generative
+what are fairness
+what are existential
+what are equalized
+what are dignity
+what are democratic
+what are convolutional
+what are artificial
+what ai safety
+what ai ethics
 weather forecast
+weather for tomorrow
 weather for
 weak ai
 values learning
 updateless theory
 universal approximation
 universal
+uma whole brain
 uma whole
+uma objective function
 uma objective
 turing machines
 trustworthiness
 treachery
 transformer block
+to rain tomorrow
 to rain
 to
+timelines for ai
 timelines for
+time series forecasting
+time series analysis
+time is it
+the weather forecast
+the weather for
+the vanishing gradient
 the vanishing
+the value alignment
 the value
 the truth
+the treacherous turn
 the treacherous
 the topics
 the temperature
+the schools of
 the schools
+the school of
 the school
 the pucrs
+the president of
 the president
+the power seeking
 the power
+the outer alignment
 the outer
+the orthogonality thesis
 the orthogonality
+the manifold hypothesis
 the manifold
+the lottery ticket
 the lottery
 the hour
+the gradient problem
 the gradient
+the goodhart s
 the goodhart
+the exploding gradient
 the exploding
+the control problem
 the control
+the complexity of
 the complexity
 the box
 the basilisk
+the alignment problem
 the alignment
+the aires at
 the aires
+the ai principles
 the ai
+thank you very
 temperature
+tell me the
 tell me
 tell
 takeoff speeds
@@ -841,8 +1246,10 @@ supervised learnings
 superintelligence aixi
 superintelligence
 sunny
+study of ethics
 study of
 study
+statistics ai ethics
 started aires
 started
 speeds
@@ -852,39 +1259,56 @@ society
 snowfall
 simplicity prior
 simplicity
+show me your
 series time
 series forecasting
 series analysis
 see ya
 see
+security in ai
 security in
 security external
 security ai
 second
+schools of western
 schools of
 schools
+school of ethics
 school of
 school
 safety on
 safety of
+s your race
 s your
 s theorem
 s rights
 s razor
 s complexity
+s agreement theorem
 s agreement
+rule based system
+robustness in ai
 robustness in
+robotics ethics society
 robotics ethics
 robotics
 rights ai
 right s
+relu activation function
+recurrent neural networks
+recurrent neural network
 recurrent network
 rain tomorrow
+que e federated
 pspace
+principles of ai
 principles of
+principles for ai
 principles for
+principle for ai
 principle for
 principle
+president of aires
 president of
 positivo
 polynomial time
@@ -894,17 +1318,22 @@ paperclips
 paper clips
 p polynomial
 online learning
+on line learning
 ok bye
 off
+of western ethics
 of western
 of values
 of principles
+of artificial intelligence
 of artificial
 of aires
 occams razor
 occams
+occam s razor
 occam s
 nonsupervised learning
+nondeterministic in polynomial
 nondeterministic in
 non deterministic
 non
@@ -916,17 +1345,24 @@ ml fairness
 ml
 minute
 metrics justice
+metaanalysis ai ethics
 meta analysis
+me your summary
 me your
+me the topics
+me the time
+me the summary
 mas
 man
 maleficence
 machines learning
+machine learning fairness
 machine learn
 mab problem
 lying
 loss
 logical uncertainty
+list of principles
 list of
 list
 line learning
@@ -934,168 +1370,343 @@ lies
 learnings
 learning machines
 learning fairness
+learning by reinforcement
 learning by
 learn
+laborer s rights
 laborer s
 laborer
+labor rights ai
+labor and ai
 labor and
+kolmogorov s complexity
 kolmogorov s
 know
 kasparov
 justice metrics
+iterated distillation amplification
 iterated amplification
+it is going
 it is
 is xai
+is weak ai
 is weak
 is wbe
+is virtue ethics
+is vanishing gradient
 is vanishing
+is value alignment
 is utilitarianism
+is updateless decision
 is updateless
+is unsupervised learning
 is unsupervised
 is ul
 is udt
 is trustworthiness
 is trust
+is true positive
+is true negative
+is treacherous turn
 is treacherous
 is transparency
 is today
+is the vanishing
+is the value
+is the truth
+is the treacherous
+is the time
+is the temperature
+is the summary
+is the president
+is the outer
+is the orthogonality
+is the manifold
+is the lottery
+is the hour
+is the gradient
+is the goodhart
+is the exploding
+is the control
+is the complexity
+is the basilisk
+is the alignment
+is the aires
+is technological sovereignty
 is technological
 is sustainability
+is stochastic descent
 is ssl
+is solomonoff prior
 is sl
 is sgd
+is sensitive atribute
 is sensitive
+is semisupervised learning
 is semisupervised
 is selfimprovement
 is selfattention
+is rokos basilisk
 is rokos
+is roko s
 is roko
+is robustness in
 is rl
 is responsibility
+is representations learning
 is representations
 is recurrent
 is property
 is privacy
+is preservation of
 is preservation
+is paperclip maximizer
 is paperclip
+is p versus
+is outer alignmet
+is outer alignment
+is orthogonality thesis
 is orthogonality
+is open source
 is open
+is online learning
 is online
+is on line
 is on
 is ol
 is np
 is normativity
 is nondiscrimination
+is newcomb problem
 is newcomb
+is natural language
 is natural
+is narrow ai
 is narrow
+is nan trap
 is nan
 is morality
+is moral uncertainty
+is misinformation spread
 is metaethics
 is metaethic
+is meta ethics
 is meta
+is mesa optimization
 is mesa
+is manifold hypothesis
 is manifold
 is maleficence
+is machine learning
 is machine
 is mab
 is lstm
+is lottery ticket
 is lottery
+is logical uncertanty
+is logical uncertainty
+is labor rights
 is labor
+is kolmogorov complexity
 is kolmogorov
 is justice
+is iterated distillation
 is iterated
 is it
 is interpretability
 is intelligence
+is intellectual property
+is instrumental convergence
 is instrumental
+is infra bayesianism
 is infra
+is indirect normativity
 is indirect
 is inclusion
+is impact measures
 is ida
 is humancenteredness
+is human sensitive
+is human rights
+is human intelligence
+is human formation
+is human centeredness
 is heuristic
 is gpt
+is goodhart s
 is goodhart
+is going to
 is going
+is general data
 is general
 is gdpr
+is game theory
 is game
 is forgetting
 is forecasting
 is fnn
 is ffnn
+is false positive
+is false negative
+is fairness metrics
+is fairness in
+is exploding gradient
 is exploding
 is explainability
+is expert iteration
 is expert
+is expalibable ai
 is expalibable
 is exit
+is evolutionary programming
 is evolutionary
+is ethics of
+is ethical ai
 is ethical
 is equity
+is equalized odds
 is equalized
+is environmental preservation
 is environmental
 is environment
 is engineering
+is embedded agency
 is embedded
+is education and
 is dt
 is dl
 is diversity
+is disinformation spread
 is discrimination
+is dignity and
 is deontology
+is deontic ethics
 is deontic
+is democratic values
 is democratic
 is deeplearning
+is data augmentation
 is cv
 is corrigibility
 is cooperation
+is control problem
 is control
+is consequential ethics
 is consequential
+is computational complexity
 is computational
+is coherent extrapolated
 is coherent
 is cnns
 is cnn
 is cev
 is boxing
 is bias
+is beneficence and
 is bayesianism
 is bayes
 is backpropagation
+is back propagation
 is back
+is aumann s
 is aumann
 is auditability
+is artificial general
+is an optimizer
+is an multi
+is an mesa
+is an lstm
+is an intellectual
+is an heuristic
+is an external
+is an environment
+is an aixi
+is an activation
+is alignment problem
 is alignment
+is aires pucrs
+is aires in
+is ai sandboxing
+is ai robustness
+is ai robotics
+is ai risks
+is ai risk
+is ai monitoring
+is ai ethics
+is ai boxing
 is agi
 is ag
 is adam
+is a world
+is a whole
+is a value
+is a utility
+is a treacherous
+is a rnn
+is a philosophical
+is a p
+is a normative
+is a neural
+is a nan
+is a multi
+is a metaethics
+is a mesa
+is a manifold
+is a long
+is a hyperparameter
+is a heuristic
+is a gpt
+is a gan
+is a feedforward
+is a feature
+is a existential
+is a environment
+is a corrigible
+is a convolutional
+is a cnn
+is a bias
+is a ann
 intra attention
 interpretable systems
 interpretable
 intelligences
 intelligence ethics
 instrumentality
+in the pucrs
+in the box
+in polynomial time
 in polynomial
+in a box
 in a
 imbecile
 if models
+human labor rights
 human education
 human centered
 how pathetic
+how are you
 how are
+how aires began
 how aires
 heuristicas
 heuristica
 hello
 gpt is
 goodhart law
+going to rain
 going to
 going
 gofai
 girl
 genetic algorithm
 generative networks
+generative adversarial networks
+generative adversarial network
+general artificial intelligence
 general artificial
+gender you are
 gender you
+gelu activation function
 gdpr
 garry kasparov
 garry
@@ -1108,15 +1719,20 @@ forecast
 for tomorrow
 feed forward
 feed
+feature is engineering
 feature is
 falso positivo
 falso negativo
 false information
+fairness in ai
 fairness in
+external security in
+external security ai
 exptime
 expspace
 explosive gradient
 explosive
+exploding gradient problem
 expert system
 expalibable ai
 expalibable
@@ -1125,7 +1741,10 @@ evolutionary algorithms
 evolutionary algorithm
 evil ai
 ethics society
+ethics of artificial
 ethics in
+ethic of ai
+ethic in ai
 ethic in
 environmental values
 entropy loss
@@ -1133,38 +1752,53 @@ encoder decoder
 encoder block
 eboddied agents
 eboddied
+e uma whole
+e uma objective
+e federated learning
 e federated
 dual processing
 dt
+does artificial means
 does artificial
 does
+do you know
+do you age
 distillation amplification
 deterministic
+define the word
 define the
 define intelligence
+define human intelligence
 define human
 deeplearning
 deep blue
 decoder block
 decisions
+day is today
 day is
 day
 data enhancement
+cross entropy loss
 counterfactual fairness
 convolutional network
 convolution
 consequential ethics
 consequential
 computational vision
+complexity of values
 complexity of
 cloudy
 clips
 cite principles
 cite
 chronological
+childrens and adolescents
 childrens and
 chaitin complexity
 cartesian agent
+can you tell
+can you help
+can help me
 can help
 called
 bye bye
@@ -1173,6 +1807,7 @@ blue
 biases
 began
 be intelligence
+be algorithmic information
 be algorithmic
 bayesian
 bayes
@@ -1180,99 +1815,177 @@ basilisk argument
 based system
 aumanns agreement
 aumann theorem
+aumann s theorem
+aumann s agreement
 artificial networks
+artificial intelligence ethics
 armed problem
 argument
+are your topics
+are your likes
+are you called
 are virtues
+are virtue ethics
 are virtue
+are timelines for
 are timelines
+are time series
+are the schools
+are the school
+are the rights
+are the right
+are the power
+are the ai
+are takeoff speeds
 are takeoff
 are stupid
 are representations
 are principles
+are principle for
 are principle
+are power seeking
 are power
 are parameters
+are neural networks
 are neural
 are moron
+are metrics justice
 are metrics
+are learning machines
+are learning machine
+are labor rights
 are labor
+are interpretable systems
 are interpretable
+are impact measures
 are impact
 are imbecible
 are idiot
 are hyperparameters
+are human rights
 are human
+are genetic algorithms
 are genetic
+are generative adversarial
 are generative
+are fairness metrics
 are fairness
+are existential risks
 are existential
+are equalized odds
 are equalized
 are dumb
+are dignity and
 are dignity
+are democratic values
 are democratic
+are convolutional neural
 are convolutional
+are artificial neural
 are artificial
+are an imbecible
+are an idiot
+are ai timelines
+are ai risks
+are ai risk
+are ai principles
+are a whore
+are a moron
 approximation
 anns
 and ai
 an optimizer
+an multi agent
 an multi
+an mesa optimizer
 an mesa
 an lstm
+an intellectual property
 an intellectual
 an imbecible
 an idiot
 an heuristic
+an external security
 an external
 an environment
 an aixi
+an activation function
 an activation
 aires pucrs
 aires president
+aires in the
 aires in
 aires began
 aira
+ai robotics ethics
 ai robotics
+ai in the
+ai in a
 ai boxing
 agents
 agent multi
 adversarial network
 adversarial nets
+adversarial generative networks
 adversarial generative
 activation functions
+a world state
 a world
 a woman
 a whore
+a whole brain
 a whole
+a value complexity
 a value
+a utility function
 a utility
+a treacherous turn
 a treacherous
+a sensitive attribute
 a rnn
+a recurrent neural
+a philosophical zombie
 a philosophical
+a p zombie
 a p
+a normative uncertainty
 a normative
+a newcomb problem
+a neural turing
 a neural
+a nan trap
 a nan
+a multi agent
 a multi
 a moron
 a metaethics
+a mesa optimizer
 a mesa
 a manifold
 a man
+a mab problem
+a long short
 a long
 a hyperparameter
 a heuristic
 a gpt
 a girl
+a generative pretrained
+a generative adversarial
 a gan
+a feedforward neural
 a feedforward
 a feature
+a existential risks
 a existential
 a environment
+a discriminatory bias
+a corrigible agent
 a corrigible
+a convolutional neural
 a convolutional
 a cnn
+a cartesian agent
 a box
 a bias
 a ann
