@@ -73,7 +73,7 @@ controls = dbc.InputGroup(
     style={'width': '100%', 'max-width': '100vw',
            'margin': 'auto'},
     children=[
-        dbc.Input(id='user-input', placeholder='Write to Ai.ra...',
+        dbc.Input(id='user-input', placeholder='Write to Aira...',
                   type='text', style={'border-radius': '5px'}),
         dbc.Button(
             [html.I(className="bi bi-send")], size='lg', id='submit',
@@ -92,18 +92,18 @@ modal = html.Div(
         dbc.Modal(
             [
                 dbc.ModalHeader(dbc.ModalTitle(dcc.Markdown(
-                    '## What is `Ai.ra`? 🤔'), style={'font-weight': 'bold'})),
+                    '## What is `Aira`? 🤔'), style={'font-weight': 'bold'})),
                 dbc.ModalBody([
-                    dcc.Markdown('''`Ai.ra` is a chatbot (or chatterbot). We can also say that `Ai.ra` is a language model, i.e. it is a software application capable of manipulating text. `Ai.ra` is designed to simulate the way an expert would behave during a round of questions and answers (Q&A).''',
+                    dcc.Markdown('''`Aira` is a chatbot (or chatterbot). We can also say that `Aira` is a language model, i.e. it is a software application capable of manipulating text. `Aira` is designed to simulate the way an expert would behave during a round of questions and answers (Q&A).''',
                                  className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
                     dcc.Markdown('''We can classify this type of system (CUS - `Conversation Understanding System`) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system could (_in principle_) sustain a dialog about any topic. For example, `GPT-3` - the language model produced by OpenAI - is capable of "chatting about virtually anything."''',
                                  className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
-                    dcc.Markdown('''`Ai.ra` is a _closed domain chatbot_, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Ai.ra` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".''',
+                    dcc.Markdown('''`Aira` is a _closed domain chatbot_, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Aira` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".''',
                                  className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
-                    dcc.Markdown('''`Ai.ra` has four iterations, the first three were trained as machine learning models (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the fourth iteration was created from `pre-set rules` (n-gram analysis + dictionary search).''',
+                    dcc.Markdown('''`Aira` has four iterations, the first three were trained as machine learning models (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the fourth iteration was created from `pre-set rules` (n-gram analysis + dictionary search).''',
                                  className='modal-body-text-style', style={'font-size': FONT_SIZE}), html.Br(),
                     dcc.Markdown(
-                        '''`Ai.ra` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).''', className='modal-body-text-style', style={'font-size': FONT_SIZE}),
+                        '''`Aira` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).''', className='modal-body-text-style', style={'font-size': FONT_SIZE}),
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
@@ -154,7 +154,7 @@ app = dash.Dash(__name__,
                 external_stylesheets=[dbc.themes.SLATE, dbc.icons.BOOTSTRAP])
 
 server = app.server
-app.title = 'Ai.ra Expert 🤖'
+app.title = 'Aira Expert 🤖'
 
 
 app.layout = dbc.Container(
@@ -162,14 +162,14 @@ app.layout = dbc.Container(
     children=[
         dbc.Row([
             dbc.Col([
-                html.Div([dcc.Markdown('# `Ai.ra Expert`', className='title-style'),
+                html.Div([dcc.Markdown('# `Aira Expert`', className='title-style'),
                           html.Img(src=dash.get_asset_url(
                               'robot.svg'), height="50px", className='title-icon-style')],
                     className='title-div'),
                 html.Div([
                     html.Div([
                         dcc.Markdown('''
-                _Ai.ra is a chatbot designed to simulate the way an expert would behave during a round of questions and answers (Q&A). Ai.ra is a small decoder-only transformer model that basically does text classification (classifies your question into one of her domain answers). For comparison reasons, we allow users to toggle between talking to Ai.ra (close-domain) and Distill-Blenderbot (open-domain) on this page._
+                _Aira is a chatbot designed to simulate the way an expert would behave during a round of questions and answers (Q&A). Aira is a small decoder-only transformer model that basically does text classification (classifies your question into one of her domain answers)._
                 ''', className='page-intro')
                     ], className='page-intro-inner-div'),
                 ], className='page-intro-outer-div'),
@@ -221,17 +221,17 @@ def run_chatbot(n_clicks, n_submit, user_input, chat_history):
     chat_history = chat_history or []
     if n_clicks == 0:
         chat_history.insert(0, f'{avatar}    👋')
-        chat_history.insert(0, "🤖    Hello, how are you? My name is `Ai.ra`! I am a `language model`. More specifically, I am a machine learning model trained for conversation and Q&A (_a chatbot_). I was trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        chat_history.insert(0, "🤖    Hello, how are you? My name is `Aira`! I am a `language model`. More specifically, I am a machine learning model trained for conversation and Q&A (_a chatbot_). I was trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, '', ''
 
     if user_input is None or user_input == '':
         chat_history.insert(0, f'{avatar}    👋')
-        chat_history.insert(0, "🤖    Hello, how are you? My name is `Ai.ra`! I am a `language model`. More specifically, I am a machine learning model trained for conversation and Q&A (_a chatbot_). I was trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        chat_history.insert(0, "🤖    Hello, how are you? My name is `Aira`! I am a `language model`. More specifically, I am a machine learning model trained for conversation and Q&A (_a chatbot_). I was trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, '', ''
 
     if user_input is None or user_input.isspace() is True:
         chat_history.insert(0, f'{avatar}    👋')
-        chat_history.insert(0, "🤖    Hello, how are you? My name is `Ai.ra`! I am a `language model`. More specifically, I am a machine learning model trained for conversation and Q&A (_a chatbot_). I was trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
+        chat_history.insert(0, "🤖    Hello, how are you? My name is `Aira`! I am a `language model`. More specifically, I am a machine learning model trained for conversation and Q&A (_a chatbot_). I was trained to answer questions about AI Ethics and AI Safety! Would you like a summary of the terms I am aware of?")
         return chat_history, '', ''
 
     else:
