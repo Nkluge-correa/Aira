@@ -17,9 +17,7 @@ Closed-domain Aira has an area of expertise that comprises topics related to AI 
 | Curie   | 13B               |
 | Davinci | 175B              |
 
-## Metrics
-
-## Closed Domain Aira
+## Metrics (Closed Domain Aira)
 
 The `accuracy` of our text classification models is documented in the table below (for both Portuguese and English):
 
