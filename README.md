@@ -1,20 +1,51 @@
-# Aira - the AIRES Expert 🤖
+# Aira - the AIRES Expert 🤓
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
-![image-gif](assets/gif_demo.gif)
+![chat-gif](assets/chat.gif)
 
-[`Aira`](https://aires-playground.herokuapp.com/aira) is a `chatbot`. We can also say that `Aira` is a language model, i.e. it is a software application capable of manipulating text. `Aira` is designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A).
+[`Aira`](https://aires-playground.herokuapp.com/aira) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via fine-tuning pre-trained large language models.
 
-We can classify this type of system (`CUS` - _Conversation Understanding System_) into "_open domain systems_" and "_closed domain systems_". A closed domain system, also known as a domain-specific system, focuses on a particular set of topics and has limited responses. On the other hand, an open domain system could (_in principle_) sustain a dialog about any topic. For example, `GPT-3` - the language model produced by OpenAI - is capable of "_chatting about virtually anything_."
+The creation of Aira's dataset is documented in the `augmentation-factory.ipynb` file, while the `chatbot-factory.ipynb` takes the reader through the development of all iterations of our chatbot, from close-domain chatbots via `text classification` to open-domain chatbots via `conditional text generation`. All datasets are available in the `data` folder.
 
-`Aira` is a closed domain chatbot, so don't even try to ask it what the square root of 25 is. It won't be able to help you (but your calculator can!). `Aira` is designed to provide definitions and answer questions on topics related to `artificial intelligence (AI)`, `machine learning`, `AI ethics`, and `AI safety`, and this is her "_domain_".
+Closed-domain Aira has an area of expertise that comprises topics related to AI Ethics and AI Safety research. Meanwhile, open-domain Aira can generalize for other domains. Open-domain Aira comes in four sizes, being a fine-tuned version of several sizes of GPT-3 models (made available by OpenAI).
 
-`Aira` has four iterations, the first and second iterations were trained by machine learning (a `Bayesian neural network`, a `Bi-directional LSTM`, and a `Decoder-Transformer` were trained through `supervised learning`), while the third iteration was created from `pre-set rules` (n-gram analysis + dictionary search). The general development of the `Tf.Keras` models can be found in the `aira_maker` notebook.
+| Models  | Size (Parameters) |
+| ------- | ----------------- |
+| Ada     | 350M              |
+| Babbage | 3B                |
+| Curie   | 13B               |
+| Davinci | 175B              |
 
-In our [demo](https://aires-playground.herokuapp.com/aira), we also provide the possibility to users to conduct conversations with a prompt-tune version of [ChatGPT](https://geo-not-available.blenderbot.ai/) (`Chat-Aira`). The reason we make this model available in our application is so that people can compare the capabilities of small, closed-domain models (`Aira`) and large language models created for open conversation (`Chat-Aira`). More information on `GPT-3.5` can be found [here](https://platform.openai.com/docs/models/gpt-3-5) and in the `information` section of our demo.
+## Metrics
 
-Tags and answers are available in this repository. You can change these variables to create your own chatbot if you want. If you have any questions concerning `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
+## Closed Domain Aira
+
+The `accuracy` of our text classification models is documented in the table below (for both Portuguese and English):
+
+| Models            | Accuracy (PT) | Accuracy (EN) |
+| ----------------- | ------------- | ------------- |
+| Ruled-based       | 96.77%        | 95.36%        |
+| Bi-LSTM           | 92.29%        | 96.98%        |
+| Ensembled-Bi-LSTM | 93.73%        | 95.43%        |
+| Transformer       | 97.11%        | 98.35%        |
+| BERT              | **98.55%**    | **99.45%**    |
+
+## Limitations
+
+Our open-domain conversational chatbots were achieved via conditional text generation. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean factual and nontoxic responses. This leads us to two of the most common problems of generative models used in conversational applications:
+
+- 🤥 Generative models can perpetuate the generation of pseudo-informative content, that is, false information that may appear truthful. For example, multi-modal generative models can be used to create images with untruthful content, while language models for text generation can automate the generation of misinformation.
+
+- 🤬 In certain types of tasks, generative models can generate toxic and discriminatory content inspired by historical stereotypes against sensitive attributes (for example, gender, race, and religion). Unfiltered public datasets may also contain inappropriate content, such as pornography, racist images, and social stereotypes, which can contribute to unethical biases in generative models. Furthermore, when prompted with non-English languages, some generative models may perform poorly.
+
+## Demo
+
+In our [demo](https://aires-playground.herokuapp.com/aira), we provide the user with a control panel to interact with our open domain models. The closed domain models are all available in this repository for download. We also provide the possibility to users to conduct conversations with a prompt-tune version of [ChatGPT](https://geo-not-available.blenderbot.ai/) (`Chat-Aira`), so that people can compare the capabilities of open-domain conversational chatbots (`Aira`) created via fine-tunning and large language models created via RLHF (`Chat-Aira`).
+
+We made available a copy of our demo application (built using [`dash`](https://dash.plotly.com/)) in this repository. Assets can be found in the `assets` folder and the app in the `Aira-app.py` file.
+
+If you have any questions concerning `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 
 If you are not satisfied with `Aira's` performance or would like to help us improve the capabilities of our system, or if you would like to complain about any type of message produced by `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 
@@ -32,7 +63,7 @@ If you are not satisfied with `Aira's` performance or would like to help us impr
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated in 28 March 2023},
+  note = {Last updated on 16 April 2023},
 }
 
 ```

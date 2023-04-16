@@ -25,6 +25,10 @@
 
 /* Body */
 
+html {
+  scroll-behavior: smooth;
+}
+
 body { 
   margin: 0;
   width: 100%; 
@@ -99,7 +103,7 @@ a:active {
 
 .page-intro {
   text-align: center; 
-  font-weight: bold
+  font-weight: bold;
 }
 
 .page-intro-inner-div {
@@ -130,7 +134,6 @@ a:active {
   margin-top: 20px;
 }
 
-
 .icon-button {
   border: none;
   font-weight: bold;
@@ -145,7 +148,6 @@ a:active {
   color: #f4f5f5;
   cursor: pointer;
 }
-
 
 /* Graph Control Objects*/
 
@@ -182,6 +184,9 @@ a:active {
 /* Mobile Version */
 
 @media (max-width: 700px) {
+  .hidden-mobile {
+    display: none;
+  }
   ::-webkit-scrollbar-thumb {
     display: none;
   }
