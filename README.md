@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
-![chat-gif](assets/chat.gif)
+<img src="assets/chat.gif" width=300 >
 
 [`Aira`](https://playground.airespucrs.org/aira) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via fine-tuning pre-trained large language models.
 
@@ -59,7 +59,7 @@ If you have any questions concerning `Aira`, please contact [nicholas@airespucrs
   year = {2022},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated on 16 April 2023},
+  note = {Last updated on 17 April 2023},
 }
 
 ```
