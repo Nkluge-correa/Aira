@@ -59,7 +59,7 @@ If you have any questions concerning `Aira`, please contact [nicholas@airespucrs
   year = {2022},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated on 17 April 2023},
+  note = {Last updated on 24 April 2023},
 }
 
 ```
