@@ -43,7 +43,7 @@ In our [demo](https://playground.airespucrs.org/aira), we provide the user with 
 
 We made available a copy of our demo application (built using [`dash`](https://dash.plotly.com/)) in this repository. Assets can be found in the `assets` folder and the app in the `Aira-app.py` file.
 
-`Aira` was created to assist researchers to explore the impacts, limitations, and differences of large language models when it comes to size and mode of training/tuning. **We do not recommend its use for uses outside Academia.**
+`Aira` was created to assist researchers to explore the impacts, limitations, and differences of large language models when it comes to size and mode of training/tuning. `Aira` is intended **only for academic research** and any **commercial use is prohibited**.
 
 If you have any questions concerning `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org). If you are not satisfied with `Aira's` performance or would like to help us improve the capabilities of our system, or if you would like to complain about any type of message produced by `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 
@@ -59,7 +59,7 @@ If you have any questions concerning `Aira`, please contact [nicholas@airespucrs
   year = {2022},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated on 24 April 2023},
+  note = {Last updated on 11 May 2023},
 }
 
 ```
