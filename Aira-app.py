@@ -14,7 +14,7 @@ with open('data/generated_data/keys_en.json', 'rb') as fp:
     fp.close()
 
 
-def textbox(text):
+def textbox(text, box="other"):
     style = {
         'max-width': '100%',
         'width': 'max-content',
@@ -23,11 +23,32 @@ def textbox(text):
         'text-align': 'justify',
         'text-justify': 'inter-word',
         'font-size': '1.em',
-        'font-weight': 'bold',
-        'float': 'right',
+        'backdrop-filter': 'blur(14px)'
+
     }
 
-    return dcc.Markdown(text, style=style)
+    if box == "self":
+        style["margin-left"] = "auto"
+        style["margin-right"] = 0
+        style["border-radius"] = '10px 10px 10px 0px'
+        style["box-shadow"] = '-5px 10px 8px #1c1c1b'
+
+        color = "primary"
+        inverse = True
+
+    elif box == "other":
+        style["margin-left"] = 0
+        style["margin-right"] = "auto"
+        style["border-radius"] = '10px 10px 0px 10px'
+        style["box-shadow"] = '5px 10px 8px #1c1c1b'
+
+        color = "secondary"
+        inverse = True
+
+    else:
+        raise ValueError("Incorrect option for `box`.")
+
+    return dbc.Card(dcc.Markdown(text), style=style, body=True, color=color, inverse=inverse)
 
 
 conversation = html.Div(
@@ -160,8 +181,8 @@ app.layout = dbc.Container(
 )
 def update_display(chat_history):
     return [
-        textbox(message)
-        for message in chat_history
+        textbox(x, box="self") if i % 2 != 0 else textbox(x, box="other")
+        for i, x in enumerate(chat_history)
     ]
 
 
@@ -195,11 +216,11 @@ def run_chatbot(n_clicks, user_input, chat_history):
 
     else:
 
-        bot_input_ids = rule_based_prediction_app(
+        bot_response = rule_based_prediction_app(
             user_input, vocabulary, answers)
 
         chat_history.insert(0, f'''👤    {user_input}''')
-        chat_history.insert(0, f'🦾🤖    {bot_input_ids}')
+        chat_history.insert(0, f'🦾🤖    {bot_response}')
         return chat_history, '', ''
 
 
