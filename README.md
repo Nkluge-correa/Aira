@@ -56,10 +56,10 @@ If you have any questions concerning `Aira`, please contact [nicholas@airespucrs
   url = {https://github.com/Nkluge-correa/Aira-EXPERT},
   author = {Nicholas Kluge Corrêa and Carolina Del Pino},
   title = {Aira - the AIRES Expert},
-  year = {2022},
+  year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated on 11 May 2023},
+  note = {Last updated on 08 June 2023},
 }
 
 ```
