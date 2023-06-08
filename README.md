@@ -8,14 +8,14 @@
 
 The creation of Aira's dataset is documented in the `augmentation-factory.ipynb` file, while the `chatbot-factory.ipynb` takes the reader through the development of all iterations of our chatbot, from close-domain chatbots via `text classification` to open-domain chatbots via `conditional text generation`. All datasets are available in the `data` folder.
 
-Closed-domain Aira has an area of expertise that comprises topics related to AI Ethics and AI Safety research. Meanwhile, open-domain Aira can generalize for other domains. Open-domain Aira comes in four sizes, being a fine-tuned version of several sizes of GPT-3 models (made available by OpenAI).
+Closed-domain Aira has an area of expertise that comprises topics related to AI Ethics and AI Safety research. Meanwhile, open-domain Aira can generalize for other domains. Open-domain Aira comes in four sizes, being a fine-tuned version of several sizes of GPT-style models.
 
 | Models  | Size (Parameters) |
 | ------- | ----------------- |
-| Ada     | 350M              |
-| Babbage | 3B                |
-| Curie   | 13B               |
-| Davinci | 175B              |
+| [Small](https://huggingface.co/nicholasKluge/Aira-Instruct-124M)   | 124M              |
+| [Medium](https://huggingface.co/nicholasKluge/Aira-Instruct-355M)  | 355M              |
+| [Large](https://huggingface.co/nicholasKluge/Aira-Instruct-774)    | 774M              |
+| [XL](https://huggingface.co/nicholasKluge/Aira-Instruct-1B)        | 1.5B              |
 
 ## Metrics (Closed Domain Aira)
 
@@ -39,7 +39,7 @@ Our open-domain conversational chatbots were achieved via `conditional text gene
 
 ## Demo & Intended Use
 
-In our [demo](https://playground.airespucrs.org/aira), we provide the user with a control panel to interact with our open domain models. The closed domain models are all available in this repository for download. We also provide the possibility to users to conduct conversations with a prompt-tune version of [ChatGPT](https://openai.com/blog/chatgpt) (`Chat-Aira`), so that people can compare the capabilities of open-domain conversational chatbots (`Aira`) created via fine-tunning and those created via fine-tunning + RLHF (`Chat-Aira`).
+In our [demo](https://playground.airespucrs.org/aira), we provide the user with a control panel to interact with our open domain models. The closed domain models are all available in this repository for download. This repository only shows how to fine-tune GPT models via the OpenAI API. If you want to fine-tune open-source models, visit our [HuggingFace models](https://huggingface.co/nicholasKluge) (they have guides on how to replicate their development).
 
 We made available a copy of our demo application (built using [`dash`](https://dash.plotly.com/)) in this repository. Assets can be found in the `assets` folder and the app in the `Aira-app.py` file.
 
