@@ -1,4 +1,4 @@
-# Aira - the AIRES Expert 🤓
+# Aira 🤓
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
@@ -55,11 +55,10 @@ If you have any questions concerning `Aira`, please contact [nicholas@airespucrs
   doi = {10.5281/zenodo.6989727},
   url = {https://github.com/Nkluge-correa/Aira-EXPERT},
   author = {Nicholas Kluge Corrêa and Carolina Del Pino},
-  title = {Aira - the AIRES Expert},
+  title = {Aira},
   year = {2023},
   publisher = {GitHub},
   journal = {GitHub repository},
-  note = {Last updated on 08 June 2023},
 }
 
 ```
