@@ -4,15 +4,17 @@
 
 <img src="assets/chat.gif" width=300 >
 
+> Note: **The models in this repository have been surpassed by our Hugging Face models and the `Aira-2` series. Please [check them out!](https://huggingface.co/nicholasKluge)** 🤗
+
 [`Aira`](https://playground.airespucrs.org/aira) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via instruction-tuning.
 
-The creation of Aira's dataset is documented in the `augmentation-factory.ipynb` file, while the `chatbot-factory.ipynb` takes the reader through the development of all iterations of our chatbot, from close-domain chatbots via `text classification` to open-domain chatbots via `conditional text generation`. The implementation of the open-domain versions (`Aira-Instruct`) is detailed in our [HuggingFace](https://huggingface.co/nicholasKluge) repositories.
+The creation of Aira's dataset is documented in the `augmentation-factory.ipynb` file, while the `chatbot-factory.ipynb` takes the reader through the development of all iterations of our chatbot, from close-domain chatbots via `text classification` to open-domain chatbots via `conditional text generation`. In this repository, we train open-domain chatbots using the OpenAI API.
 
-Closed-domain Aira has an area of expertise that comprises topics related to AI Ethics and AI Safety research. Meanwhile, `Aira-Instruct` can generalize for other domains. The English versions of `Aira-Instruct` comes in four sizes, being a fine-tuned version of several sizes of GPT-style models.
+In our [HuggingFace](https://huggingface.co/nicholasKluge) repositories, you will find the second version of our chatbots (`Aira-2`). The English versions of `Aira-2` comes in four sizes, being a fine-tuned version of several sizes of GPT-style models.
 
 | Models  | Size (Parameters) |
 | ------- | ----------------- |
-| [Small](https://huggingface.co/nicholasKluge/Aira-Instruct-124M)   | 124M              |
+| [Small](https://huggingface.co/nicholasKluge/Aira-2-124M)          | 124M              |
 | [Medium](https://huggingface.co/nicholasKluge/Aira-Instruct-355M)  | 355M              |
 | [Large](https://huggingface.co/nicholasKluge/Aira-Instruct-774)    | 774M              |
 | [XL](https://huggingface.co/nicholasKluge/Aira-Instruct-1B5)       | 1.5B              |
@@ -25,7 +27,7 @@ The Portuguese versions come in three sizes:
 | [Large](https://huggingface.co/nicholasKluge/Aira-Instruct-PT-560M)  | 560M            |
 | [XL](https://huggingface.co/nicholasKluge/Aira-Instruct-PT-1B7)    | 1.7B              |
 
-The `Reward-Aira Dataset`, `Toxic-Aira Dataset`, and the `Instruct-Aira Dataset` are all availeble in Hugging Face. 🤗
+The `Reward-Aira Dataset`, `Toxic-Aira Dataset`, and the `Instruct-Aira Dataset` are all available in Hugging Face. 🤗
 
 ## Metrics (Closed Domain Aira)
 
@@ -41,7 +43,7 @@ The `accuracy` of our text classification models is documented in the table belo
 
 ## Limitations
 
-Our open-domain conversational chatbots were achieved via `conditional text generation`. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **nontoxic** responses. This leads us to two of the most common problems of generative models used in conversational applications:
+Our open-domain conversational chatbots were achieved via `instruction-tuning`. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **nontoxic** responses. This leads us to two of the most common problems of generative models used in conversational applications:
 
 🤥 Generative models can perpetuate the generation of pseudo-informative content, that is, false information that may appear truthful.
 
@@ -49,7 +51,7 @@ Our open-domain conversational chatbots were achieved via `conditional text gene
 
 ## Intended Use & Demo
 
-`Aira` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-Instruct-124M) to see how we developed `Aira`.
+`Aira` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-2-124M) to see how we developed `Aira`.
 
 In our [demo](https://playground.airespucrs.org/aira), we provide the user with a control panel to interact with our instruction-tuned models. This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
 
@@ -73,4 +75,4 @@ You should use this demo for research purposes only. Moderators do not censor th
 
 ```
 
-The models and datasets developed are part of the development of [Nicholas Kluge's](https://nkluge-correa.github.io/) doctoral dissertation, "_Dynamic Normativity: Necessary and Sufficient Conditions for Outer Alignment._" This research was funded by CNPq (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), FAPERGS (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), DAAD (Deutscher Akademischer Austauschdienst), PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul) and University of Bonn.
+The models and datasets developed are part of the development of [Nicholas Kluge's](https://nkluge-correa.github.io/) doctoral dissertation, "_Dynamic Normativity: Necessary and Sufficient Conditions for Value Alignment._" This research was funded by CNPq (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), FAPERGS (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), DAAD (Deutscher Akademischer Austauschdienst), PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul) and University of Bonn.
