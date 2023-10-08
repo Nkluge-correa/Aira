@@ -2,8 +2,6 @@
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
-<img src="assets/chat.gif" width=300 >
-
 > Note: **The models in this repository have been surpassed by our Hugging Face models and the `Aira-2` series. Please [check them out!](https://huggingface.co/nicholasKluge)** 🤗
 
 [`Aira`](https://playground.airespucrs.org/aira) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via instruction-tuning.
@@ -15,17 +13,17 @@ In our [HuggingFace](https://huggingface.co/nicholasKluge) repositories, you wil
 | Models  | Size (Parameters) |
 | ------- | ----------------- |
 | [Small](https://huggingface.co/nicholasKluge/Aira-2-124M)          | 124M              |
-| [Medium](https://huggingface.co/nicholasKluge/Aira-Instruct-355M)  | 355M              |
-| [Large](https://huggingface.co/nicholasKluge/Aira-Instruct-774)    | 774M              |
-| [XL](https://huggingface.co/nicholasKluge/Aira-Instruct-1B5)       | 1.5B              |
+| [Medium](https://huggingface.co/nicholasKluge/Aira-2-355M)         | 355M              |
+| [Large](https://huggingface.co/nicholasKluge/Aira-2-774)           | 774M              |
+| [XL](https://huggingface.co/nicholasKluge/Aira-2-1B5)              | 1.5B              |
 
 The Portuguese versions come in three sizes:
 
 | Models  | Size (Parameters) |
 | ------- | ----------------- |
-| [Small](https://huggingface.co/nicholasKluge/Aira-Instruct-PT-124M)   | 124M           |
-| [Large](https://huggingface.co/nicholasKluge/Aira-Instruct-PT-560M)  | 560M            |
-| [XL](https://huggingface.co/nicholasKluge/Aira-Instruct-PT-1B7)    | 1.7B              |
+| [Small](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M)  | 124M           |
+| [Large](https://huggingface.co/nicholasKluge/Aira-2-portuguese-560M)  | 560M           |
+| [XL](https://huggingface.co/nicholasKluge/Aira-2-portuguese-1B7)      | 1.7B           |
 
 The `Reward-Aira Dataset`, `Toxic-Aira Dataset`, and the `Instruct-Aira Dataset` are all available in Hugging Face. 🤗
 
@@ -66,7 +64,7 @@ You should use this demo for research purposes only. Moderators do not censor th
 @misc{nicholas22aira,
   doi = {10.5281/zenodo.6989727},
   url = {https://github.com/Nkluge-correa/Aira-EXPERT},
-  author = {Nicholas Kluge Corrêa and Carolina Del Pino},
+  author = {Nicholas Kluge Corrêa},
   title = {Aira},
   year = {2023},
   publisher = {GitHub},
