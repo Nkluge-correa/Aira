@@ -4,7 +4,7 @@
 
 > Note: **The models in this repository have been surpassed by our Hugging Face models and the `Aira-2` series. Please [check them out!](https://huggingface.co/nicholasKluge)** 🤗
 
-[`Aira`](https://playground.airespucrs.org/aira) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via instruction-tuning.
+[`Aira`](https://nkluge-correa.github.io/Aira-EXPERT/) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via instruction-tuning.
 
 The creation of Aira's dataset is documented in the `augmentation-factory.ipynb` file, while the `chatbot-factory.ipynb` takes the reader through the development of all iterations of our chatbot, from close-domain chatbots via `text classification` to open-domain chatbots via `conditional text generation`. In this repository, we train open-domain chatbots using the OpenAI API.
 
@@ -51,7 +51,7 @@ Our open-domain conversational chatbots were achieved via `instruction-tuning`. 
 
 `Aira` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-2-124M) to see how we developed `Aira`.
 
-In our [demo](https://playground.airespucrs.org/aira), we provide the user with a control panel to interact with our instruction-tuned models. This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
+In our [demo](https://nkluge-correa.github.io/Aira-EXPERT/), we provide the user with a control panel to interact with our instruction-tuned models. This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
 
 ## Disclaimer
 
