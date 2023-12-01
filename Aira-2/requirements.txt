@@ -1,0 +1,9 @@
+scikit-learn
+transformers
+codecarbon
+datasets
+torch
+pandas
+wandb
+pyyaml
+tlr

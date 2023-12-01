@@ -97,7 +97,7 @@ modal = html.Div(
                     '## What is `Aira`? 🤔'), style={'font-weight': 'bold'})),
                 dbc.ModalBody([
                     dcc.Markdown(
-                        '''`Aira` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/) and [`Carolina Del Pino`](http://lattes.cnpq.br/6291330432531578). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira-EXPERT).''', className='modal-body-text-style', style={'font-size': '1rem'}),
+                        '''`Aira` was developed by [`Nicholas Kluge`](https://nkluge-correa.github.io/). For more information visit this [`repository`](https://github.com/Nkluge-correa/Aira).''', className='modal-body-text-style', style={'font-size': '1rem'}),
                 ]),
                 dbc.ModalFooter(
                     dbc.Button(
@@ -125,12 +125,6 @@ modal = html.Div(
 )
 
 badges = html.Span([
-    dbc.Badge([html.I(className="bi bi-heart-fill"), "  Open-Source"], href="https://github.com/Nkluge-correa/Aira-EXPERT",
-              color="dark", className="text-decoration-none", style={'margin-right': '5px'}),
-    dbc.Badge([html.I(className="bi bi-bank"), "  AIRES at PUCRS"], href="https://www.airespucrs.org/",
-              color="dark", className="text-decoration-none", style={'margin-right': '5px'}),
-    dbc.Badge([html.I(className="bi bi-filetype-py"), "  Made with Python"], href="https://www.python.org/",
-              color="dark", className="text-decoration-none", style={'margin-right': '5px'}),
     dbc.Badge([html.I(className="bi bi-github"), "  Nkluge-correa"], href="https://nkluge-correa.github.io/",
               color="dark", className="text-decoration-none", style={'margin-right': '5px'})
 ])

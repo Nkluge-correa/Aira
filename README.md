@@ -1,61 +1,14 @@
-# Aira 🤓
+# Aira
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
-> Note: **The models in this repository have been surpassed by our Hugging Face models and the `Aira-2` series. Please [check them out!](https://huggingface.co/nicholasKluge)** 🤗
+[`Aira`](https://nkluge-correa.github.io/Aira/) is a series of `chatbots` developed as an experimentation playground for value alignment. While series 1 ([`Aira-1`](https://github.com/Nkluge-correa/Aira/tree/master/Aira-1)) represents our first attempts to develop conversational bots via text classification and conditional text generation, series 2 ([`Aira-2`](https://github.com/Nkluge-correa/Aira/tree/master/Aira-2)) is comprised of several models achieved via instruction finetuning and preference modeling techniques like Reinforcement Learning with Human Feeback and Direct Preference Optimization.
 
-[`Aira`](https://nkluge-correa.github.io/Aira/) is a `chatbot` designed to simulate the way a human (expert) would behave during a round of questions and answers (Q&A). `Aira` has many iterations, from a closed-domain chatbot based on pre-defined rules to an open-domain chatbot achieved via instruction-tuning.
+All models relating to the `Aira-1` series can be downloaded via the URLs in [this repo](https://github.com/Nkluge-correa/Aira/tree/master/Aira-1/aira) while the entire `Aira-2` series is available on the [Hugging Face hub](https://huggingface.co/nicholasKluge).
 
-The creation of Aira's dataset is documented in the `augmentation-factory.ipynb` file, while the `chatbot-factory.ipynb` takes the reader through the development of all iterations of our chatbot, from close-domain chatbots via `text classification` to open-domain chatbots via `conditional text generation`. In this repository, we train open-domain chatbots using the OpenAI API.
+This repository also contains the source code for the pre-training of several types of language models (`Bert`, `GPT-2`, `Llama`), using common machine learning frameworks and libraries, like `transformers`, `datasets`, and `torch`. The source code of our first attempt to train such models is documented in the `old-pre-training-scripts` folder (models also available on the [Hugging Face hub](https://huggingface.co/AiresPucrs/bert-base-wikitext)), while the `Teeny-tiny-llama` folder contains the source code for training a small version of the Llama-2 architecture with a Portuguese corpus, following the [Chinchila scaling laws](https://arxiv.org/abs/2203.15556) while also incorporating [preference pre-training](https://arxiv.org/abs/2112.00861).
 
-In our [HuggingFace](https://huggingface.co/nicholasKluge) repositories, you will find the second version of our chatbots (`Aira-2`). The English versions of `Aira-2` comes in four sizes, being a fine-tuned version of several sizes of GPT-style models.
-
-| Models  | Size (Parameters) |
-| ------- | ----------------- |
-| [Small](https://huggingface.co/nicholasKluge/Aira-2-124M)          | 124M              |
-| [Medium](https://huggingface.co/nicholasKluge/Aira-2-355M)         | 355M              |
-| [Large](https://huggingface.co/nicholasKluge/Aira-2-774)           | 774M              |
-| [XL](https://huggingface.co/nicholasKluge/Aira-2-1B5)              | 1.5B              |
-
-The Portuguese versions come in three sizes:
-
-| Models  | Size (Parameters) |
-| ------- | ----------------- |
-| [Small](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M)  | 124M           |
-| [Large](https://huggingface.co/nicholasKluge/Aira-2-portuguese-560M)  | 560M           |
-| [XL](https://huggingface.co/nicholasKluge/Aira-2-portuguese-1B7)      | 1.7B           |
-
-The `Reward-Aira Dataset`, `Toxic-Aira Dataset`, and the `Instruct-Aira Dataset` are all available in Hugging Face. 🤗
-
-## Metrics (Closed Domain Aira)
-
-The `accuracy` of our text classification models is documented in the table below (for both Portuguese and English):
-
-| Models            | Accuracy (PT) | Accuracy (EN) |
-| ----------------- | ------------- | ------------- |
-| Ruled-based       | 96.77%        | 95.36%        |
-| Bi-LSTM           | 92.29%        | 96.98%        |
-| Ensembled-Bi-LSTM | 93.73%        | 95.43%        |
-| Transformer       | 97.11%        | 98.35%        |
-| BERT              | **98.55%**    | **99.45%**    |
-
-## Limitations
-
-Our open-domain conversational chatbots were achieved via `instruction-tuning`. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **nontoxic** responses. This leads us to two of the most common problems of generative models used in conversational applications:
-
-🤥 Generative models can perpetuate the generation of pseudo-informative content, that is, false information that may appear truthful.
-
-🤬 In certain types of tasks, generative models can produce harmful and discriminatory content inspired by historical stereotypes.
-
-## Intended Use & Demo
-
-`Aira` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-2-124M) to see how we developed `Aira`.
-
-In our [demo](https://nkluge-correa.github.io/Aira/), we provide the user with a control panel to interact with our instruction-tuned models. This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
-
-## Disclaimer
-
-You should use this demo for research purposes only. Moderators do not censor the model output, and the authors do not endorse the opinions generated by this model. If you would like to complain about any message produced by `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
+All models and datasets developed are part of [Nicholas Kluge's](https://nkluge-correa.github.io/) doctoral dissertation, "_Dynamic Normativity: Necessary and Sufficient Conditions for Value Alignment._" This research was funded by CNPq (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), FAPERGS (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), and DAAD (Deutscher Akademischer Austauschdienst), as part of a doctoral research project tied to Philosophy departments of PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul) and the University of Bonn.
 
 ## Cite as 🤗
 
@@ -72,5 +25,3 @@ You should use this demo for research purposes only. Moderators do not censor th
 }
 
 ```
-
-The models and datasets developed are part of the development of [Nicholas Kluge's](https://nkluge-correa.github.io/) doctoral dissertation, "_Dynamic Normativity: Necessary and Sufficient Conditions for Value Alignment._" This research was funded by CNPq (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), FAPERGS (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), DAAD (Deutscher Akademischer Austauschdienst), PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul) and University of Bonn.

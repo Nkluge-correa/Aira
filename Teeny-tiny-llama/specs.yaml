@@ -1,0 +1,73 @@
+model_args:
+  model_to_train: "TinyLlama/TinyLlama-1.1B-intermediate-step-715k-1.5T"
+  embedding_model: "pierreguillou/gpt2-small-portuguese"
+  tokenizer_name: "nicholasKluge/Teeny-tiny-llama-tokenizer"
+  train_from_scratch: true
+  clone_embedding_layer: false
+  vocab_size: 32000
+  hidden_size: 768
+  intermediate_size: 3072
+  max_position_embeddings: 2048
+  num_attention_heads: 12
+  num_hidden_layers: 12
+  output_hidden_states: false
+  config_overrides: null
+  cache_dir: null
+  use_fast_tokenizer: true
+  model_revision: "main"
+  trust_remote_code: false
+  torch_dtype: "auto"
+  low_cpu_mem_usage: null
+  bos_token: '<|endoftext|>'
+  sep_token: '<|endoftext|>'
+  eos_token: '<|endoftext|>'
+  pad_token: '<|endoftext|>'
+  unk_token: '<|endoftext|>'
+data_args:
+  dataset_name: "nicholasKluge/portuguese-corpus-as-tensors-2048-teeny-tiny-llama-tokenizer"
+  dataset_is_tokenized: true
+  dataset_split: "train"
+  validation_split_percentage: 0.01
+  streaming: false
+  block_size: 2048
+  overwrite_cache: false
+  preprocessing_num_workers: null
+  sanity_check: true
+training_args:
+  output_dir: "checkpoints"
+  do_train: true
+  do_eval: true
+  evaluation_strategy: "steps"
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 1
+  learning_rate: 0.001
+  adam_epsilon: 0.00000001
+  weight_decay: 0.0
+  lr_scheduler_type: "cosine"
+  num_train_epochs: 5
+  no_cuda: false
+  gradient_checkpointing: false
+  warmup_steps: 50
+  seed: 42
+  eval_steps: 50
+  dataloader_pin_memory: true
+  push_to_hub: true
+  resume_from_checkpoint: null
+  hub_model_id: "nicholasKluge/Teeny-tiny-llama"
+  hub_token: null
+extra_args:
+  wandb_token: null
+  logger_name: "Teeny-tiny-llama"
+  wandb_log_steps: 1
+  mixed_precision: 'no'
+  checkpointing_steps: '20'
+  sample_every: 20
+  generation_seeds:
+    - "Meu nome é Nicholas e eu"
+    - "O Brasil é um país"
+    - "A vida é algo que"
+    - "A morte vem para todos"
+    - "A felicidade é um sentimento"
+    - "A tristeza é um sentimento"
+    - "A capital do Brazil é"

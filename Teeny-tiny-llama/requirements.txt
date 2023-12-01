@@ -1,0 +1,8 @@
+transformers
+torch
+pyyaml
+datasets
+wandb
+codecarbon
+huggingface_hub
+accelerate

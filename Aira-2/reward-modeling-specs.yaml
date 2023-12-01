@@ -1,0 +1,28 @@
+model_args:
+  base_model: "bert-base-cased"
+  cache_dir: null
+data_args:
+    dataset_name: "nicholasKluge/toxicity-aira-dataset"
+    dataset_split: "english"
+    validation_split_percentage: 0.05
+    streaming: false
+    max_length: 400
+    sanity_check: true
+training_args:
+  output_dir: "checkpoints"
+  evaluation_strategy: "steps"
+  save_strategy: "steps"
+  logging_strategy: "steps"
+  logging_steps: 20
+  max_steps: 100
+  save_steps: 50
+  per_device_train_batch_size: 32
+  per_device_eval_batch_size: 32
+  gradient_accumulation_steps: 1
+  learning_rate: 0.0005
+  hub_token: null
+  push_to_hub: false
+  hub_model_id: "nicholasKluge/Aira-test"
+extra_args:
+  project_name: "Aira-test"
+  wandb_token: null
