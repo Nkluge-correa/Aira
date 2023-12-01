@@ -9,11 +9,10 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForSequen
 
 
 # download the instruct-aira-dataset
-#dataset = load_dataset("nicholasKluge/instruct-aira-dataset", split='english')
-dataset = load_dataset("parquet", data_files="instruct-aira-dataset.parquet")
+dataset = load_dataset("nicholasKluge/instruct-aira-dataset", split='english')
 
 # convert the dataset to a pandas dataframe
-df = dataset['train'].to_pandas()
+df = dataset.to_pandas()
 
 # rename the columns
 df.columns = ['Prompt', 'Completion']
@@ -113,8 +112,6 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                         likeable=False,
                         layout='panel')
     
-    #chatbot = gr.Chatbot(label="Aira").style(height=500)
-    
     msg = gr.Textbox(label="Write a question or instruction to Aira ...", placeholder="What is the capital of Brazil?")
 
     # Parameters to control the generation
@@ -151,7 +148,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         """
         Chatbot's user message handler.
         """
-        return gr.update(value=user_message, interactive=True), chat_history + [["👤 " + user_message, None]]
+        return gr.update(value=user_message, interactive=True), chat_history + [[user_message, None]]
 
     def generate_response(user_msg, top_p, temperature, top_k, max_length, smaple_from, repetition_penalty, safety, chat_history):
         """
@@ -179,40 +176,45 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         decoded_text = [tokenizer.decode(tokens, skip_special_tokens=True).replace(user_msg, "") for tokens in generated_response]
 
         rewards = list()
-        toxicities = list()
-
-        for text in decoded_text:
-          reward_tokens = rewardTokenizer(user_msg, text,
-                        truncation=True,
-                        max_length=512,
-                        return_token_type_ids=False,
-                        return_tensors="pt",
-                        return_attention_mask=True)
-
-          reward_tokens.to(rewardModel.device)
-
-          reward = rewardModel(**reward_tokens)[0].item()
-
-          toxicity_tokens = toxiciyTokenizer(user_msg + " " + text,
-                        truncation=True,
-                        max_length=512,
-                        return_token_type_ids=False,
-                        return_tensors="pt",
-                        return_attention_mask=True)
-
-          toxicity_tokens.to(toxicityModel.device)
-
-          toxicity = toxicityModel(**toxicity_tokens)[0].item()
-
-          rewards.append(reward)
-          toxicities.append(toxicity)
-        
-        toxicity_threshold = 5
-
-        ordered_generations = sorted(zip(decoded_text, rewards, toxicities), key=lambda x: x[1], reverse=True)
 
         if safety == "On":
+            toxicities = list()
+
+        for text in decoded_text:
+            reward_tokens = rewardTokenizer(user_msg, text,
+                        truncation=True,
+                        max_length=512,
+                        return_token_type_ids=False,
+                        return_tensors="pt",
+                        return_attention_mask=True)
+            
+            reward_tokens.to(rewardModel.device)
+            
+            reward = rewardModel(**reward_tokens)[0].item()
+            rewards.append(reward)
+
+            if safety == "On":
+
+                toxicity_tokens = toxiciyTokenizer(user_msg + " " + text,
+                            truncation=True,
+                            max_length=512,
+                            return_token_type_ids=False,
+                            return_tensors="pt",
+                            return_attention_mask=True)
+                
+                toxicity_tokens.to(toxicityModel.device)
+                
+                toxicity = toxicityModel(**toxicity_tokens)[0].item()
+                toxicities.append(toxicity)
+                
+                toxicity_threshold = 5
+
+        if safety == "On":
+            ordered_generations = sorted(zip(decoded_text, rewards, toxicities), key=lambda x: x[1], reverse=True)
             ordered_generations = [(x, y, z) for (x, y, z) in ordered_generations if z >= toxicity_threshold]
+
+        else:
+            ordered_generations = sorted(zip(decoded_text, rewards), key=lambda x: x[1], reverse=True)
 
         if len(ordered_generations) == 0:
           bot_message = """I apologize for the inconvenience, but it appears that no suitable responses meeting our safety standards could be identified. Unfortunately, this indicates that the generated content may contain elements of toxicity or may not help address your message. Your input is valuable to us, and we strive to ensure a safe and constructive conversation. Please feel free to provide further details or ask any other questions, and I will do my best to assist you."""
@@ -220,7 +222,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         else:
           bot_message = ordered_generations[0][0]
 
-        chat_history[-1][1] = "🤖 "
+        chat_history[-1][1] = ""
         for character in bot_message:
             chat_history[-1][1] += character
             time.sleep(0.005)

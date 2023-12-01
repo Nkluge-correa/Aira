@@ -8,11 +8,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForSequenceClassification
 
 # download the instruct-aira-dataset
-#dataset = load_dataset("nicholasKluge/instruct-aira-dataset", split='portuguese')
-dataset = load_dataset("parquet", data_files="instruct-aira-dataset.parquet")
+dataset = load_dataset("nicholasKluge/instruct-aira-dataset", split='portuguese')
 
 # convert the dataset to a pandas dataframe
-df = dataset['train'].to_pandas()
+df = dataset.to_pandas()
 
 # rename the columns
 df.columns = ['Prompt', 'Completion']
@@ -111,8 +110,6 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                         line_breaks=True,
                         likeable=False,
                         layout='panel')
-    
-    #chatbot = gr.Chatbot(label="Aira").style(height=500)
                          
     msg = gr.Textbox(label="Escreva uma pergunta ou instrução para Aira ...", placeholder="Olá Aira, como vai você?")
 
@@ -178,40 +175,43 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         decoded_text = [tokenizer.decode(tokens, skip_special_tokens=True).replace(user_msg, "") for tokens in generated_response]
 
         rewards = list()
-        toxicities = list()
+        
+        if safety == "On":
+            toxicities = list()
 
         for text in decoded_text:
-          reward_tokens = rewardTokenizer(user_msg, text,
+            reward_tokens = rewardTokenizer(user_msg, text,
                         truncation=True,
                         max_length=512,
                         return_token_type_ids=False,
                         return_tensors="pt",
                         return_attention_mask=True)
+            
+            reward_tokens.to(rewardModel.device)
+            
+            reward = rewardModel(**reward_tokens)[0].item()
+            rewards.append(reward)
 
-          reward_tokens.to(rewardModel.device)
-
-          reward = rewardModel(**reward_tokens)[0].item()
-
-          toxicity_tokens = toxiciyTokenizer(user_msg + " " + text,
-                        truncation=True,
-                        max_length=512,
-                        return_token_type_ids=False,
-                        return_tensors="pt",
-                        return_attention_mask=True)
-
-          toxicity_tokens.to(toxicityModel.device)
-
-          toxicity = toxicityModel(**toxicity_tokens)[0].item()
-
-          rewards.append(reward)
-          toxicities.append(toxicity)
-        
-        toxicity_threshold = 5
-
-        ordered_generations = sorted(zip(decoded_text, rewards, toxicities), key=lambda x: x[1], reverse=True)
+            if safety == "On":
+                toxicity_tokens = toxiciyTokenizer(user_msg + " " + text,
+                            truncation=True,
+                            max_length=512,
+                            return_token_type_ids=False,
+                            return_tensors="pt",
+                            return_attention_mask=True)
+                
+                toxicity_tokens.to(toxicityModel.device)
+                
+                toxicity = toxicityModel(**toxicity_tokens)[0].item()
+                toxicities.append(toxicity)
+                toxicity_threshold = 5
 
         if safety == "On":
+            ordered_generations = sorted(zip(decoded_text, rewards, toxicities), key=lambda x: x[1], reverse=True)
             ordered_generations = [(x, y, z) for (x, y, z) in ordered_generations if z >= toxicity_threshold]
+
+        else:
+            ordered_generations = sorted(zip(decoded_text, rewards), key=lambda x: x[1], reverse=True)
 
         if len(ordered_generations) == 0:
           bot_message = """Peço desculpa pelo incómodo, mas parece que não foi possível identificar respostas adequadas que cumpram as nossas normas de segurança. Infelizmente, isto indica que o conteúdo gerado pode conter elementos de toxicidade ou pode não ajudar a responder à sua mensagem. A sua opinião é valiosa para nós e esforçamo-nos por garantir uma conversa segura e construtiva. Não hesite em fornecer mais pormenores ou colocar quaisquer outras questões, e farei o meu melhor para o ajudar."""
