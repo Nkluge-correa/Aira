@@ -37,6 +37,13 @@ The `reward-aira-dataset`, `toxic-aira-dataset`, and the `instruct-aira-dataset`
 | [Aira-OPT-1B3](https://huggingface.co/nicholasKluge/Aira-OPT-1B3)   | **43.90** | 28.41                                   | **46.59**                                      | **56.70**                                   |
 | OPT-1.3b                                                            | 40.91     | **29.69**                               | 38.68                                          | 54.36                                       |
 
+## TinyLlama
+
+| Model (TinyLlama)                                             | Average   | [ARC](https://arxiv.org/abs/1803.05457) | [TruthfulQA](https://arxiv.org/abs/2109.07958) | [ToxiGen](https://arxiv.org/abs/2203.09509) |
+|---------------------------------------------------------------|-----------|-----------------------------------------|------------------------------------------------|---------------------------------------------|
+| [Aira-2-1B1](https://huggingface.co/nicholasKluge/Aira-2-1B1) | **42.55** | 25.26                                   | **50.81**                                      | **51.59**                                   |
+| TinyLlama-1.1B-intermediate-step-480k-1T                      | 37.52     | **30.89**                               | 39.55                                          | 42.13                                       |
+
 ## Intended Use & Demo
 
 `Aira-2` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-2-1B5) to see how we developed `Aira-2`.
