@@ -167,13 +167,13 @@ def main(spec_file):
 
         raise ValueError("No base model provided. Try running with `base_model=gpt2`")
 
-    # if `is_OPT=True` then we do not need to append the bos_token to the demonstrations,
+    # if `model.config.model_type == "opt"` then we do not need to append the bos_token to the demonstrations,
     # since the OPT model already prepends the bos_token to the prompt.`
-    if model_args.is_OPT:
-        dataset_df['demonstrations'] = dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token
+    if model.config.model_type != "opt":
+        dataset_df['demonstrations'] = tokenizer.bos_token + dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token
 
     else:
-        dataset_df['demonstrations'] = tokenizer.bos_token + dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token
+        dataset_df['demonstrations'] = dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token 
 
     # Get the maximum length of the demonstrations if it is not provided
     if data_args.max_length is None:
@@ -383,11 +383,11 @@ def main(spec_file):
 
                     model.eval()
 
-                    if model_args.is_OPT:
-                        inputs = tokenizer(dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, return_tensors="pt").to('cuda:0')
-                    
-                    else:
+                    if model.config.model_type != "opt":
                         inputs = tokenizer(tokenizer.bos_token + dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, return_tensors="pt").to('cuda:0')
+                        
+                    else:
+                        inputs = tokenizer(dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, return_tensors="pt").to('cuda:0')  
 
                     sample_outputs = model.generate(**inputs,
                                         bos_token_id=tokenizer.bos_token_id,

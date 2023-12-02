@@ -11,7 +11,6 @@ model_args:
   eos_token: '<|endofcompletion|>'
   pad_token: '<|pad|>'
   unk_token: '<|unk|>'
-  is_OPT: false
 data_args:
     dataset_name: "nicholasKluge/instruct-aira-dataset"
     dataset_split: "english"

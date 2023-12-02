@@ -91,11 +91,6 @@ class ModelArguments:
         metadata={"help": "The unknown token"},
     )
 
-    is_OPT: Optional[bool] = field(
-        default=False,
-        metadata={"help": "Whether the model fine-tuned is OPT or not"},
-    )
-
 @dataclass
 class DataTrainingArguments:
     """
