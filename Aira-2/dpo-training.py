@@ -38,6 +38,7 @@ def main(spec_file):
                 repo_id=extra_args.project_name, 
                 token=training_args.hub_token,
                 repo_type="model",
+                exist_ok=True,
                 private=True)['id']
         
         else:
@@ -45,6 +46,7 @@ def main(spec_file):
                 repo_id=training_args.hub_model_id, 
                 token=training_args.hub_token,
                 repo_type="model",
+                exist_ok=True,
                 private=True)
 
     # Set the logger
@@ -119,7 +121,7 @@ def main(spec_file):
     # Initialize W&B tracker if needed
     if extra_args.wandb_token is not None: 
         # Login to wandb    
-        wandb.login(extra_args.wandb_token)
+        wandb.login(key=extra_args.wandb_token)
 
         # Initialize wandb
         wandb.init(
@@ -135,8 +137,8 @@ def main(spec_file):
         per_device_train_batch_size=training_args.per_device_train_batch_size,
         do_eval=training_args.do_eval,
         per_device_eval_batch_size=training_args.per_device_eval_batch_size if training_args.do_eval else None,
-        evaluation_strategy=training_args.evaluation_strategy,
-        eval_steps=training_args.eval_steps,
+        evaluation_strategy=training_args.evaluation_strategy if training_args.do_eval else None,
+        eval_steps=training_args.eval_steps if training_args.do_eval else None,
         save_strategy=training_args.save_strategy,
         logging_strategy=training_args.logging_strategy,
         logging_steps=training_args.logging_steps,

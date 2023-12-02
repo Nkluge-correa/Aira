@@ -1,12 +1,15 @@
 import os
+import sys
+import math
 import yaml
-import tqdm
 import torch
+import wandb
 import random
 import logging
 import argparse
-import pandas as pd
+from tqdm import tqdm
 from codecarbon import EmissionsTracker
+from torch.utils.data import DataLoader
 from datasets import load_dataset, Dataset
 from huggingface_hub import create_repo, HfApi
 
@@ -47,6 +50,7 @@ def main(spec_file):
                 repo_id=extra_args.project_name, 
                 token=training_args.hub_token,
                 repo_type="model",
+                exist_ok=True,
                 private=True)['id']
         
         else:
@@ -54,6 +58,7 @@ def main(spec_file):
                 repo_id=training_args.hub_model_id, 
                 token=training_args.hub_token,
                 repo_type="model",
+                exist_ok=True,
                 private=True)
 
     # Set the logger
@@ -237,7 +242,7 @@ def main(spec_file):
         )
 
     # Create the Evaluation DataLoader
-    if do_eval:
+    if training_args.do_eval:
         if "test" not in dataset:
             raise ValueError("`do_eval=True` requires a validation dataset")
         eval_dataset = dataset["test"] 
@@ -254,7 +259,7 @@ def main(spec_file):
     optimizer_grouped_parameters = [
         {
             "params": [p for n, p in model.named_parameters() if not any(nd in n for nd in no_decay)],
-            "weight_decay": weight_decay,
+            "weight_decay": training_args.weight_decay,
         },
         {
             "params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)],
@@ -281,7 +286,7 @@ def main(spec_file):
     )
 
     # Prepare everything with `accelerator`.
-    if training_args.do_train and do_eval:
+    if training_args.do_train and training_args.do_eval:
 
         model, optimizer, train_dataloader, eval_dataloader, lr_scheduler = accelerator.prepare(
             model, optimizer, train_dataloader, eval_dataloader, lr_scheduler
@@ -300,7 +305,7 @@ def main(spec_file):
     # Initialize W&B tracker if needed
     if extra_args.wandb_token is not None: 
         # Login to wandb    
-        wandb.login(extra_args.wandb_token)
+        wandb.login(key=extra_args.wandb_token)
 
         # Initialize wandb
         wandb.init(
@@ -344,7 +349,7 @@ def main(spec_file):
 
     for epoch in range(starting_epoch, training_args.num_train_epochs):
         model.train()
-        logger.info(f'Beginning epoch {epoch + 1} of {num_train_epochs}')
+        logger.info(f'Beginning epoch {epoch + 1} of {training_args.num_train_epochs}')
         
         total_loss = 0
     
@@ -404,7 +409,7 @@ def main(spec_file):
                     texts = []
 
                     for i, sample_output in enumerate(sample_outputs):
-                        texts.append(tokenizer.decode(sample_output, skip_special_tokens=True))
+                        texts.append(tokenizer.decode(sample_output))
                         
                     if extra_args.wandb_token is not None:
 
@@ -486,12 +491,11 @@ def main(spec_file):
     if extra_args.wandb_token is not None:
         wandb.finish()
 
-    # Save the optimizer, scheduler states, rng state, and pytorch model
+    # Save the optimizer, lr_scheduler states, rng state, and pytorch model
     rng_state = torch.get_rng_state()
     torch.save(rng_state, f"./{training_args.output_dir}/rng_state.pt")
-    torch.save(scheduler.state_dict(), f"./{training_args.output_dir}/scheduler.pt")
+    torch.save(lr_scheduler.state_dict(), f"./{training_args.output_dir}/lr_scheduler.pt")
     torch.save(optimizer.state_dict(), f"./{training_args.output_dir}/optimizer.pt")
-    torch.save(unwrapped_model.state_dict(), training_args.output_dir)
 
     # Push the model checkpoint to the hub if needed
     if training_args.push_to_hub and training_args.hub_token is not None:

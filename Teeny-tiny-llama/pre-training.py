@@ -88,6 +88,7 @@ def main(spec_file):
                     repo_id=extra_args.project_name, 
                     token=training_args.hub_token,
                     repo_type="model",
+                    exist_ok=True,
                     private=True)['id']
             
             else:
@@ -95,6 +96,7 @@ def main(spec_file):
                     repo_id=training_args.hub_model_id, 
                     token=training_args.hub_token,
                     repo_type="model",
+                    exist_ok=True,
                     private=True)
         
     accelerator.wait_for_everyone()

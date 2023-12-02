@@ -40,7 +40,7 @@ def main(input_file, column_name, batch_size, source_language, target_language):
             done = False
             while not done:
                 try:
-                    translated_sentences = deep_translator.ChatGptTranslator(api_key="api_key_here", target=target_language).translate_batch(batch)
+                    translated_sentences = deep_translator.ChatGptTranslator(api_key="your_api_key", target=target_language).translate_batch(batch)
                     print("Server responded ...")
                     for sentence in translated_sentences:
                         with open(f'{column_name}/{count}.md', 'a') as f:
@@ -63,4 +63,4 @@ if __name__ == '__main__':
 
     main(args.input_file, args.column_name, args.batch_size, args.source_language, args.target_language)
 
-# example: python translate-dataset.py --input_file toxic-non-toxic.parquet --column_name toxic --batch_size 20 --source_language english --target_language portuguese
+# example: python translate-dataset.py --input_file train.parquet --column_name prompt --batch_size 20 --source_language english --target_language portuguese

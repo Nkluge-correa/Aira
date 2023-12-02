@@ -2,6 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
+<img src="./logo/aira-logo.jfif" alt="An image of a girl sitting close to a can bottle and a little blue robot toy. The name 'Aira' is written on the side of the girl." height="400">
+
 [`Aira`](https://nkluge-correa.github.io/Aira/) is a series of `chatbots` developed as an experimentation playground for value alignment. While series 1 ([`Aira-1`](https://github.com/Nkluge-correa/Aira/tree/master/Aira-1)) represents our first attempts to develop conversational bots via text classification and conditional text generation, series 2 ([`Aira-2`](https://github.com/Nkluge-correa/Aira/tree/master/Aira-2)) is comprised of several models achieved via instruction finetuning and preference modeling techniques like Reinforcement Learning with Human Feeback and Direct Preference Optimization.
 
 All models relating to the `Aira-1` series can be downloaded via the URLs in [this repo](https://github.com/Nkluge-correa/Aira/tree/master/Aira-1/aira) while the entire `Aira-2` series is available on the [Hugging Face hub](https://huggingface.co/nicholasKluge).
