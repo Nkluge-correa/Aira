@@ -140,7 +140,6 @@ def main(spec_file):
         do_eval=training_args.do_eval,
         per_device_eval_batch_size=training_args.per_device_eval_batch_size if training_args.do_eval else None,
         evaluation_strategy=training_args.evaluation_strategy if training_args.do_eval else "no",
-        eval_steps=training_args.eval_steps if training_args.do_eval else None,
         save_strategy=training_args.save_strategy,
         logging_strategy=training_args.logging_strategy,
         logging_steps=training_args.logging_steps,
