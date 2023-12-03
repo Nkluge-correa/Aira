@@ -45,21 +45,16 @@ def main(spec_file):
 
     # Create a HuggingFace repository if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
-        if training_args.hub_model_id is None:
-            training_args.hub_model_id = create_repo(
-                repo_id=extra_args.project_name, 
-                token=training_args.hub_token,
-                repo_type="model",
-                exist_ok=True,
-                private=True)['id']
-        
-        else:
+        if training_args.hub_model_id is not None:
             create_repo(
                 repo_id=training_args.hub_model_id, 
                 token=training_args.hub_token,
                 repo_type="model",
                 exist_ok=True,
                 private=True)
+        
+        else:
+            raise ValueError("No model id provided. Try running with `hub_model_id=your-model-id`")     
 
     # Set the logger
     logger = get_logger(extra_args.project_name)
@@ -128,9 +123,8 @@ def main(spec_file):
                 "eos_token": model_args.eos_token,
             }
 
-        # Clean the tokenizer input sizes dictionary
+        # Load the tokenizer of the base model
         tokenizer = AutoTokenizer.from_pretrained(model_args.base_model, **tokenizer_kwargs)
-        tokenizer.max_model_input_sizes.clear()
 
         # Set the configuration for the `base_model`
         config_kwargs = {
@@ -158,9 +152,6 @@ def main(spec_file):
         # Resize the token embeddings of the model to match the tokenizer
         model.resize_token_embeddings(len(tokenizer))
 
-        # Replace the tokenizer `max_model_input_sizes` to the maximum sequence length of the base model
-        tokenizer.max_model_input_sizes[extra_args.project_name] = model.config.max_position_embeddings
-
         # Enable gradient checkpointing if `gradient_checkpointing=True`
         if training_args.gradient_checkpointing:
             model.gradient_checkpointing_enable()
@@ -184,6 +175,8 @@ def main(spec_file):
     if data_args.max_length is None:
         dataset_df['length'] = dataset_df['demonstrations'].apply(lambda x: len(tokenizer.encode(x)))
         data_args.max_length = dataset_df['length'].max()
+        dataset_df.drop(columns=['length'], inplace=True)    
+        logger.info(f"Maximum length of demonstrations set to `None`. Using max_length of demonstrations: {data_args.max_length}")
 
     # Turn the pandas dataframe into a HuggingFace Dataset
     dataset = Dataset.from_pandas(dataset_df)
@@ -229,7 +222,7 @@ def main(spec_file):
         logger.info(f"Using the whole dataset for training. Training set size: {len(dataset):,}")
 
     # Create the Training DataLoader
-    if training_args.do_train:
+    if training_args.do_train and training_args.do_eval:
         if "train" not in dataset:
             raise ValueError("`do_train=True` requires a train dataset")
         train_dataset = dataset["train"]
@@ -238,11 +231,10 @@ def main(spec_file):
             shuffle=True, 
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
-            pin_memory=data_args.pin_memory,
+            pin_memory=training_args.dataloader_pin_memory,
         )
 
-    # Create the Evaluation DataLoader
-    if training_args.do_eval:
+        # Create the Evaluation DataLoader
         if "test" not in dataset:
             raise ValueError("`do_eval=True` requires a validation dataset")
         eval_dataset = dataset["test"] 
@@ -250,7 +242,17 @@ def main(spec_file):
             eval_dataset,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_eval_batch_size,
-            pin_memory=data_args.pin_memory,
+            pin_memory=training_args.dataloader_pin_memory,
+        )
+    
+    elif training_args.do_train and not training_args.do_eval:
+        train_dataset = dataset
+        train_dataloader = DataLoader(
+            train_dataset,
+            shuffle=True, 
+            collate_fn=default_data_collator, 
+            batch_size=training_args.per_device_train_batch_size,
+            pin_memory=training_args.dataloader_pin_memory,
         )
 
     # Optimizer
@@ -410,13 +412,15 @@ def main(spec_file):
 
                     for i, sample_output in enumerate(sample_outputs):
                         texts.append(tokenizer.decode(sample_output))
+                    
+                    for text in texts:
+                        logger.info(f"Samples (Epoch: {epoch + 1} | Step: {step}): {text}")
                         
                     if extra_args.wandb_token is not None:
 
                         training_samples = wandb.Table(columns=[f"Samples (Epoch: {epoch + 1} | Step: {step})"])
                         for text in texts:
                             training_samples.add_data(text)
-                            logger.info(f"Samples (Epoch: {epoch + 1} | Step: {step}): {text}")
                         wandb.log({f"Samples (Epoch: {epoch + 1} | Step: {step})": training_samples})
                 
                 except Exception as e:

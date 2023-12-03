@@ -137,15 +137,6 @@ class DataTrainingArguments:
         metadata={"help": "The number of processes to use for the preprocessing."},
     )
 
-    pin_memory: bool = field(
-        default=True,
-        metadata={
-            "help": (
-                "Whether to pin memory of the DataLoader or not."
-            )
-        },
-    )
-
     sanity_check: Optional[bool] = field(
         default=False,
         metadata={"help": "If set, will run training on a small portion of the dataset."},

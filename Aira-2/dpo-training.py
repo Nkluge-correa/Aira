@@ -1,9 +1,11 @@
 import os
+import sys
 import yaml
 import torch
+import wandb
 import logging
 import argparse
-from datasets import Dataset, load_dataset
+from datasets import load_dataset, Dataset
 from huggingface_hub import create_repo, HfApi
 
 from transformers import (
@@ -13,6 +15,8 @@ from transformers import (
 )
 
 from trl import DPOTrainer
+
+from accelerate.logging import get_logger
 
 from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 
@@ -33,21 +37,16 @@ def main(spec_file):
 
     # Create a HuggingFace repository if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
-        if training_args.hub_model_id is None:
-            training_args.hub_model_id = create_repo(
-                repo_id=extra_args.project_name, 
-                token=training_args.hub_token,
-                repo_type="model",
-                exist_ok=True,
-                private=True)['id']
-        
-        else:
+        if training_args.hub_model_id is not None:
             create_repo(
                 repo_id=training_args.hub_model_id, 
                 token=training_args.hub_token,
                 repo_type="model",
                 exist_ok=True,
                 private=True)
+        
+        else:
+            raise ValueError("No model id provided. Try running with `hub_model_id=your-model-id`")
 
     # Set the logger
     logger = get_logger(extra_args.project_name)
@@ -111,13 +110,16 @@ def main(spec_file):
                 "rejected": [completion + tokenizer.eos_token for completion in dataset["rejected_response"]],
             }
         
-    dataset = Dataset.from_dict(dataset_dic)
+    formatted_dataset = Dataset.from_dict(dataset_dic)
 
     if training_args.do_eval:
         formatted_dataset = formatted_dataset.train_test_split(test_size=data_args.validation_split_percentage)
 
         logger.info(f"Train set size: {len(formatted_dataset['train']):,} | Validation set size: {len(formatted_dataset['test']):,}")
     
+    else:
+        logger.info(f"Train set size: {len(formatted_dataset):,}")
+
     # Initialize W&B tracker if needed
     if extra_args.wandb_token is not None: 
         # Login to wandb    
@@ -126,18 +128,18 @@ def main(spec_file):
         # Initialize wandb
         wandb.init(
             project=extra_args.project_name, 
-            notes="Fine tuning base model on the AIRA-reward dataset",
-            tags=["Alignment", "reward-modeling", "Aira"],
+            notes="Fine tuning base model on the AIRA-reward dataset via DPO",
+            tags=["Alignment", "DPO", "Aira"],
             config=all_kwargs
         )
 
     # Set up the training arguments
-    training_args = TrainingArguments(
+    train_args = TrainingArguments(
         output_dir=training_args.output_dir,
         per_device_train_batch_size=training_args.per_device_train_batch_size,
         do_eval=training_args.do_eval,
         per_device_eval_batch_size=training_args.per_device_eval_batch_size if training_args.do_eval else None,
-        evaluation_strategy=training_args.evaluation_strategy if training_args.do_eval else None,
+        evaluation_strategy=training_args.evaluation_strategy if training_args.do_eval else "no",
         eval_steps=training_args.eval_steps if training_args.do_eval else None,
         save_strategy=training_args.save_strategy,
         logging_strategy=training_args.logging_strategy,
@@ -158,7 +160,7 @@ def main(spec_file):
     dpo_trainer = DPOTrainer(
         model=model,
         ref_model=model_ref,
-        args=training_args,
+        args=train_args,
         tokenizer=tokenizer,
         train_dataset=formatted_dataset if not training_args.do_eval else formatted_dataset["train"],
         eval_dataset=formatted_dataset["test"] if training_args.do_eval else None,
@@ -169,13 +171,14 @@ def main(spec_file):
 
     # Train the model
     dpo_trainer.train()
-
-    # Save the model
-    output_dir = os.path.join(training_args.output_dir, "final_checkpoint")
-    dpo_trainer.save_model(training_args.output_dir)
-    dpo_trainer.model.save_pretrained(output_dir)
-
     logger.info("Training complete!")
+
+    # Resume wandb tracking
+    if extra_args.wandb_token is not None:
+        wandb.finish()
+
+    # Save the model one last time
+    dpo_trainer.save_model(training_args.output_dir)
 
     # Push the model checkpoint to the hub if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
@@ -188,16 +191,23 @@ def main(spec_file):
 
         future = api.upload_folder(
             repo_id=training_args.hub_model_id,
-            folder_path=training_args.output_dir,
+            folder_path=os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}"),
             run_as_future=True,
         )
 
-        logger.info("Ouput directory being uploaded to the hub.")
+        api.upload_file(
+            path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
+            path_in_repo=f"emissions.csv",
+            repo_id=training_args.hub_model_id,
+            run_as_future=True,
+        )
+
+        logger.info(f"""Ouput directory ({os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}) being uploaded to the hub.""")
 
         while not future.done():
             pass
         
-        logger.info("Ouput directory uploaded to the hub!")
+        logger.info(f"""{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")} directory uploaded to the hub!""")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fine tune a language model on the Aira reward dataset via DPO.")

@@ -83,22 +83,17 @@ def main(spec_file):
     # Handle the repository creation if needed
     if accelerator.is_main_process:
         if training_args.push_to_hub and training_args.hub_token is not None:
-            if training_args.hub_model_id is None:
-                training_args.hub_model_id = create_repo(
-                    repo_id=extra_args.project_name, 
-                    token=training_args.hub_token,
-                    repo_type="model",
-                    exist_ok=True,
-                    private=True)['id']
-            
-            else:
+            if training_args.hub_model_id is not None:
                 create_repo(
                     repo_id=training_args.hub_model_id, 
                     token=training_args.hub_token,
                     repo_type="model",
                     exist_ok=True,
                     private=True)
-        
+            
+            else:
+                raise ValueError("No model id provided. Try running with `hub_model_id=your-model-id`")
+
     accelerator.wait_for_everyone()
 
     # Load the portuguese tokenizer
@@ -366,8 +361,8 @@ def main(spec_file):
 
         logger.info(f"Using the whole dataset for training. Training set size: {len(dataset):,}")
 
-    # Create the Training DataLoader
-    if training_args.do_train:
+    # Create the Training DataLoader and Evaluation DataLoade
+    if training_args.do_train and training_args.do_eval:
         if "train" not in dataset:
             raise ValueError("`do_train=True` requires a train dataset")
         train_dataset = dataset["train"]
@@ -378,9 +373,7 @@ def main(spec_file):
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
         )
-    
-    # Create the Evaluation DataLoader
-    if training_args.do_eval:
+
         if "test" not in dataset:
             raise ValueError("`do_eval=True` requires a validation dataset")
         eval_dataset = dataset["test"] 
@@ -388,6 +381,17 @@ def main(spec_file):
             eval_dataset,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_eval_batch_size,
+            pin_memory=training_args.dataloader_pin_memory,
+        )
+    
+    # Create only the Training DataLoader
+    elif training_args.do_train and not training_args.do_eval:
+        train_dataset = dataset
+        train_dataloader = DataLoader(
+            train_dataset,
+            shuffle=True, 
+            collate_fn=default_data_collator, 
+            batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
         )
 
@@ -589,6 +593,8 @@ def main(spec_file):
                                         repo_id=training_args.hub_model_id,
                                         commit_message=f"Checkpointing at step {completed_steps}",
                                     )
+
+                                    logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
                                 
                                 except Exception as e:
                                     logger.warning(f"Error while uploading checkpoint to Hub: {e}")
@@ -619,14 +625,16 @@ def main(spec_file):
                     texts = []
 
                     for i, sample_output in enumerate(sample_outputs):
-                        texts.append(tokenizer.decode(sample_output, skip_special_tokens=True))
+                        texts.append(tokenizer.decode(sample_output))
+                    
+                    for text in texts:
+                        logger.info(f"Samples (Epoch: {epoch + 1} | Step: {step}): {text}")
                         
                     if extra_args.wandb_token is not None:
 
                         training_samples = wandb.Table(columns=[f"Samples (Epoch: {epoch + 1} | Step: {step})"])
                         for text in texts:
                             training_samples.add_data(text)
-                            logger.info(f"Samples (Epoch: {epoch + 1} | Step: {step}): {text}")
                         wandb.log({f"Samples (Epoch: {epoch + 1} | Step: {step})": training_samples})
                 
                 except Exception as e:
@@ -761,22 +769,12 @@ def main(spec_file):
 
                     try:
 
-                        api = HfApi(
-                            token=training_args.hub_token,
-                        )
-
-                        future = api.upload_folder(
-                            repo_id=training_args.hub_model_id,
-                            folder_path=training_args.output_dir,
-                            run_as_future=True,
-                        )
-
-                        logger.info("Ouput directory being uploaded to the hub.")
-
-                        while not future.done():
-                            pass
+                        unwrap_model.push_to_hub(
+                                        repo_id=training_args.hub_model_id,
+                                        commit_message=f"Checkpointing at step {completed_steps}",
+                                    )
                         
-                        logger.info("Ouput directory uploaded to the hub!")
+                        logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}!")
 
                     except Exception as e:
                         logger.warning(f"Error while uploading checkpoint to Hub: {e}")
@@ -817,23 +815,14 @@ def main(spec_file):
                 if training_args.hub_model_id and training_args.hub_token is not None:
 
                     try:
-                        api = HfApi(
-                            token=training_args.hub_token,
-                        )
-
-                        future = api.upload_folder(
-                            repo_id=training_args.hub_model_id,
-                            folder_path=training_args.output_dir,
-                            run_as_future=True,
-                        )
-
-                        logger.info("Ouput directory being uploaded to the hub.")
-
-                        while not future.done():
-                            pass
                         
-                        logger.info("Ouput directory uploaded to the hub!")
-                    
+                        unwrap_model.push_to_hub(
+                                        repo_id=training_args.hub_model_id,
+                                        commit_message=f"Training complete!",
+                                    )
+                        
+                        logger.info(f"Final model pushed to the hub!")
+                                    
                     except Exception as e:
                         logger.warning(f"Error while uploading checkpoint to Hub: {e}")
     

@@ -18,7 +18,6 @@ data_args:
     streaming: false
     max_length: 400
     preprocessing_num_workers: null
-    pin_memory: true
     sanity_check: false
 training_args:
   output_dir: "checkpoints"
@@ -35,6 +34,7 @@ training_args:
   lr_scheduler_type: "linear"
   warmup_steps: 100
   seed: 42
+  dataloader_pin_memory: true
   hub_token: null
   push_to_hub: true
   hub_model_id: "nicholasKluge/Aira-2-124M"
