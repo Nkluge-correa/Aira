@@ -512,16 +512,12 @@ def main(spec_file):
                 token=training_args.hub_token,
             )
 
+            logger.info("Ouput directory being uploaded to the hub.")
+
             future = api.upload_folder(
                 repo_id=training_args.hub_model_id,
                 folder_path=training_args.output_dir,
-                run_as_future=True,
             )
-
-            logger.info("Ouput directory being uploaded to the hub.")
-
-            while not future.done():
-                pass
             
             logger.info("Ouput directory uploaded to the hub!")
         

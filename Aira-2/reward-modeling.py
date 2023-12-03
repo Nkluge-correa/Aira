@@ -173,7 +173,7 @@ def main(spec_file):
     # Push the model checkpoint to the hub if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
 
-        logger.info("Pushing model to hub!")
+        logger.info(f"""Ouput directory ({os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}) being uploaded to the hub.""")
 
         api = HfApi(
             token=training_args.hub_token,
@@ -182,20 +182,13 @@ def main(spec_file):
         future = api.upload_folder(
             repo_id=training_args.hub_model_id,
             folder_path=os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}"),
-            run_as_future=True,
         )
 
         api.upload_file(
             path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
             path_in_repo=f"emissions.csv",
             repo_id=training_args.hub_model_id,
-            run_as_future=True,
         )
-
-        logger.info(f"""Ouput directory ({os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}) being uploaded to the hub.""")
-
-        while not future.done():
-            pass
         
         logger.info(f"""{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")} directory uploaded to the hub!""")
 
