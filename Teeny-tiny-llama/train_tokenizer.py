@@ -87,10 +87,11 @@ def main(spec_file):
     
     # Save the new tokenizers
     new_tokenizer.save_pretrained(save_directory=training_args.output_dir)
-    new_tokenizer_fast.save_pretrained(save_directory=training_args.output_dir)
+    new_tokenizer_fast.save_pretrained(save_directory=training_args.output_dir + "-fast")
 
     # If hub_token is passed, upload the tokenizer to the hub
     if training_args.hub_token is not None and training_args.hub_model_id is not None:
+        
         new_tokenizer.push_to_hub(
             repo_id=training_args.hub_model_id,
             use_auth_token=training_args.hub_token,
@@ -98,7 +99,7 @@ def main(spec_file):
         )
 
         new_tokenizer_fast.push_to_hub(
-            repo_id=training_args.hub_model_id,
+            repo_id=training_args.hub_model_id +'-fast',
             use_auth_token=training_args.hub_token,
             commit_message=f"GPT2TokenizerFast implementation",
         )

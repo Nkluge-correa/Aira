@@ -46,7 +46,7 @@ def main(spec_file):
                 private=True)
         
         else:
-            raise ValueError("No model id provided. Try running with `hub_model_id=your-model-id`")
+            raise ValueError("No model id provided. Try running with `hub_model_id=your-user-name/your-model-name`")
 
     # Set the logger
     logger = get_logger(extra_args.project_name)
@@ -173,13 +173,13 @@ def main(spec_file):
     # Push the model checkpoint to the hub if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
 
-        logger.info(f"""Ouput directory ({os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}) being uploaded to the hub.""")
+        logger.info(f"""Ouput directory (`{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}`) being uploaded to the hub.""")
 
         api = HfApi(
             token=training_args.hub_token,
         )
 
-        future = api.upload_folder(
+        api.upload_folder(
             repo_id=training_args.hub_model_id,
             folder_path=os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}"),
         )
@@ -190,7 +190,7 @@ def main(spec_file):
             repo_id=training_args.hub_model_id,
         )
         
-        logger.info(f"""{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")} directory uploaded to the hub!""")
+        logger.info(f"""Output directory (`{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}`) uploaded to the hub!""")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fine tune a language model on the Aira reward dataset.")

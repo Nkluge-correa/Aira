@@ -80,19 +80,18 @@ def main(spec_file):
     if training_args.seed is not None:
         set_seed(training_args.seed)
     
-    # Handle the repository creation if needed
-    if accelerator.is_main_process:
-        if training_args.push_to_hub and training_args.hub_token is not None:
-            if training_args.hub_model_id is not None:
-                create_repo(
-                    repo_id=training_args.hub_model_id, 
-                    token=training_args.hub_token,
-                    repo_type="model",
-                    exist_ok=True,
-                    private=True)
-            
-            else:
-                raise ValueError("No model id provided. Try running with `hub_model_id=your-model-id`")
+    # Create a HuggingFace repository if needed
+    if training_args.push_to_hub and training_args.hub_token is not None:
+        if training_args.hub_model_id is not None:
+            create_repo(
+                repo_id=training_args.hub_model_id, 
+                token=training_args.hub_token,
+                repo_type="model",
+                exist_ok=True,
+                private=True)
+        
+        else:
+            raise ValueError("No model id provided. Try running with `hub_model_id=your-user-name/your-model-name`")
 
     accelerator.wait_for_everyone()
 
@@ -574,24 +573,37 @@ def main(spec_file):
                     accelerator.save_state(output_dir)
                 
                     # Push the model checkpoint to the hub if needed
-                    if training_args.push_to_hub:
-
-                        if training_args.hub_model_id and training_args.hub_token is not None:
-
+                    if training_args.push_to_hub and training_args.hub_token is not None:
+                        if training_args.hub_model_id is not None:
 
                             accelerator.wait_for_everyone()
-                            unwrapped_model = accelerator.unwrap_model(model)
-                            unwrapped_model.save_pretrained(
-                                training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
-                            )
+
+                            # Handle the repository creation if needed
+                            create_repo(
+                                repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                                token=training_args.hub_token,
+                                repo_type="model",
+                                exist_ok=True,
+                                private=True)
+        
+                            #unwrapped_model = accelerator.unwrap_model(model)
+                            #unwrapped_model.save_pretrained(
+                            #    training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
+                            #)
 
                             if accelerator.is_main_process:
 
                                 try:
 
-                                    unwrap_model.push_to_hub(
-                                        repo_id=training_args.hub_model_id,
-                                        commit_message=f"Checkpointing at step {completed_steps}",
+                                    logger.info(f"""Checkpoint directory (`{output_dir}`) being uploaded to the hub.""")
+
+                                    api = HfApi(
+                                        token=training_args.hub_token,
+                                    )
+
+                                    api.upload_folder(
+                                        repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                                        folder_path=output_dir,
                                     )
 
                                     logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
@@ -754,37 +766,50 @@ def main(spec_file):
                         text=f"Current trainin stats -- Epoch: {epoch + 1} | Completed Steps: {completed_steps} | Total Energy Consumption: {tracker._total_energy.kWh}", 
                         level="INFO")
 
+        # Save the model checkpoint at the end of each epoch
+        output_dir = f"epoch_{epoch + 1}"
+        if training_args.output_dir is not None:
+            output_dir = os.path.join(training_args.output_dir, output_dir)
+        accelerator.save_state(output_dir)
+
         # Push the model checkpoint to the hub if needed
-        if training_args.push_to_hub and epoch < training_args.num_train_epochs - 1:
-
-            if training_args.hub_model_id and training_args.hub_token is not None:
-
+        if training_args.push_to_hub and training_args.hub_token is not None: 
+            if training_args.hub_model_id is not None:
+                
                 accelerator.wait_for_everyone()
-                unwrapped_model = accelerator.unwrap_model(model)
-                unwrapped_model.save_pretrained(
-                    training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
-                )
+
+                # Handle the repository creation if needed
+                create_repo(
+                    repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                    token=training_args.hub_token,
+                    repo_type="model",
+                    exist_ok=True,
+                    private=True)
+                
+                #unwrapped_model = accelerator.unwrap_model(model)
+                #unwrapped_model.save_pretrained(
+                #    training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
+                #)
 
                 if accelerator.is_main_process:
 
                     try:
 
-                        unwrap_model.push_to_hub(
-                                        repo_id=training_args.hub_model_id,
-                                        commit_message=f"Checkpointing at step {completed_steps}",
-                                    )
+                        logger.info(f"""Checkpoint directory (`{output_dir}`) being uploaded to the hub.""")
+
+                        api = HfApi(
+                            token=training_args.hub_token,
+                        )
+
+                        api.upload_folder(
+                            repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                            folder_path=output_dir,
+                        )
                         
-                        logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}!")
+                        logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}. Completed steps: {completed_steps}.")
 
                     except Exception as e:
                         logger.warning(f"Error while uploading checkpoint to Hub: {e}")
-        
-        # If checkpoiting is enabled as `epoch`, save the model checkpoint
-        if checkpointing_steps == "epoch":
-            output_dir = f"epoch_{epoch + 1}"
-            if training_args.output_dir is not None:
-                output_dir = os.path.join(training_args.output_dir, output_dir)
-            accelerator.save_state(output_dir)
 
     # Resume codecarbon tracking
     logger.info("Training complete!")
@@ -808,23 +833,29 @@ def main(spec_file):
             training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
         )
 
-        if accelerator.is_main_process:
-            tokenizer.save_pretrained(training_args.output_dir)
+    if accelerator.is_main_process:
+        tokenizer.save_pretrained(training_args.output_dir)
 
-            if training_args.push_to_hub:
-                if training_args.hub_model_id and training_args.hub_token is not None:
+    if training_args.push_to_hub and training_args.hub_token is not None:
+        if training_args.hub_model_id is not None:
 
-                    try:
-                        
-                        unwrap_model.push_to_hub(
-                                        repo_id=training_args.hub_model_id,
-                                        commit_message=f"Training complete!",
-                                    )
-                        
-                        logger.info(f"Final model pushed to the hub!")
-                                    
-                    except Exception as e:
-                        logger.warning(f"Error while uploading checkpoint to Hub: {e}")
+            try:
+                
+                unwrap_model.push_to_hub(
+                        repo_id=training_args.hub_model_id,
+                        commit_message=f"Training complete!",
+                    )
+                
+                api.upload_file(
+                    path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
+                    path_in_repo=f"emissions.csv",
+                    repo_id=training_args.hub_model_id,
+                )
+
+                logger.info(f"Final model and emissions pushed to the hub!")
+                            
+            except Exception as e:
+                logger.warning(f"Error while uploading checkpoint to Hub: {e}")
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a Teeny-tiny-llama on a \

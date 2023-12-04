@@ -54,7 +54,7 @@ def main(spec_file):
                 private=True)
         
         else:
-            raise ValueError("No model id provided. Try running with `hub_model_id=your-model-id`")     
+            raise ValueError("No model id provided. Try running with `hub_model_id=your-user-name/your-model-name`")   
 
     # Set the logger
     logger = get_logger(extra_args.project_name)
@@ -506,20 +506,18 @@ def main(spec_file):
 
         try:
 
-            logger.info("Pushing model to hub!")
-
             api = HfApi(
                 token=training_args.hub_token,
             )
 
-            logger.info("Ouput directory being uploaded to the hub.")
+            logger.info(f"""Ouput directory (`{training_args.output_dir}`) being uploaded to the hub.""")
 
-            future = api.upload_folder(
+            api.upload_folder(
                 repo_id=training_args.hub_model_id,
                 folder_path=training_args.output_dir,
             )
             
-            logger.info("Ouput directory uploaded to the hub!")
+            logger.info(f"Ouput directory (`{training_args.output_dir}`) uploaded to the hub!")
         
         except Exception as e:
             logger.warning(f"Error while uploading checkpoint to Hub: {e}")
