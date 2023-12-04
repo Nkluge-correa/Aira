@@ -121,7 +121,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         top_p = gr.Slider(minimum=0.1, maximum=1.0, value=0.30, step=0.05, interactive=True, label="Top-p", info="Controls the cumulative probability of the generated tokens.")
         temperature = gr.Slider(minimum=0.1, maximum=2.0, value=0.1, step=0.1, interactive=True, label="Temperature", info="Controls the randomness of the generated tokens.")
         repetition_penalty = gr.Slider(minimum=1, maximum=2, value=1.1, step=0.1, interactive=True, label="Repetition Penalty", info="Higher values help the model to avoid repetition in text generation.")
-        max_length = gr.Slider(minimum=10, maximum=500, value=200, step=10, interactive=True, label="Max Length", info="Controls the maximum length of the generated text.")
+        max_new_tokens = gr.Slider(minimum=10, maximum=500, value=200, step=10, interactive=True, label="Max Length", info="Controls the maximum number of new token (not considering the prompt) to generate.")
         smaple_from = gr.Slider(minimum=2, maximum=10, value=2, step=1, interactive=True, label="Sample From", info="Controls the number of generations that the reward model will sample from.")
 
     clear = gr.Button("Clear Conversation 🧹")
@@ -150,7 +150,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         """
         return gr.update(value=user_message, interactive=True), chat_history + [[user_message, None]]
 
-    def generate_response(user_msg, top_p, temperature, top_k, max_length, smaple_from, repetition_penalty, safety, chat_history):
+    def generate_response(user_msg, top_p, temperature, top_k, max_new_tokens, smaple_from, repetition_penalty, safety, chat_history):
         """
         Chatbot's response generator.
         """
@@ -159,16 +159,13 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         inputs = tokenizer(user_msg + tokenizer.sep_token, return_tensors="pt").to(model.device)
 
         generated_response = model.generate(**inputs,
-            bos_token_id=tokenizer.bos_token_id,
-            pad_token_id=tokenizer.pad_token_id,
-            eos_token_id=tokenizer.eos_token_id,
             repetition_penalty=repetition_penalty,
             do_sample=True,
             early_stopping=True,
             renormalize_logits=True,
             length_penalty=0.3, 
             top_k=top_k,
-            max_length=max_length,
+            max_new_tokens=max_new_tokens,
             top_p=top_p,
             temperature=temperature,
             num_return_sequences=smaple_from)
@@ -251,7 +248,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
     
     
     response = msg.submit(user, [msg, chatbot], [msg, chatbot], queue=False).then(
-        generate_response, [msg, top_p, temperature, top_k, max_length, smaple_from, repetition_penalty, safety, chatbot], chatbot
+        generate_response, [msg, top_p, temperature, top_k, max_new_tokens, smaple_from, repetition_penalty, safety, chatbot], chatbot
     )
     response.then(lambda: gr.update(interactive=True), None, [msg], queue=False)
     msg.submit(lambda x: gr.update(value=''), None,[msg])

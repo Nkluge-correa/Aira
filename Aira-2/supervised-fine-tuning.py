@@ -20,6 +20,7 @@ from transformers import (
     TrainingArguments,
     default_data_collator,
     get_scheduler,
+    GenerationConfig,
 )
 
 from accelerate import Accelerator, DistributedType
@@ -500,6 +501,24 @@ def main(spec_file):
     torch.save(rng_state, f"./{training_args.output_dir}/rng_state.pt")
     torch.save(lr_scheduler.state_dict(), f"./{training_args.output_dir}/lr_scheduler.pt")
     torch.save(optimizer.state_dict(), f"./{training_args.output_dir}/optimizer.pt")
+
+    # Save the `generation_config` file
+    generation_config = GenerationConfig(
+        bos_token_id=tokenizer.bos_token_id,
+        pad_token_id=tokenizer.pad_token_id,
+        eos_token_id=tokenizer.eos_token_id,
+        max_new_tokens=512,
+        min_length=0,
+        do_sample=True,
+        use_cache=False,
+        renormalize_logits=True,
+        top_k=30,
+        top_p=0.3,
+        temperature=0.3,
+        repetition_penalty=1.1,
+    )
+
+    generation_config.save_pretrained(training_args.output_dir)
 
     # Push the model checkpoint to the hub if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
