@@ -458,7 +458,10 @@ def main(spec_file):
             project=extra_args.logger_name, 
             notes="Training the Teeny-Tiny Llama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
-            config=all_kwargs
+            name=extra_args.logger_name .lower() + "-" + time.strftime("%d-%m-%Y"),
+            config=all_kwargs,
+            resume="allow",
+            id=extra_args.logger_name.lower(),
         )
 
     # Intialize codecarbon tracker
@@ -466,7 +469,7 @@ def main(spec_file):
         project_name=extra_args.logger_name,
         log_level="critical", # set to "critical" to silence codecarbon
         output_dir=training_args.output_dir,
-        output_file=f"{extra_args.logger_name}.csv",
+        output_file=f"emissions.csv",
         tracking_mode='machine'
     )
 
@@ -571,6 +574,9 @@ def main(spec_file):
                     if training_args.output_dir is not None:
                         output_dir = os.path.join(training_args.output_dir, output_dir)
                     accelerator.save_state(output_dir)
+
+                    # Flush the codecarbon tracker
+                    tracker.flush()
                 
                     # Push the model checkpoint to the hub if needed
                     if training_args.push_to_hub and training_args.hub_token is not None:
@@ -604,6 +610,12 @@ def main(spec_file):
                                     api.upload_folder(
                                         repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
                                         folder_path=output_dir,
+                                    )
+
+                                    api.upload_file(
+                                        path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
+                                        path_in_repo=f"emissions.csv",
+                                        repo_id=training_args.hub_model_id + f"-step-{completed_steps}",
                                     )
 
                                     logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
@@ -772,6 +784,9 @@ def main(spec_file):
             output_dir = os.path.join(training_args.output_dir, output_dir)
         accelerator.save_state(output_dir)
 
+        # Flush the codecarbon tracker
+        tracker.flush()
+
         # Push the model checkpoint to the hub if needed
         if training_args.push_to_hub and training_args.hub_token is not None: 
             if training_args.hub_model_id is not None:
@@ -804,6 +819,12 @@ def main(spec_file):
                         api.upload_folder(
                             repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
                             folder_path=output_dir,
+                        )
+
+                        api.upload_file(
+                            path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
+                            path_in_repo=f"emissions.csv",
+                            repo_id=training_args.hub_model_id + f"-step-{completed_steps}",
                         )
                         
                         logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}. Completed steps: {completed_steps}.")
