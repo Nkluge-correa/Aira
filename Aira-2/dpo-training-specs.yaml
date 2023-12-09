@@ -33,4 +33,4 @@ training_args:
 extra_args:
   project_name: "Aira-2"
   wandb_token: null
-  beta: 0.9
+  beta: 0.8

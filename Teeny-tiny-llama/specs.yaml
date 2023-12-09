@@ -1,9 +1,7 @@
 model_args:
-  model_to_train: "TinyLlama/TinyLlama-1.1B-intermediate-step-715k-1.5T"
-  embedding_model: "pierreguillou/gpt2-small-portuguese"
+  model_to_train: "TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T"
   tokenizer_name: "nicholasKluge/Teeny-tiny-llama-tokenizer"
   train_from_scratch: true
-  clone_embedding_layer: false
   vocab_size: 32000
   hidden_size: 768
   intermediate_size: 3072
@@ -11,21 +9,21 @@ model_args:
   num_attention_heads: 12
   num_hidden_layers: 12
   output_hidden_states: false
-  config_overrides: null
   cache_dir: null
   use_fast_tokenizer: true
   model_revision: "main"
   trust_remote_code: false
   torch_dtype: "auto"
   low_cpu_mem_usage: null
-  bos_token: '<|endoftext|>'
-  sep_token: '<|endoftext|>'
-  eos_token: '<|endoftext|>'
-  pad_token: '<|endoftext|>'
-  unk_token: '<|endoftext|>'
+  use_cache: true
+  bos_token: '<s>'
+  sep_token: '<s/s>'
+  eos_token: '</s>'
+  pad_token: '<pad>'
+  unk_token: '<unk>'
 data_args:
-  dataset_name: "nicholasKluge/portuguese-corpus-as-tensors-2048-teeny-tiny-llama-tokenizer"
-  dataset_is_tokenized: true
+  dataset_name: "nicholasKluge/portuguese-corpus"
+  dataset_is_tokenized: false
   dataset_split: "train"
   validation_split_percentage: 0.01
   streaming: false
@@ -61,7 +59,7 @@ extra_args:
   logger_name: "Teeny-tiny-llama"
   wandb_log_steps: 1
   mixed_precision: 'no'
-  checkpointing_steps: '20'
+  checkpointing_steps: 20
   sample_every: 20
   generation_seeds:
     - "Meu nome é Nicholas e eu"

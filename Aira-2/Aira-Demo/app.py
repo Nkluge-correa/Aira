@@ -155,8 +155,9 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         Chatbot's response generator.
         """
         
-        # OPT tokenizer already adds the BOS token, so we do not need to add it manually
-        inputs = tokenizer(user_msg + tokenizer.sep_token, return_tensors="pt").to(model.device)
+        inputs = tokenizer(tokenizer.bos_token + user_msg + tokenizer.sep_token, 
+            add_special_tokens=False,
+            return_tensors="pt").to(model.device)
 
         generated_response = model.generate(**inputs,
             repetition_penalty=repetition_penalty,

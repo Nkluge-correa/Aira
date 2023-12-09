@@ -155,7 +155,9 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
         Chatbot's response generator.
         """
 
-        inputs = tokenizer(tokenizer.bos_token + user_msg + tokenizer.sep_token, return_tensors="pt").to(model.device)
+        inputs = tokenizer(tokenizer.bos_token + user_msg + tokenizer.sep_token, 
+            add_special_tokens=False,
+            return_tensors="pt").to(model.device)
 
         generated_response = model.generate(**inputs,
             bos_token_id=tokenizer.bos_token_id,

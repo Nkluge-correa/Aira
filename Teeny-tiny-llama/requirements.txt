@@ -6,3 +6,4 @@ wandb
 codecarbon
 huggingface_hub
 accelerate
+sentencepiece

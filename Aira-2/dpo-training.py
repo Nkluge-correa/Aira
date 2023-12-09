@@ -119,7 +119,7 @@ def main(spec_file):
         for response in dataset["rejected_response"]
     ]
 
-    # create a new dataset with the padded responses
+    # Create a new dataset with the padded responses
     dataset = Dataset.from_dict(
         {
             "instruction": dataset["instruction"],
@@ -129,20 +129,12 @@ def main(spec_file):
     )
 
     # Format the dataset
-    # If the model is not OPT, add the BOS token to the prompt
-    if model.config.model_type != "opt":
-        dataset_dic = {
-                "prompt": [tokenizer.bos_token + instruction + tokenizer.sep_token for instruction in dataset["instruction"]],
-                "chosen": [completion + tokenizer.eos_token for completion in dataset["chosen_response"]],
-                "rejected": [completion + tokenizer.eos_token for completion in dataset["rejected_response"]],
-            }
-    else:
-        dataset_dic = {
-                "prompt": [instruction + tokenizer.sep_token for instruction in dataset["instruction"]],
-                "chosen": [completion + tokenizer.eos_token for completion in dataset["chosen_response"]],
-                "rejected": [completion + tokenizer.eos_token for completion in dataset["rejected_response"]],
-            }
-        
+    dataset_dic = {
+            "prompt": [tokenizer.bos_token + instruction + tokenizer.sep_token for instruction in dataset["instruction"]],
+            "chosen": [completion + tokenizer.eos_token for completion in dataset["chosen_response"]],
+            "rejected": [completion + tokenizer.eos_token for completion in dataset["rejected_response"]],
+        }
+
     formatted_dataset = Dataset.from_dict(dataset_dic)
 
     if training_args.do_eval:

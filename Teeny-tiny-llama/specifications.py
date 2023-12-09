@@ -18,15 +18,6 @@ class ModelArguments:
         },
     )
 
-    embedding_model: Optional[str] = field(
-        default=None,
-        metadata={"help": (
-                "The model checkpoint for cloning the tokenizer and the embedding layer. "
-                "Currently using `pierreguillou/gpt2-small-portuguese` embeddings and tokenizer"
-            )
-        },
-    )
-
     tokenizer_name: Optional[str] = field(
         default=None,
         metadata={"help": "Pretrained tokenizer name or path."},
@@ -35,11 +26,6 @@ class ModelArguments:
     train_from_scratch: bool = field(
         default=False,
         metadata={"help": "Whether to train the model from scratch."},
-    )
-
-    clone_embedding_layer: bool = field(
-        default=False,
-        metadata={"help": "Whether to clone the embedding layer from a pretrained model."},
     )
 
     vocab_size: Optional[int] = field(
@@ -75,16 +61,6 @@ class ModelArguments:
     output_hidden_states: Optional[bool] = field(
         default=False,
         metadata={"help": "Whether to return all hidden-states (i.e., all hidden-states for all layers)."},
-    )
-
-    config_overrides: Optional[str] = field(
-        default=None,
-        metadata={
-            "help": (
-                "Override some existing default config settings when a model is trained from scratch. Example: "
-                "n_embd=10,resid_pdrop=0.2,scale_attn_weights=false,summary_type=cls_index"
-            )
-        },
     )
 
     cache_dir: Optional[str] = field(
@@ -134,28 +110,37 @@ class ModelArguments:
         },
     )
 
+    use_cache: bool = field(
+        default=True,
+        metadata={
+            "help": (
+                "Whether or not to cache the loaded pretrained weights. Set to `False` to avoid caching when loading a model."
+            )
+        },
+    ) 
+
     bos_token: Optional[str] = field(
-        default='<|endoftext|>',
+        default='<s>',
         metadata={"help": "The beginning of sentence token"},
     )
 
     sep_token: Optional[str] = field(
-        default='<|endoftext|>',
+        default='<s\s>',
         metadata={"help": "The end of sentence token"},
     )
 
     eos_token: Optional[str] = field(
-        default='<|endoftext|>',
+        default='<\s>',
         metadata={"help": "The end of sentence token"},
     )   
 
     pad_token: Optional[str] = field(
-        default='<|endoftext|>',
+        default='<s>',
         metadata={"help": "The padding token"},
     )   
 
     unk_token: Optional[str] = field(
-        default='<|endoftext|>',
+        default='<unk>',
         metadata={"help": "The unknown token"},
     )
 
@@ -249,12 +234,12 @@ class ExtraArguments:
 
     mixed_precision: Optional[str] = field(
         default='no',
-        metadata={"help": "Whether to use mixed precision or not ('no', 'fp16')."},
+        metadata={"help": "Whether to use mixed precision or not ('no', 'fp16', `bf16`)."},
     )
 
-    checkpointing_steps: Optional[str] = field(
+    checkpointing_steps: Optional[int] = field(
         default=None,
-        metadata={"help": "The number of steps the various states should be saved at the end of every n steps. Or 'epoch' for each epoch."},
+        metadata={"help": "The number of steps the various states should be saved at the end of every n steps."},
     )
 
     generation_seeds: Optional[list] = field(

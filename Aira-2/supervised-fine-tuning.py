@@ -164,13 +164,8 @@ def main(spec_file):
 
         raise ValueError("No base model provided. Try running with `base_model=gpt2`")
 
-    # if `model.config.model_type == "opt"` then we do not need to append the bos_token to the demonstrations,
-    # since the OPT model already prepends the bos_token to the prompt.`
-    if model.config.model_type != "opt":
-        dataset_df['demonstrations'] = tokenizer.bos_token + dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token
-
-    else:
-        dataset_df['demonstrations'] = dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token 
+    # Add the `demonstrations` column to the dataset
+    dataset_df['demonstrations'] = tokenizer.bos_token + dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token
 
     # Get the maximum length of the demonstrations if it is not provided
     if data_args.max_length is None:
@@ -185,6 +180,7 @@ def main(spec_file):
     # Tokenize all texts in the dataset
     def tokenize_function(examples):
         return tokenizer(examples['demonstrations'],
+            add_special_tokens=False,
             truncation=True,
             max_length=data_args.max_length,
             padding="max_length")
@@ -391,12 +387,8 @@ def main(spec_file):
 
                     model.eval()
 
-                    if model.config.model_type != "opt":
-                        inputs = tokenizer(tokenizer.bos_token + dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, return_tensors="pt").to('cuda:0')
+                    inputs = tokenizer(tokenizer.bos_token + dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, add_special_tokens=False, return_tensors="pt").to('cuda:0')
                         
-                    else:
-                        inputs = tokenizer(dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, return_tensors="pt").to('cuda:0')  
-
                     sample_outputs = model.generate(**inputs,
                                         bos_token_id=tokenizer.bos_token_id,
                                         pad_token_id=tokenizer.pad_token_id,
@@ -505,8 +497,10 @@ def main(spec_file):
     # Save the `generation_config` file
     generation_config = GenerationConfig(
         bos_token_id=tokenizer.bos_token_id,
-        pad_token_id=tokenizer.pad_token_id,
+        sep_token_id=tokenizer.sep_token_id,
         eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.pad_token_id,
+        unk_token_id=tokenizer.unk_token_id,
         max_new_tokens=512,
         min_length=0,
         do_sample=True,

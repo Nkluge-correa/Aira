@@ -34,6 +34,7 @@ from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
     AutoTokenizer,
+    GenerationConfig,
     TrainingArguments,
     default_data_collator,
     get_scheduler,
@@ -41,8 +42,13 @@ from transformers import (
 
 from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 
+# Set the environment variables for mixed precision training
+torch.backends.cuda.matmul.allow_tf32 = True
+torch.backends.cudnn.allow_tf32 = True
+
 def main(spec_file):
 
+    spec_file = "specs.yaml"
     # Load the arguments from the spec file
     with open(spec_file, "r") as stream:
         all_kwargs = yaml.safe_load(stream)
@@ -105,16 +111,10 @@ def main(spec_file):
             "revision": model_args.model_revision,
             "use_auth_token": training_args.hub_token,
             "trust_remote_code": model_args.trust_remote_code,
-            "bos_token": model_args.bos_token,
-            "sep_token": model_args.sep_token,
-            "pad_token": model_args.pad_token,
-            "unk_token": model_args.unk_token,
-            "eos_token": model_args.eos_token,
         }
 
         # Clear the tokenizer's `max_model_input_sizes` 
         tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
-        tokenizer.max_model_input_sizes.clear()
     
     else:
         raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_tokenizer.py`.")
@@ -138,16 +138,28 @@ def main(spec_file):
             "num_hidden_layers": model_args.num_hidden_layers,
             "bos_token_id": tokenizer.bos_token_id,
             "eos_token_id": tokenizer.eos_token_id,
+            "pad_token_id": tokenizer.pad_token_id,
+            "torch_dtype": "float16" if extra_args.mixed_precision.endswith('16') else "float32",
             "vocab_size": len(tokenizer),
+            "use_cache": model_args.use_cache,
         }
         
         # Load the configurations to create a new model
         configuration = AutoConfig.from_pretrained(model_args.model_to_train, **config_kwargs)
         model = AutoModelForCausalLM.from_config(configuration)
+        model.config.name_or_path = training_args.hub_model_id
 
         # Count the number of trainable parameters in the model
         params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         logger.info(f'There are {params:,} trainable parameters in this model.')
+
+        # Create generation config file
+        generation_config = GenerationConfig(
+            bos_token_id=model.config.bos_token_id,
+            eos_token_id=model.config.eos_token_id,
+            max_length=model.config.max_position_embeddings, 
+            pad_token_id=model.config.pad_token_id,
+        )
 
     else:
 
@@ -173,84 +185,25 @@ def main(spec_file):
                 trust_remote_code=model_args.trust_remote_code,
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )
+        
+        model.config.name_or_path = training_args.hub_model_id
 
-    # Replace the tokenizer `max_model_input_sizes` to the maximum sequence length of the new model
-    tokenizer.max_model_input_sizes[extra_args.logger_name] = model.config.max_position_embeddings
+        # Count the number of trainable parameters in the model
+        params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        logger.info(f'There are {params:,} trainable parameters in this model.')
 
-    # if `block_size` is None, we will use the model's own max length
-    if data_args.block_size is None:
-        data_args.block_size = model.config.max_position_embeddings
-    
-    # if `block_size` is larger than the model's own max length, we will use the model's own max length
-    elif data_args.block_size > model.config.max_position_embeddings:
+        # Load the generation config file
+        generation_config = GenerationConfig.from_pretrained(model_args.model_to_train)
+
+    # if `block_size` is None, or `block_size` is bigger then `model.config.max_position_embeddings`, we will use the model's own max length
+    if (data_args.block_size is None) or (data_args.block_size > model.config.max_position_embeddings):
         data_args.block_size = model.config.max_position_embeddings
         logger.info(f"Block size set to the model's own max length: {data_args.block_size}")
-
+    
     # Resize the model's embedding layer to match the tokenizer's vocabulary size
     model.resize_token_embeddings(len(tokenizer))
 
-    # Clone the embedding layer from another model
-    # If `clone_embedding_layer=True` this script will clone the embedding layer of the specified 
-    # `embedding_model`, e.g., "pierreguillou/gpt2-small-portuguese" has embeddings trained in protuguese
-    if model_args.clone_embedding_layer:
-
-        logger.info(f"Model to train (base architecture): {model_args.model_to_train} | Model to clone embeddings: {model_args.embedding_model}")
-
-        # Set the configuration kwargs for the model
-        config_kwargs = {
-            "cache_dir": model_args.cache_dir,
-            "revision": model_args.model_revision,
-            "use_auth_token": training_args.hub_token,
-            "trust_remote_code": model_args.trust_remote_code,
-            "output_hidden_states": model_args.output_hidden_states,
-        }
-
-        # Load the model to clone embeddings
-        embedding_model_configuration = AutoConfig.from_pretrained(model_args.embedding_model, **config_kwargs)
-        
-        model_embedding = AutoModelForCausalLM.from_pretrained(
-                model_args.embedding_model,
-                config=embedding_model_configuration,
-                cache_dir=model_args.cache_dir,
-                revision=model_args.model_revision,
-                use_auth_token=training_args.hub_token,
-                trust_remote_code=model_args.trust_remote_code,
-                low_cpu_mem_usage=model_args.low_cpu_mem_usage,
-            )
-        
-        # Resize the model's embedding layer to match the tokenizer's vocabulary size
-        model_embedding.resize_token_embeddings(len(tokenizer))
-
-        # Clone the embedding layer from the model to clone embeddings if the dimensions match
-        if model.get_input_embeddings().weight.shape[1] == model_embedding.get_input_embeddings().weight.shape[1]:
-            model.get_input_embeddings().weight.data = model_embedding.get_input_embeddings().weight.data
-            logger.info(f"Embeddings/tokenizer cloned from {model_args.embedding_model} to {model_args.model_to_train}")
-        
-        else:
-            # If dimensions don't match, pad the embedding layer of the model
-            # Get the dimensions of the original and target embedding layers
-            original_dim = model_embedding.get_input_embeddings().weight.shape[1]
-            target_dim = model.get_input_embeddings().weight.shape[1] 
-
-            # Pad the embedding layer of the model to match the target dimensions
-            if original_dim < target_dim:
-                # If the target dimensions are larger, pad the original embedding layer
-                pad_dim = target_dim - original_dim
-                padding = torch.zeros((model.get_input_embeddings().weight.shape[0], pad_dim))
-                new_weight = torch.cat([model_embedding.get_input_embeddings().weight.data, padding], dim=1)
-                model.get_input_embeddings().weight.data = new_weight
-
-                logger.info(f"Embeddings/tokenizer cloned from {model_args.embedding_model}. Embedding layer padded from {original_dim} to {target_dim}")
-
-            elif original_dim > target_dim:
-                # If the target dimensions are smaller, truncate the original embedding layer
-                new_weight = model_embedding.get_input_embeddings().weight.data[:, :target_dim]
-                model.get_input_embeddings().weight.data = new_weight
-
-                logger.info(f"Embeddings/tokenizer cloned from {model_args.embedding_model}. Embedding layer truncated from {original_dim} to {target_dim}")
-    else:
-        logger.info(f"Model to train (base architecture): {model_args.model_to_train} | (clone_embedding_layer=False)")
-
+    # Set the gradient checkpointing if needed
     if training_args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
         model.config.use_cache = False
@@ -442,11 +395,6 @@ def main(spec_file):
     # On TPU, the tie weights in our model have been disconnected, so we need to restore the ties.
     if accelerator.distributed_type == DistributedType.TPU:
         model.tie_weights() 
-    
-    # Figure out how many steps we should save the Accelerator states
-    checkpointing_steps = extra_args.checkpointing_steps
-    if checkpointing_steps is not None and checkpointing_steps.isdigit():
-        checkpointing_steps = int(checkpointing_steps)
 
     # Initialize the W&B tracker
     if extra_args.wandb_token is not None: 
@@ -568,12 +516,14 @@ def main(spec_file):
                 completed_steps += 1
             
             # Save the model checkpoint if needed
-            if isinstance(checkpointing_steps, int):
-                if completed_steps % checkpointing_steps == 0 and completed_steps > 0:
+            if isinstance(extra_args.checkpointing_steps, int):
+                if completed_steps % extra_args.checkpointing_steps == 0 and completed_steps > 0:
                     output_dir = f"step_{completed_steps}"
                     if training_args.output_dir is not None:
                         output_dir = os.path.join(training_args.output_dir, output_dir)
                     accelerator.save_state(output_dir)
+                    # Save the generation config file
+                    generation_config.save_pretrained(output_dir)
 
                     # Flush the codecarbon tracker
                     tracker.flush()
@@ -635,9 +585,6 @@ def main(spec_file):
                     inputs = tokenizer(random.choice(extra_args.generation_seeds), return_tensors="pt").to('cuda:0')
 
                     sample_outputs = model.generate(**inputs,
-                                        bos_token_id=tokenizer.bos_token_id,
-                                        pad_token_id=tokenizer.pad_token_id,
-                                        eos_token_id=tokenizer.eos_token_id,
                                         do_sample=True,
                                         top_k=50,
                                         max_length=150,
@@ -783,6 +730,8 @@ def main(spec_file):
         if training_args.output_dir is not None:
             output_dir = os.path.join(training_args.output_dir, output_dir)
         accelerator.save_state(output_dir)
+        # Save the generation config file
+        generation_config.save_pretrained(output_dir)
 
         # Flush the codecarbon tracker
         tracker.flush()
@@ -854,6 +803,9 @@ def main(spec_file):
             training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
         )
 
+        # Save the generation config file
+        generation_config.save_pretrained(training_args.output_dir)
+
     if accelerator.is_main_process:
         tokenizer.save_pretrained(training_args.output_dir)
 
@@ -872,6 +824,12 @@ def main(spec_file):
                     path_in_repo=f"emissions.csv",
                     repo_id=training_args.hub_model_id,
                 )
+
+                generation_config.push_to_hub(
+                        repo_id="test",
+                        commit_message=f"Training complete!",
+                        use_auth_token=training_args.hub_token,
+                    )
 
                 logger.info(f"Final model and emissions pushed to the hub!")
                             
