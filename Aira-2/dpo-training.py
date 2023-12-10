@@ -131,8 +131,8 @@ def main(spec_file):
     # Format the dataset
     dataset_dic = {
             "prompt": [tokenizer.bos_token + instruction + tokenizer.sep_token for instruction in dataset["instruction"]],
-            "chosen": [completion + tokenizer.eos_token for completion in dataset["chosen_response"]],
-            "rejected": [completion + tokenizer.eos_token for completion in dataset["rejected_response"]],
+            "chosen": [completion for completion in dataset["chosen_response"]],
+            "rejected": [completion for completion in dataset["rejected_response"]],
         }
 
     formatted_dataset = Dataset.from_dict(dataset_dic)

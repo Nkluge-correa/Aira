@@ -88,7 +88,7 @@ def main(args):
 
     ddict = DatasetDict({args.generation_model.split("-")[-1]: dataset})
 
-    ddict.push_to_hub(args.hub_dataset_name)
+    ddict.push_to_hub(args.hub_dataset_name + "-" + args.generation_model.split("/")[-1])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
