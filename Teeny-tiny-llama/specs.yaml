@@ -16,11 +16,6 @@ model_args:
   torch_dtype: "auto"
   low_cpu_mem_usage: null
   use_cache: true
-  bos_token: '<s>'
-  sep_token: '<s/s>'
-  eos_token: '</s>'
-  pad_token: '<pad>'
-  unk_token: '<unk>'
 data_args:
   dataset_name: "nicholasKluge/portuguese-corpus"
   dataset_is_tokenized: false

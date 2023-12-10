@@ -48,7 +48,6 @@ torch.backends.cudnn.allow_tf32 = True
 
 def main(spec_file):
 
-    spec_file = "specs.yaml"
     # Load the arguments from the spec file
     with open(spec_file, "r") as stream:
         all_kwargs = yaml.safe_load(stream)
@@ -117,7 +116,7 @@ def main(spec_file):
         tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
     
     else:
-        raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_tokenizer.py`.")
+        raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_sentencepiece.py`.")
 
     # See if we need to train the model from scratch
     if model_args.train_from_scratch:
@@ -149,16 +148,20 @@ def main(spec_file):
         model = AutoModelForCausalLM.from_config(configuration)
         model.config.name_or_path = training_args.hub_model_id
 
+        # Resize the model's embedding layer to match the tokenizer's vocabulary size
+        model.resize_token_embeddings(len(tokenizer))
+
         # Count the number of trainable parameters in the model
         params = sum(p.numel() for p in model.parameters() if p.requires_grad)
         logger.info(f'There are {params:,} trainable parameters in this model.')
 
         # Create generation config file
         generation_config = GenerationConfig(
-            bos_token_id=model.config.bos_token_id,
-            eos_token_id=model.config.eos_token_id,
-            max_length=model.config.max_position_embeddings, 
-            pad_token_id=model.config.pad_token_id,
+            bos_token_id=tokenizer.bos_token_id,
+            eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.pad_token_id,
+            max_length=model.config.max_position_embeddings,
+            unk_token_id=tokenizer.unk_token_id,
         )
 
     else:
@@ -187,6 +190,8 @@ def main(spec_file):
             )
         
         model.config.name_or_path = training_args.hub_model_id
+        # Resize the model's embedding layer to match the tokenizer's vocabulary size
+        model.resize_token_embeddings(len(tokenizer))
 
         # Count the number of trainable parameters in the model
         params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -199,9 +204,6 @@ def main(spec_file):
     if (data_args.block_size is None) or (data_args.block_size > model.config.max_position_embeddings):
         data_args.block_size = model.config.max_position_embeddings
         logger.info(f"Block size set to the model's own max length: {data_args.block_size}")
-    
-    # Resize the model's embedding layer to match the tokenizer's vocabulary size
-    model.resize_token_embeddings(len(tokenizer))
 
     # Set the gradient checkpointing if needed
     if training_args.gradient_checkpointing:
@@ -299,6 +301,13 @@ def main(spec_file):
                 load_from_cache_file=True,
                 desc="Adding labels to the dataset",
             )
+        
+        # In case the dataset has the column `token_type_ids`, we will remove it
+        if "token_type_ids" in dataset.column_names:
+            dataset = dataset.remove_columns("token_type_ids")
+        
+        # Make the dataset a torch dataset
+        dataset = dataset.with_format("torch")
 
     # Split the dataset into train and validation sets
     if training_args.do_eval and data_args.validation_split_percentage is not None:

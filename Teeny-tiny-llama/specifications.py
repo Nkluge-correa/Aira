@@ -117,31 +117,6 @@ class ModelArguments:
                 "Whether or not to cache the loaded pretrained weights. Set to `False` to avoid caching when loading a model."
             )
         },
-    ) 
-
-    bos_token: Optional[str] = field(
-        default='<s>',
-        metadata={"help": "The beginning of sentence token"},
-    )
-
-    sep_token: Optional[str] = field(
-        default='<s\s>',
-        metadata={"help": "The end of sentence token"},
-    )
-
-    eos_token: Optional[str] = field(
-        default='<\s>',
-        metadata={"help": "The end of sentence token"},
-    )   
-
-    pad_token: Optional[str] = field(
-        default='<s>',
-        metadata={"help": "The padding token"},
-    )   
-
-    unk_token: Optional[str] = field(
-        default='<unk>',
-        metadata={"help": "The unknown token"},
     )
 
 
