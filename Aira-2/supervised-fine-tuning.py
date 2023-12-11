@@ -29,6 +29,10 @@ from accelerate.utils import set_seed
 
 from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 
+# Set the environment variables for improved performance in the Ampere GPUs
+torch.backends.cuda.matmul.allow_tf32 = True
+torch.backends.cudnn.allow_tf32 = True
+
 def main(spec_file):
 
     # Load the arguments from the spec file

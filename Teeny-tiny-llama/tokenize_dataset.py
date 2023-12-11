@@ -86,7 +86,7 @@ def main(args):
     })
 
     # Push dataset to the hub
-    ddict.push_to_hub(args.dataset_name + "-tokenized-" + args.block_size)
+    ddict.push_to_hub(args.dataset_name + "-tokenized-" + str(args.block_size))
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tokenize a dataset")

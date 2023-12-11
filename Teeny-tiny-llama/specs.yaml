@@ -8,6 +8,7 @@ model_args:
   max_position_embeddings: 2048
   num_attention_heads: 12
   num_hidden_layers: 12
+  num_key_value_heads: 12
   output_hidden_states: false
   cache_dir: null
   use_fast_tokenizer: true
@@ -38,12 +39,12 @@ training_args:
   adam_epsilon: 0.00000001
   weight_decay: 0.0
   lr_scheduler_type: "cosine"
-  num_train_epochs: 5
+  num_train_epochs: 3
   no_cuda: false
   gradient_checkpointing: false
-  warmup_steps: 50
+  warmup_steps: 10
   seed: 42
-  eval_steps: 50
+  eval_steps: 20
   dataloader_pin_memory: true
   push_to_hub: true
   resume_from_checkpoint: null
@@ -53,7 +54,7 @@ extra_args:
   wandb_token: null
   logger_name: "Teeny-tiny-llama"
   wandb_log_steps: 1
-  mixed_precision: 'no'
+  mixed_precision: 'bf16'
   checkpointing_steps: 20
   sample_every: 20
   generation_seeds:

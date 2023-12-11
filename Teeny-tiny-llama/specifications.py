@@ -58,6 +58,11 @@ class ModelArguments:
         metadata={"help": "The number of hidden layers used by the model. Only used if `train_from_scratch` is set to `True`."},
     )
 
+    num_key_value_heads: Optional[int] = field(
+        default=12,
+        metadata={"help": "The number of key-value attention heads used by the model. Only used if `train_from_scratch` is set to `True`."},
+    )
+
     output_hidden_states: Optional[bool] = field(
         default=False,
         metadata={"help": "Whether to return all hidden-states (i.e., all hidden-states for all layers)."},

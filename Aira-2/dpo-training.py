@@ -178,6 +178,7 @@ def main(spec_file):
         gradient_checkpointing=training_args.gradient_checkpointing,
         report_to=['wandb', 'codecarbon'] if extra_args.wandb_token is not None else ['codecarbon'],
         remove_unused_columns=False,
+        tf32=True, # Set this value to True if you want to have performance improvements using the Ampere GPUs
     )
 
     # Set up the DPOTrainer

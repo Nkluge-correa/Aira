@@ -151,6 +151,7 @@ def main(spec_file):
         save_steps=training_args.save_steps,
         learning_rate=training_args.learning_rate,
         report_to=['wandb', 'codecarbon'] if extra_args.wandb_token is not None else ['codecarbon'],
+        tf32=True, # Set this value to True if you want to have performance improvements using the Ampere GPUs
     )
 
     # Set up the Rewardtrainer

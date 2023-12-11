@@ -3,6 +3,10 @@
 #
 # python -m torch.distributed.launch --nproc_per_node 4 pre-training.py --spec-file specs.yaml
 #
+# or, if using `accelerate`:
+#
+# accelerate launch pre-training.py --spec-file specs.yaml
+#
 # This will launch 4 processes on the current node, each with 1 GPU device per process.
 # More information can be found here: https://github.com/huggingface/transformers/tree/main/examples/pytorch#distributed-training-and-mixed-precision
 import os
@@ -42,7 +46,7 @@ from transformers import (
 
 from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 
-# Set the environment variables for mixed precision training
+# Set the environment variables for improved performance in the Ampere GPUs
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
@@ -135,6 +139,7 @@ def main(spec_file):
             "max_position_embeddings": model_args.max_position_embeddings,
             "num_attention_heads": model_args.num_attention_heads,
             "num_hidden_layers": model_args.num_hidden_layers,
+            "num_key_value_heads": model_args.num_key_value_heads,
             "bos_token_id": tokenizer.bos_token_id,
             "eos_token_id": tokenizer.eos_token_id,
             "pad_token_id": tokenizer.pad_token_id,
@@ -223,7 +228,7 @@ def main(spec_file):
 
         # Sanity check: use only the first 100 examples
         if data_args.sanity_check:
-            dataset = dataset.select(range(100))
+            dataset = dataset.select(range(404))
 
             logger.info(f"Sanity check: using only the first 100 examples")
 
@@ -329,7 +334,7 @@ def main(spec_file):
         train_dataset = dataset["train"]
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=True, 
+            shuffle=False, 
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -350,7 +355,7 @@ def main(spec_file):
         train_dataset = dataset
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=True, 
+            shuffle=False, 
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -413,7 +418,7 @@ def main(spec_file):
         # Initialize wandb
         wandb.init(
             project=extra_args.logger_name, 
-            notes="Training the Teeny-Tiny Llama model on a custom Portuguese-BR dataset.",
+            notes="Training the Teeny-Tiny-Llama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
             name=extra_args.logger_name .lower() + "-" + time.strftime("%d-%m-%Y"),
             config=all_kwargs,
