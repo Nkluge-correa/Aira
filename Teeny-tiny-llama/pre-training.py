@@ -11,6 +11,7 @@
 # More information can be found here: https://github.com/huggingface/transformers/tree/main/examples/pytorch#distributed-training-and-mixed-precision
 import os
 import sys
+import time
 import yaml
 import math
 import json
@@ -116,8 +117,8 @@ def main(spec_file):
             "trust_remote_code": model_args.trust_remote_code,
         }
 
-        # Clear the tokenizer's `max_model_input_sizes` 
         tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
+        tokenizer.push_to_hub(training_args.hub_model_id, use_auth_token=training_args.hub_token)
     
     else:
         raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_sentencepiece.py`.")
@@ -143,7 +144,7 @@ def main(spec_file):
             "bos_token_id": tokenizer.bos_token_id,
             "eos_token_id": tokenizer.eos_token_id,
             "pad_token_id": tokenizer.pad_token_id,
-            "torch_dtype": "float16" if extra_args.mixed_precision.endswith('16') else "float32",
+            "torch_dtype": "float16" if extra_args.mixed_precision.endswith('16') else model_args.torch_dtype,
             "vocab_size": len(tokenizer),
             "use_cache": model_args.use_cache,
         }
@@ -165,7 +166,7 @@ def main(spec_file):
             bos_token_id=tokenizer.bos_token_id,
             eos_token_id=tokenizer.eos_token_id,
             pad_token_id=tokenizer.pad_token_id,
-            max_length=model.config.max_position_embeddings,
+            max_length=model_args.max_position_embeddings,
             unk_token_id=tokenizer.unk_token_id,
         )
 
@@ -216,116 +217,61 @@ def main(spec_file):
         model.config.use_cache = False
 
     # Load the dataset from the huggingface Hub and prepare it for training
-    if data_args.dataset_name is not None:
-        dataset = load_dataset(data_args.dataset_name, 
+    if data_args.streaming and data_args.dataset_name is not None:
+
+        # Streaming datasets work faster if they are in a local directory
+        # The dataset folder must contain a list o parquet files
+        # You can achieve this by simply cloning the dataset from the hub with `git lfs clone`
+        dataset = load_dataset(
+            'parquet', 
+            data_files={data_args.dataset_split: f'./{data_args.dataset_name}/*.parquet'}, 
             split=data_args.dataset_split, 
-            use_auth_token=training_args.hub_token if training_args.hub_token else None,
-            cache_dir=model_args.cache_dir,
-            streaming=data_args.streaming,
-        )       
+            streaming=True)
+        
+        # Shuffle the dataset
+        dataset = dataset.shuffle(seed=training_args.seed, buffer_size=data_args.buffer_size)
 
-        logger.info(f"Loaded dataset: {data_args.dataset_name} | Split: {data_args.dataset_split} | Number of examples: {len(dataset):,}")
+        # Turn the dataset into a torch dataset
+        dataset = dataset.with_format("torch")  
 
-        # Sanity check: use only the first 100 examples
-        if data_args.sanity_check:
-            dataset = dataset.select(range(404))
-
-            logger.info(f"Sanity check: using only the first 100 examples")
+        logger.info(f"Loaded dataset: {data_args.dataset_name} | Split: {data_args.dataset_split} | Number of examples: {data_args.total_num_samples:,}")
 
     else:
-        raise ValueError("Need a dataset name to train on.")
-
-    # Preprocessing the dataset
-    if data_args.dataset_is_tokenized:
-
-        # Load the dataset as torch tensors
-        dataset = dataset.with_format("torch")
-        logger.info(f"Dataset `{data_args.dataset_name}` is already tokenized. Using it as is...")
-    
-    else:
-
-        # Get the column names
-        column_names = dataset.column_names
-
-        # Get the text column name
-        text_column_name = "text" if "text" in column_names else column_names[0]
-        
-        # Tokenize all texts in the dataset
-        def tokenize_function(examples):
-            return tokenizer(examples[text_column_name])
-        
-        with accelerator.main_process_first():
-            dataset = dataset.map(
-                tokenize_function,
-                batched=True,
-                num_proc=data_args.preprocessing_num_workers,
-                remove_columns=column_names,
-                load_from_cache_file=True,
-                desc="Running tokenizer on every text in dataset",
-            )
-        
-        # Group texts together so that we have chunks of max_seq_length
-        def group_texts(examples):
-            eos_token_id = tokenizer.eos_token_id
-
-            concatenated_examples = {
-                k: [t for example in examples[k] for t in example + [eos_token_id]] for k in examples.keys()
-            }
-
-            for k in concatenated_examples.keys():
-                concatenated_examples[k] = concatenated_examples[k][:-1]
-            total_length = len(concatenated_examples[list(examples.keys())[0]])
-
-            if total_length >= data_args.block_size:
-                total_length = (total_length // data_args.block_size) * data_args.block_size
-
-            result = {
-                k: [
-                    t[i : i + data_args.block_size]
-                    for i in range(0, total_length, data_args.block_size)
-                ]
-                for k, t in concatenated_examples.items()
-            }
-            return result
-
-        with accelerator.main_process_first():
-            dataset = dataset.map(
-                group_texts,
-                batched=True,
-                num_proc=data_args.preprocessing_num_workers,
-                load_from_cache_file=True,
-                desc=f"Grouping texts in chunks of {data_args.block_size}",
-            )
-        
-        # Add a column named `labels` wich is a copy of the `input_ids` column
-        with accelerator.main_process_first():
-            dataset = dataset.map(
-                lambda examples: {"labels": examples["input_ids"]},
-                batched=True,
-                num_proc=data_args.preprocessing_num_workers,
-                load_from_cache_file=True,
-                desc="Adding labels to the dataset",
-            )
-        
-        # In case the dataset has the column `token_type_ids`, we will remove it
-        if "token_type_ids" in dataset.column_names:
-            dataset = dataset.remove_columns("token_type_ids")
-        
-        # Make the dataset a torch dataset
-        dataset = dataset.with_format("torch")
+        raise ValueError("Need a dataset name to train on. Also, streaming the dataset from a local directory is the recommended way to train using this script.")
 
     # Split the dataset into train and validation sets
-    if training_args.do_eval and data_args.validation_split_percentage is not None:
+    if training_args.do_eval and data_args.validation_split is not None and not data_args.sanity_check:
 
         logger.info("Splitting the dataset into train and validation sets...")
 
-        dataset = dataset.train_test_split(test_size=data_args.validation_split_percentage)
+        # Streaming datasets do not have a `train_test_split` method and require a different approach
+        train_dataset = dataset.take(data_args.total_num_samples - data_args.validation_split)
+        validation_dataset = dataset.skip(data_args.total_num_samples - data_args.validation_split)
 
-        logger.info(f"Train set size: {len(dataset['train']):,} ({len(dataset['train']) * data_args.block_size:,} tokens)| Validation set size: {len(dataset['test']):,}")
+        dataset = {"train": train_dataset, "test": validation_dataset}
+
+        logger.info(f"Train set size: {data_args.total_num_samples - data_args.validation_split:,} ({(data_args.total_num_samples - data_args.validation_split) * data_args.block_size:,} tokens)| Validation set size: {data_args.validation_split:,}")
     
-    else:
+    elif training_args.do_eval and data_args.validation_split is not None and data_args.sanity_check:
 
-        logger.info(f"Using the whole dataset for training. Training set size: {len(dataset):,}")
+        logger.info("Splitting the dataset into train and validation sets...")
+
+        train_dataset = dataset.take(400)
+        validation_dataset = dataset.skip(40)
+
+        dataset = {"train": train_dataset, "test": validation_dataset}
+
+        logger.info(f"`Sanity check` is set to `True`. Train set size: 400 | Validation set size: 40")
+
+    elif not training_args.do_eval and not data_args.sanity_check:
+
+        logger.info(f"Using the whole dataset for training. Training set size: {data_args.total_num_samples:,}")
+    
+    elif not training_args.do_eval and data_args.sanity_check:
+
+        dataset = dataset.take(400)
+
+        logger.info(f"`Sanity check` is set to `True`. Training set size: 400")
 
     # Create the Training DataLoader and Evaluation DataLoade
     if training_args.do_train and training_args.do_eval:
@@ -334,7 +280,7 @@ def main(spec_file):
         train_dataset = dataset["train"]
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=False, 
+            shuffle=True,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -345,6 +291,7 @@ def main(spec_file):
         eval_dataset = dataset["test"] 
         eval_dataloader = DataLoader(
             eval_dataset,
+            shuffle=False,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_eval_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -355,7 +302,7 @@ def main(spec_file):
         train_dataset = dataset
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=False, 
+            shuffle=True,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -420,7 +367,7 @@ def main(spec_file):
             project=extra_args.logger_name, 
             notes="Training the Teeny-Tiny-Llama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
-            name=extra_args.logger_name .lower() + "-" + time.strftime("%d-%m-%Y"),
+            name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
             resume="allow",
             id=extra_args.logger_name.lower(),
@@ -490,6 +437,9 @@ def main(spec_file):
     tracker.start()
 
     for epoch in range(starting_epoch, training_args.num_train_epochs):
+
+        # Since our dataset is a streaming dataset, we need to reset the epoch at each iteration
+        dataset.set_epoch(epoch)
         model.train()
         logger.info(f'Beginning epoch {epoch + 1} of {training_args.num_train_epochs}')
 
@@ -498,6 +448,7 @@ def main(spec_file):
         if training_args.resume_from_checkpoint and epoch == starting_epoch and resume_step is not None:
             # We skip the first `n` batches in the dataloader when resuming from a checkpoint
             active_dataloader = accelerator.skip_first_batches(train_dataloader, resume_step)
+            logger.info(f"Skipping the first {resume_step} batches of the first epoch.")
         else:
             active_dataloader = train_dataloader
         
@@ -515,7 +466,7 @@ def main(spec_file):
                 # Log the loss to wandb
                 if (step) % extra_args.wandb_log_steps == 0 and extra_args.wandb_token is not None:
                     wandb.log({
-                        "loss": loss.detach().float().item(),     
+                        "loss": loss.detach().float().item(),
                         })
 
                 # Backward pass and update optimizer
@@ -535,6 +486,9 @@ def main(spec_file):
                     output_dir = f"step_{completed_steps}"
                     if training_args.output_dir is not None:
                         output_dir = os.path.join(training_args.output_dir, output_dir)
+                    # Register the LR scheduler
+                    accelerator.register_for_checkpointing(lr_scheduler)
+                    # Save the model checkpoint
                     accelerator.save_state(output_dir)
                     # Save the generation config file
                     generation_config.save_pretrained(output_dir)
@@ -743,6 +697,8 @@ def main(spec_file):
         output_dir = f"epoch_{epoch + 1}"
         if training_args.output_dir is not None:
             output_dir = os.path.join(training_args.output_dir, output_dir)
+        # Register the LR scheduler
+        accelerator.register_for_checkpointing(lr_scheduler)
         accelerator.save_state(output_dir)
         # Save the generation config file
         generation_config.save_pretrained(output_dir)

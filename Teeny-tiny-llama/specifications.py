@@ -18,6 +18,17 @@ class ModelArguments:
         },
     )
 
+    model_id: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": (
+                "The model id of the model to train.",
+                "Options are: `162m`, `334m`, and `606m`.",
+                "Caution: different `model_id` require different model configurations."
+            )    
+        },
+    )
+
     tokenizer_name: Optional[str] = field(
         default=None,
         metadata={"help": "Pretrained tokenizer name or path."},
@@ -35,12 +46,26 @@ class ModelArguments:
 
     hidden_size: Optional[int] = field(
         default=768,
-        metadata={"help": "The hidden size of the model. Only used if `train_from_scratch` is set to `True`."},
+        metadata={
+            "help": (
+                "The hidden size of the model. Only used if `train_from_scratch` is set to `True`."
+                "For `model_id=162m`, `hidden_size` should be set to `768`."
+                "For `model_id=334m`, `hidden_size` should be set to `1024`."
+                "For `model_id=606m`, `hidden_size` should be set to `1280`."
+            )
+        },
     )
 
     intermediate_size: Optional[int] = field(
         default=3072,
-        metadata={"help": "The intermediate size of the model. Only used if `train_from_scratch` is set to `True`."},
+        metadata={
+            "help": (
+                "The intermediate size of the model. Only used if `train_from_scratch` is set to `True`."
+                "For `model_id=162m`, `intermediate_size` should be set to `3072`."
+                "For `model_id=334m`, `intermediate_size` should be set to `4096`."
+                "For `model_id=606m`, `intermediate_size` should be set to `5128`."
+            )
+        },
     )
 
     max_position_embeddings: Optional[int] = field(
@@ -50,17 +75,38 @@ class ModelArguments:
 
     num_attention_heads: Optional[int] = field(
         default=12,
-        metadata={"help": "The number of attention heads used by the model. Only used if `train_from_scratch` is set to `True`."},
+        metadata={
+            "help": (
+                "The number of attention heads used by the model. Only used if `train_from_scratch` is set to `True`."
+                "For `model_id=162m`, `num_attention_heads` should be set to `12`."
+                "For `model_id=334m`, `num_attention_heads` should be set to `16`."
+                "For `model_id=606m`, `num_attention_heads` should be set to `20`."
+            )
+        },
     )
 
     num_hidden_layers: Optional[int] = field(
         default=12,
-        metadata={"help": "The number of hidden layers used by the model. Only used if `train_from_scratch` is set to `True`."},
+        metadata={
+            "help": (
+                "The number of hidden layers used by the model. Only used if `train_from_scratch` is set to `True`."
+                "For `model_id=162m`, `num_hidden_layers` should be set to `12`."
+                "For `model_id=334m`, `num_hidden_layers` should be set to `16`."
+                "For `model_id=606m`, `num_hidden_layers` should be set to `20`."
+            )    
+        },
     )
 
     num_key_value_heads: Optional[int] = field(
         default=12,
-        metadata={"help": "The number of key-value attention heads used by the model. Only used if `train_from_scratch` is set to `True`."},
+        metadata={
+            "help": (
+                "The number of key-value attention heads used by the model. Only used if `train_from_scratch` is set to `True`."
+                "For `model_id=162m`, `num_key_value_heads` should be set to `12`."
+                "For `model_id=334m`, `num_key_value_heads` should be set to `16`."
+                "For `model_id=606m`, `num_key_value_heads` should be set to `20`."
+            )
+        },
     )
 
     output_hidden_states: Optional[bool] = field(
@@ -133,12 +179,14 @@ class DataTrainingArguments:
 
     dataset_name: Optional[str] = field(
         default=None, 
-        metadata={"help": "The name of the dataset to use (via the datasets library)."}
-    )
-
-    dataset_is_tokenized: Optional[bool] = field(
-        default=False,
-        metadata={"help": "Whether the dataset is already tokenized or not."},
+        metadata={
+            "help": (
+                "The name of the dataset to use (via the datasets library)."
+                "The `pre-training.py` script does not support the data preprocessing."
+                "Hence, the dataset must be already tokenized."
+                "For this, you can use the `tokenize_dataset.py` script."
+            )
+        }
     )
 
     dataset_split: Optional[str] = field(
@@ -146,9 +194,29 @@ class DataTrainingArguments:
         metadata={"help": "The dataset split to use."},
     )
 
-    validation_split_percentage: Optional[int] = field(
-        default=0.01,
-        metadata={"help": "The percentage of the train set used as validation set in case there's no validation split"},
+    total_num_samples: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "The total number of samples to use from the dataset."
+                "In cases of streaming, this is the total number of samples to use for training."
+            )
+        },
+    )
+
+    buffer_size: Optional[int] = field(
+        default=10000,
+        metadata={
+            "help": (
+                "The buffer size to use for shuffling the dataset."
+                "In cases of streaming, this is the buffer size to use for training."
+            )
+        },
+    )
+
+    validation_split: Optional[int] = field(
+        default=None,
+        metadata={"help": "The number of samples to use for validation."},
     )
 
     streaming: Optional[bool] = field(
