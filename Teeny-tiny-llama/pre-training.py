@@ -19,13 +19,14 @@ import random
 import logging
 import warnings
 import argparse
-from tqdm import tqdm
+from tqdm.auto import tqdm
 from pathlib import Path
 
 import torch
 import wandb
 import datasets
 import transformers
+import huggingface_hub
 from datasets import load_dataset
 from codecarbon import EmissionsTracker
 from torch.utils.data import DataLoader
@@ -50,6 +51,9 @@ from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 # Set the environment variables for improved performance in the Ampere GPUs
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
+
+# Make accelerator device be the CPU
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 def main(spec_file):
 
@@ -83,8 +87,9 @@ def main(spec_file):
     )
 
     logger.info(accelerator.state, main_process_only=False)
-    datasets.utils.logging.set_verbosity_warning()
-    transformers.utils.logging.set_verbosity_warning()
+    datasets.utils.logging.set_verbosity_error()
+    transformers.utils.logging.set_verbosity_error()
+    huggingface_hub.utils.logging.set_verbosity_error()
 
     # Set seed before initializing model.
     if training_args.seed is not None:
@@ -113,12 +118,12 @@ def main(spec_file):
             "cache_dir": model_args.cache_dir,
             "use_fast": model_args.use_fast_tokenizer,
             "revision": model_args.model_revision,
-            "use_auth_token": training_args.hub_token,
+            "token": training_args.hub_token,
             "trust_remote_code": model_args.trust_remote_code,
         }
 
         tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
-        tokenizer.push_to_hub(training_args.hub_model_id, use_auth_token=training_args.hub_token)
+        tokenizer.push_to_hub(training_args.hub_model_id, token=training_args.hub_token)
     
     else:
         raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_sentencepiece.py`.")
@@ -132,7 +137,7 @@ def main(spec_file):
         config_kwargs = {
             "cache_dir": model_args.cache_dir,
             "revision": model_args.model_revision,
-            "use_auth_token": training_args.hub_token,
+            "token": training_args.hub_token,
             "trust_remote_code": model_args.trust_remote_code,
             "output_hidden_states": model_args.output_hidden_states,
             "hidden_size": model_args.hidden_size,
@@ -166,17 +171,19 @@ def main(spec_file):
             bos_token_id=tokenizer.bos_token_id,
             eos_token_id=tokenizer.eos_token_id,
             pad_token_id=tokenizer.pad_token_id,
-            max_length=model_args.max_position_embeddings,
             unk_token_id=tokenizer.unk_token_id,
+            max_length=model_args.max_position_embeddings,
         )
 
     else:
+
+        logger.info("Fine-tuning model from HuggingFace Hub (train_from_stratch=False)")
 
         # Set the configuration kwargs for the model
         config_kwargs = {
             "cache_dir": model_args.cache_dir,
             "revision": model_args.model_revision,
-            "use_auth_token": training_args.hub_token,
+            "token": training_args.hub_token,
             "trust_remote_code": model_args.trust_remote_code,
             "output_hidden_states": model_args.output_hidden_states,
         }
@@ -190,7 +197,7 @@ def main(spec_file):
                 config=configuration,
                 cache_dir=model_args.cache_dir,
                 revision=model_args.model_revision,
-                use_auth_token=training_args.hub_token,
+                token=training_args.hub_token,
                 trust_remote_code=model_args.trust_remote_code,
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )
@@ -206,89 +213,70 @@ def main(spec_file):
         # Load the generation config file
         generation_config = GenerationConfig.from_pretrained(model_args.model_to_train)
 
-    # if `block_size` is None, or `block_size` is bigger then `model.config.max_position_embeddings`, we will use the model's own max length
-    if (data_args.block_size is None) or (data_args.block_size > model.config.max_position_embeddings):
-        data_args.block_size = model.config.max_position_embeddings
-        logger.info(f"Block size set to the model's own max length: {data_args.block_size}")
-
     # Set the gradient checkpointing if needed
     if training_args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
         model.config.use_cache = False
 
-    # Load the dataset from the huggingface Hub and prepare it for training
-    if data_args.streaming and data_args.dataset_name is not None:
-
-        # Streaming datasets work faster if they are in a local directory
-        # The dataset folder must contain a list o parquet files
-        # You can achieve this by simply cloning the dataset from the hub with `git lfs clone`
-        dataset = load_dataset(
+    # Load the dataset
+    #
+    # Streaming datasets work faster if they are in a local directory
+    # The dataset folder must contain a list o parquet files, and you 
+    # can achieve this by simply cloning the dataset from the hub 
+    # to a local directory:
+    #
+    # git lfs install
+    # git clone https://huggingface.co/datasets/nicholasKluge/your-tokenized-dataset
+    #
+    # Then, you should separate the dataset into `train` and `test` folders.
+    # To stream not locally, use `data_args.dataset_name` instead of `parquet`
+    # and omit the `data_files`` argument.
+    train_dataset = load_dataset(
             'parquet', 
-            data_files={data_args.dataset_split: f'./{data_args.dataset_name}/*.parquet'}, 
-            split=data_args.dataset_split, 
-            streaming=True)
-        
-        # Shuffle the dataset
-        dataset = dataset.shuffle(seed=training_args.seed, buffer_size=data_args.buffer_size)
+            data_files={
+                "train": './portuguese-corpus-v2-tokenized-2048/train/*.parquet',
+            },  
+            streaming=True,)['train']
 
-        # Turn the dataset into a torch dataset
-        dataset = dataset.with_format("torch")  
-
-        logger.info(f"Loaded dataset: {data_args.dataset_name} | Split: {data_args.dataset_split} | Number of examples: {data_args.total_num_samples:,}")
-
-    else:
-        raise ValueError("Need a dataset name to train on. Also, streaming the dataset from a local directory is the recommended way to train using this script.")
-
-    # Split the dataset into train and validation sets
-    if training_args.do_eval and data_args.validation_split is not None and not data_args.sanity_check:
-
-        logger.info("Splitting the dataset into train and validation sets...")
-
-        # Streaming datasets do not have a `train_test_split` method and require a different approach
-        train_dataset = dataset.take(data_args.total_num_samples - data_args.validation_split)
-        validation_dataset = dataset.skip(data_args.total_num_samples - data_args.validation_split)
-
-        dataset = {"train": train_dataset, "test": validation_dataset}
-
-        logger.info(f"Train set size: {data_args.total_num_samples - data_args.validation_split:,} ({(data_args.total_num_samples - data_args.validation_split) * data_args.block_size:,} tokens)| Validation set size: {data_args.validation_split:,}")
+    # We are not streaming the validation dataset, since it is small
+    # and can be loaded into memory without any problems.
+    eval_dataset = load_dataset(
+            'parquet',
+            data_files={
+                "test": './portuguese-corpus-v2-tokenized-2048/test/*.parquet',
+            },
+            streaming=False,)['test']
     
-    elif training_args.do_eval and data_args.validation_split is not None and data_args.sanity_check:
+    # Shuffle the `train_dataset`
+    train_dataset = train_dataset.shuffle(seed=training_args.seed, buffer_size=data_args.buffer_size)
 
-        logger.info("Splitting the dataset into train and validation sets...")
+    # Turn the datasets into torch datasets
+    train_dataset = train_dataset.with_format("torch")
+    eval_dataset = eval_dataset.with_format("torch") 
 
-        train_dataset = dataset.take(400)
-        validation_dataset = dataset.skip(40)
+    logger.info(f"Loaded dataset: {data_args.dataset_name} | Number of examples: {data_args.train_num_samples + data_args.val_num_samples:,}")
+    logger.info(f"Size of train dataset: {data_args.train_num_samples:,} ({data_args.train_num_samples * data_args.block_size:,} tokens)| Size of validation dataset: {data_args.val_num_samples:,}")
 
-        dataset = {"train": train_dataset, "test": validation_dataset}
+    # If we wat to do a sanity check, we will use a small subset of the dataset
+    if data_args.sanity_check:
 
         logger.info(f"`Sanity check` is set to `True`. Train set size: 400 | Validation set size: 40")
 
-    elif not training_args.do_eval and not data_args.sanity_check:
+        train_dataset, eval_dataset = train_dataset.take(400), eval_dataset.select(range(40))
 
-        logger.info(f"Using the whole dataset for training. Training set size: {data_args.total_num_samples:,}")
-    
-    elif not training_args.do_eval and data_args.sanity_check:
-
-        dataset = dataset.take(400)
-
-        logger.info(f"`Sanity check` is set to `True`. Training set size: 400")
+        # Change the `total_num_samples` to reflect the size of the training set and the validation set
+        data_args.train_num_samples, data_args.val_num_samples = 400, 40
 
     # Create the Training DataLoader and Evaluation DataLoade
     if training_args.do_train and training_args.do_eval:
-        if "train" not in dataset:
-            raise ValueError("`do_train=True` requires a train dataset")
-        train_dataset = dataset["train"]
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=True,
+            shuffle=False, # Streaming datasets do not support shuffling in the DataLoader
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
         )
 
-        if "test" not in dataset:
-            raise ValueError("`do_eval=True` requires a validation dataset")
-        eval_dataset = dataset["test"] 
         eval_dataloader = DataLoader(
             eval_dataset,
             shuffle=False,
@@ -299,10 +287,9 @@ def main(spec_file):
     
     # Create only the Training DataLoader
     elif training_args.do_train and not training_args.do_eval:
-        train_dataset = dataset
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=True,
+            shuffle=False, # Streaming datasets do not support shuffling in the DataLoader
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -326,18 +313,18 @@ def main(spec_file):
     # This helps avoid NANs as loss during mixed precision training.
     optimizer = torch.optim.AdamW(optimizer_grouped_parameters, 
         lr=training_args.learning_rate,
-        eps=training_args.adam_epsilon if extra_args.mixed_precision == "no" else 1e-5,
+        eps=training_args.adam_epsilon,
     )
     
     # Scheduler and math around the number of training steps.
-    num_update_steps_per_epoch = math.ceil(len(train_dataloader) / training_args.gradient_accumulation_steps)
+    num_update_steps_per_epoch = math.ceil(data_args.train_num_samples / (training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps))
 
     # Create a scheduler to set the learning rate at each training step
     lr_scheduler = get_scheduler(
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
         num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
-        num_training_steps=(len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps,
+        num_training_steps=(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps,
     )
 
     # Prepare everything with `accelerator`.
@@ -370,7 +357,7 @@ def main(spec_file):
             name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
             resume="allow",
-            id=extra_args.logger_name.lower(),
+            id=extra_args.logger_name.lower() + "-" + model_args.model_id,
         )
 
     # Intialize codecarbon tracker
@@ -388,15 +375,15 @@ def main(spec_file):
     total_batch_size = training_args.per_device_train_batch_size * accelerator.num_processes * training_args.gradient_accumulation_steps
 
     logger.info("***** Running training *****")
-    logger.info(f"  Num examples = {len(train_dataset)}")
+    logger.info(f"  Num examples = {data_args.train_num_samples + data_args.val_num_samples} | Training examples: {data_args.train_num_samples} | Validations examples: {data_args.val_num_samples}.")
     logger.info(f"  Num Epochs = {training_args.num_train_epochs}")
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {training_args.gradient_accumulation_steps}")
-    logger.info(f"  Total optimization steps = {(len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps}")
+    logger.info(f"  Total optimization steps = {(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(len(train_dataloader) * training_args.num_train_epochs), disable=not accelerator.is_local_main_process)
+    progress_bar = tqdm(range(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
@@ -426,12 +413,13 @@ def main(spec_file):
         else:
             # need to multiply `gradient_accumulation_steps` to reflect real steps
             resume_step = int(training_difference.replace("step_", "")) * training_args.gradient_accumulation_steps
-            starting_epoch = resume_step // len(train_dataloader)
+            starting_epoch = resume_step // math.ceil(data_args.train_num_samples/training_args.per_device_train_batch_size)
             completed_steps = resume_step // training_args.gradient_accumulation_steps
-            resume_step -= starting_epoch * len(train_dataloader)
+            resume_step -= starting_epoch * math.ceil(data_args.train_num_samples/training_args.per_device_train_batch_size)
     
     # Update the progress_bar if load from checkpoint
     progress_bar.update(completed_steps)
+    accelerator.print()
 
     # Start training loop and activate codecarbon tracking
     tracker.start()
@@ -439,8 +427,8 @@ def main(spec_file):
     for epoch in range(starting_epoch, training_args.num_train_epochs):
 
         # Since our dataset is a streaming dataset, we need to reset the epoch at each iteration
-        dataset.set_epoch(epoch)
         model.train()
+        train_dataset.set_epoch(epoch)
         logger.info(f'Beginning epoch {epoch + 1} of {training_args.num_train_epochs}')
 
         total_loss = 0
@@ -486,8 +474,6 @@ def main(spec_file):
                     output_dir = f"step_{completed_steps}"
                     if training_args.output_dir is not None:
                         output_dir = os.path.join(training_args.output_dir, output_dir)
-                    # Register the LR scheduler
-                    accelerator.register_for_checkpointing(lr_scheduler)
                     # Save the model checkpoint
                     accelerator.save_state(output_dir)
                     # Save the generation config file
@@ -504,16 +490,16 @@ def main(spec_file):
 
                             # Handle the repository creation if needed
                             create_repo(
-                                repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                                repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",  
                                 token=training_args.hub_token,
                                 repo_type="model",
                                 exist_ok=True,
                                 private=True)
         
-                            #unwrapped_model = accelerator.unwrap_model(model)
-                            #unwrapped_model.save_pretrained(
-                            #    training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
-                            #)
+                            unwrapped_model = accelerator.unwrap_model(model)
+                            unwrapped_model.save_pretrained(
+                                output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
+                            )
 
                             if accelerator.is_main_process:
 
@@ -526,15 +512,17 @@ def main(spec_file):
                                     )
 
                                     api.upload_folder(
-                                        repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
                                         folder_path=output_dir,
                                     )
 
                                     api.upload_file(
                                         path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                                         path_in_repo=f"emissions.csv",
-                                        repo_id=training_args.hub_model_id + f"-step-{completed_steps}",
+                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
                                     )
+
+                                    tokenizer.push_to_hub(f"{training_args.hub_model_id}-step-{completed_steps}", token=training_args.hub_token)
 
                                     logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
                                 
@@ -589,15 +577,14 @@ def main(spec_file):
 
                     if step % training_args.eval_steps == 0 and step > 0:
 
+                        accelerator.print()
                         logger.info(f"Running evaluation at step {completed_steps}.")
 
                         model.eval()
                         losses = []
-                        for step, batch in enumerate(tqdm(eval_dataloader)):
+                        for step, batch in enumerate(tqdm(eval_dataloader, total=data_args.val_num_samples / training_args.per_device_eval_batch_size, position=0, leave=True, disable=not accelerator.is_local_main_process, unit=" samples",  desc="Validation")):
                             with torch.no_grad():
-                                
                                 outputs = model(**batch)
-                            
                             loss = outputs.loss
                             losses.append(accelerator.gather_for_metrics(loss.repeat(training_args.per_device_eval_batch_size)))
                         
@@ -642,14 +629,12 @@ def main(spec_file):
             # Evaluate the model at the end of each epoch
             model.eval()
             losses = []
+            accelerator.print()
             logger.info(f"Running evaluation at the end of Epoch {epoch + 1}.")
 
-            for step, batch in enumerate(tqdm(eval_dataloader)):
+            for step, batch in enumerate(tqdm(eval_dataloader, total=data_args.val_num_samples / training_args.per_device_eval_batch_size, position=0, leave=True, disable=not accelerator.is_local_main_process, unit=" samples",  desc="Validation")):
                 with torch.no_grad():
-                    outputs = model(batch["input_ids"], 
-                                labels=batch["input_ids"], 
-                                attention_mask=batch["attention_mask"])
-                
+                    outputs = model(**batch)
                 loss = outputs.loss
                 losses.append(accelerator.gather_for_metrics(loss.repeat(training_args.per_device_eval_batch_size)))
             
@@ -697,8 +682,6 @@ def main(spec_file):
         output_dir = f"epoch_{epoch + 1}"
         if training_args.output_dir is not None:
             output_dir = os.path.join(training_args.output_dir, output_dir)
-        # Register the LR scheduler
-        accelerator.register_for_checkpointing(lr_scheduler)
         accelerator.save_state(output_dir)
         # Save the generation config file
         generation_config.save_pretrained(output_dir)
@@ -714,16 +697,16 @@ def main(spec_file):
 
                 # Handle the repository creation if needed
                 create_repo(
-                    repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                    repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
                     token=training_args.hub_token,
                     repo_type="model",
                     exist_ok=True,
                     private=True)
                 
-                #unwrapped_model = accelerator.unwrap_model(model)
-                #unwrapped_model.save_pretrained(
-                #    training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
-                #)
+                unwrapped_model = accelerator.unwrap_model(model)
+                unwrapped_model.save_pretrained(
+                    output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
+                )
 
                 if accelerator.is_main_process:
 
@@ -736,16 +719,18 @@ def main(spec_file):
                         )
 
                         api.upload_folder(
-                            repo_id=training_args.hub_model_id + f"-step-{completed_steps}", 
+                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",  
                             folder_path=output_dir,
                         )
 
                         api.upload_file(
                             path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                             path_in_repo=f"emissions.csv",
-                            repo_id=training_args.hub_model_id + f"-step-{completed_steps}",
+                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
                         )
                         
+                        tokenizer.push_to_hub(f"{training_args.hub_model_id}-step-{completed_steps}", token=training_args.hub_token)
+
                         logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}. Completed steps: {completed_steps}.")
 
                     except Exception as e:
@@ -784,7 +769,7 @@ def main(spec_file):
 
             try:
                 
-                unwrap_model.push_to_hub(
+                unwrapped_model.push_to_hub(
                         repo_id=training_args.hub_model_id,
                         commit_message=f"Training complete!",
                     )
@@ -796,9 +781,9 @@ def main(spec_file):
                 )
 
                 generation_config.push_to_hub(
-                        repo_id="test",
+                        repo_id=training_args.hub_model_id,
                         commit_message=f"Training complete!",
-                        use_auth_token=training_args.hub_token,
+                        token=training_args.hub_token,
                     )
 
                 logger.info(f"Final model and emissions pushed to the hub!")

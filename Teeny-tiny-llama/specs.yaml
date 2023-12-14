@@ -1,7 +1,7 @@
 model_args:
   model_to_train: "TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T"
   tokenizer_name: "nicholasKluge/Teeny-tiny-llama-tokenizer"
-  model_id: "test"
+  model_id: "test-fp16"
   train_from_scratch: true
   vocab_size: 32000
   hidden_size: 768
@@ -21,9 +21,9 @@ model_args:
 data_args:
   dataset_name: "nicholasKluge/portuguese-corpus-v2-tokenized-2048"
   dataset_split: "train"
-  total_num_samples: 2635921
-  validation_split: 25000
-  buffer_size: 1000
+  train_num_samples: 2610921
+  val_num_samples: 25000
+  buffer_size: 10000
   streaming: true
   block_size: 2048
   overwrite_cache: false
@@ -44,7 +44,6 @@ training_args:
   lr_scheduler_type: "cosine"
   warmup_steps: 10
   num_train_epochs: 2
-  no_cuda: false
   gradient_checkpointing: false
   seed: 42
   dataloader_pin_memory: true

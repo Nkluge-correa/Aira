@@ -194,14 +194,18 @@ class DataTrainingArguments:
         metadata={"help": "The dataset split to use."},
     )
 
-    total_num_samples: Optional[int] = field(
+    train_num_samples: Optional[int] = field(
         default=None,
         metadata={
             "help": (
-                "The total number of samples to use from the dataset."
-                "In cases of streaming, this is the total number of samples to use for training."
+                "The total number of samples to use for training."
             )
         },
+    )
+
+    val_num_samples: Optional[int] = field(
+        default=None,
+        metadata={"help": "The number of samples to use for validation."},
     )
 
     buffer_size: Optional[int] = field(
@@ -212,11 +216,6 @@ class DataTrainingArguments:
                 "In cases of streaming, this is the buffer size to use for training."
             )
         },
-    )
-
-    validation_split: Optional[int] = field(
-        default=None,
-        metadata={"help": "The number of samples to use for validation."},
     )
 
     streaming: Optional[bool] = field(

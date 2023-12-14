@@ -1,8 +1,8 @@
 import argparse
+from datasets import load_dataset
 from huggingface_hub import login
 from accelerate import Accelerator
 from transformers import AutoTokenizer
-from datasets import load_dataset, DatasetDict
 
 def main(args):
 
@@ -81,12 +81,11 @@ def main(args):
     if "token_type_ids" in dataset.column_names:
         dataset = dataset.remove_columns("token_type_ids")
     
-    ddict = DatasetDict({
-        "train": dataset
-    })
+    # split the dataset in train and validation sets
+    dataset = dataset.train_test_split(test_size=args.test_size, shuffle=args.shuffle, seed=args.seed)
 
     # Push dataset to the hub
-    ddict.push_to_hub(args.dataset_name + "-tokenized-" + str(args.block_size))
+    dataset.push_to_hub(args.dataset_name + "-tokenized-" + str(args.block_size))
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tokenize a dataset")
@@ -94,9 +93,12 @@ if __name__ == "__main__":
     parser.add_argument("--dataset-split", help="Split of the dataset to tokenize")
     parser.add_argument("--tokenizer-name", help="Name of the tokenizer to use")
     parser.add_argument("--block-size", help="Block size to use")
+    parser.add_argument("--test-size", help="Test size to use")
+    parser.add_argument("--shuffle", help="Shuffle the dataset")
+    parser.add_argument("--seed", help="Seed to use")
     parser.add_argument("--token", help="Hugging Face token")
 
     main(parser.parse_args())
 
 # How to run:
-# python tokenize_dataset.py --dataset-name nicholasKluge/portuguese-corpus-v2 --dataset-split train --tokenizer-name nicholasKluge/Teeny-tiny-llama-tokenizer --block-size 2048 --token <token>
+# python tokenize_dataset.py --dataset-name nicholasKluge/portuguese-corpus-v2 --dataset-split train --tokenizer-name nicholasKluge/Teeny-tiny-llama-tokenizer --block-size 2048 --test-size 2500 --shuffle True --seed 42 --token <your_token>

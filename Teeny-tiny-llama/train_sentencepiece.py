@@ -25,7 +25,7 @@ def main(spec_file):
     if data_args.dataset_name is not None and not data_args.dataset_is_tokenized:
         dataset = load_dataset(data_args.dataset_name, 
             split=data_args.dataset_split, 
-            use_auth_token=training_args.hub_token if training_args.hub_token else None,
+            token=training_args.hub_token if training_args.hub_token else None,
             cache_dir=model_args.cache_dir,
             streaming=data_args.streaming,
         )
@@ -54,7 +54,7 @@ def main(spec_file):
 
     # Load reference tokenizer
     if model_args.tokenizer_name is not None and training_args.hub_token is not None:
-        reference_tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, use_auth_token=training_args.hub_token if training_args.hub_token else None)
+        reference_tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, token=training_args.hub_token if training_args.hub_token else None)
         reference_tokenizer.save_pretrained("reference-tokenizer")
     else:
         raise ValueError("No tokenizer name provided or no hub token provided. Try using `tokenizer_name=meta-llama/Llama-2-7b`")
