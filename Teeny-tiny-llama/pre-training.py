@@ -48,7 +48,7 @@ from transformers import (
 
 from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 
-# Set the environment variables for improved performance in the Ampere GPUs
+# Set these environment variables for improved performance in the Ampere GPUs
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
@@ -218,7 +218,8 @@ def main(spec_file):
         model.gradient_checkpointing_enable()
         model.config.use_cache = False
 
-    # Load the dataset
+
+    # Load the datasets
     #
     # Streaming datasets work faster if they are in a local directory
     # The dataset folder must contain a list o parquet files, and you 
@@ -236,7 +237,8 @@ def main(spec_file):
             data_files={
                 "train": './portuguese-corpus-v2-tokenized-2048/train/*.parquet',
             },  
-            streaming=True,)['train']
+            streaming=data_args.streaming,)['train']
+    
 
     # We are not streaming the validation dataset, since it is small
     # and can be loaded into memory without any problems.
@@ -246,13 +248,14 @@ def main(spec_file):
                 "test": './portuguese-corpus-v2-tokenized-2048/test/*.parquet',
             },
             streaming=False,)['test']
-    
-    # Shuffle the `train_dataset`
-    train_dataset = train_dataset.shuffle(seed=training_args.seed, buffer_size=data_args.buffer_size)
 
-    # Turn the datasets into torch datasets
+    # Set the format to `torch`
     train_dataset = train_dataset.with_format("torch")
     eval_dataset = eval_dataset.with_format("torch") 
+    
+    # Shuffle the `train_dataset` and set a buffer size if in streaming mode
+    train_dataset = train_dataset.shuffle(seed=training_args.seed, buffer_size=data_args.buffer_size) \
+        if data_args.streaming else train_dataset
 
     logger.info(f"Loaded dataset: {data_args.dataset_name} | Number of examples: {data_args.train_num_samples + data_args.val_num_samples:,}")
     logger.info(f"Size of train dataset: {data_args.train_num_samples:,} ({data_args.train_num_samples * data_args.block_size:,} tokens)| Size of validation dataset: {data_args.val_num_samples:,}")
@@ -262,7 +265,8 @@ def main(spec_file):
 
         logger.info(f"`Sanity check` is set to `True`. Train set size: 400 | Validation set size: 40")
 
-        train_dataset, eval_dataset = train_dataset.take(400), eval_dataset.select(range(40))
+        train_dataset = train_dataset.take(400) if data_args.streaming else train_dataset.select(range(400)) 
+        eval_dataset = eval_dataset.select(range(40))
 
         # Change the `total_num_samples` to reflect the size of the training set and the validation set
         data_args.train_num_samples, data_args.val_num_samples = 400, 40
@@ -271,7 +275,7 @@ def main(spec_file):
     if training_args.do_train and training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=False, # Streaming datasets do not support shuffling in the DataLoader
+            shuffle=not data_args.streaming, # Streaming datasets do not support shuffling in the DataLoader
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -289,7 +293,7 @@ def main(spec_file):
     elif training_args.do_train and not training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=False, # Streaming datasets do not support shuffling in the DataLoader
+            shuffle=not data_args.streaming, # Streaming datasets do not support shuffling in the DataLoader
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -354,10 +358,10 @@ def main(spec_file):
             project=extra_args.logger_name, 
             notes="Training the Teeny-Tiny-Llama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
-            name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
+            #name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
-            resume="allow",
-            id=extra_args.logger_name.lower() + "-" + model_args.model_id,
+            #resume="allow",
+            #id=extra_args.logger_name.lower() + "-" + model_args.model_id,
         )
 
     # Intialize codecarbon tracker
@@ -428,7 +432,7 @@ def main(spec_file):
 
         # Since our dataset is a streaming dataset, we need to reset the epoch at each iteration
         model.train()
-        train_dataset.set_epoch(epoch)
+        train_dataset.set_epoch(epoch) if data_args.streaming else None
         logger.info(f'Beginning epoch {epoch + 1} of {training_args.num_train_epochs}')
 
         total_loss = 0
