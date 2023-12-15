@@ -28,8 +28,8 @@ import datasets
 import transformers
 import huggingface_hub
 from datasets import load_dataset
-from codecarbon import EmissionsTracker
 from torch.utils.data import DataLoader
+from codecarbon import OfflineEmissionsTracker
 from huggingface_hub import create_repo, HfApi
 
 from accelerate import Accelerator, DistributedType
@@ -51,9 +51,6 @@ from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 # Set these environment variables for improved performance in the Ampere GPUs
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
-
-# Make accelerator device be the CPU
-# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 def main(spec_file):
 
@@ -235,7 +232,7 @@ def main(spec_file):
     train_dataset = load_dataset(
             'parquet', 
             data_files={
-                "train": './portuguese-corpus-v2-tokenized-2048/train/*.parquet',
+                "train": f'{data_args.folder_path}/train/*.parquet',
             },  
             streaming=data_args.streaming,)['train']
     
@@ -245,7 +242,7 @@ def main(spec_file):
     eval_dataset = load_dataset(
             'parquet',
             data_files={
-                "test": './portuguese-corpus-v2-tokenized-2048/test/*.parquet',
+                "test": f'{data_args.folder_path}/test/*.parquet',
             },
             streaming=False,)['test']
 
@@ -275,7 +272,7 @@ def main(spec_file):
     if training_args.do_train and training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=not data_args.streaming, # Streaming datasets do not support shuffling in the DataLoader
+            shuffle=not data_args.streaming, # Streaming datasets do not support shuffling in the DataLoader. When True, the data reshuffled at every epoch
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -293,7 +290,7 @@ def main(spec_file):
     elif training_args.do_train and not training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=not data_args.streaming, # Streaming datasets do not support shuffling in the DataLoader
+            shuffle=not data_args.streaming,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -358,19 +355,20 @@ def main(spec_file):
             project=extra_args.logger_name, 
             notes="Training the Teeny-Tiny-Llama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
-            #name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
+            name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
-            #resume="allow",
-            #id=extra_args.logger_name.lower() + "-" + model_args.model_id,
+            resume="allow",
+            id=extra_args.logger_name.lower() + "-" + model_args.model_id,
         )
 
     # Intialize codecarbon tracker
-    tracker = EmissionsTracker(
+    tracker = OfflineEmissionsTracker(
         project_name=extra_args.logger_name,
         log_level="critical", # set to "critical" to silence codecarbon
         output_dir=training_args.output_dir,
         output_file=f"emissions.csv",
-        tracking_mode='machine'
+        tracking_mode='machine',
+        country_iso_code='DEU', # set to your country's ISO code
     )
 
     logger.info(f'Geo Location: ISO: {tracker._geo.country_iso_code} | Country: {tracker._geo.country_name} | Region : {tracker._geo.region}')
@@ -485,6 +483,13 @@ def main(spec_file):
 
                     # Flush the codecarbon tracker
                     tracker.flush()
+
+                    # Log energy consumption to wandb if needed
+                    if extra_args.wandb_token is not None:
+
+                        wandb.log({
+                            "total_energy_consumption": tracker._total_energy.kWh,      
+                        })
                 
                     # Push the model checkpoint to the hub if needed
                     if training_args.push_to_hub and training_args.hub_token is not None:
@@ -560,7 +565,8 @@ def main(spec_file):
                     
                     for text in texts:
                         logger.info(f"Samples (Epoch: {epoch + 1} | Step: {step}): {text}")
-                        
+                    
+                    # Log the samples to wandb if needed
                     if extra_args.wandb_token is not None:
 
                         training_samples = wandb.Table(columns=[f"Samples (Epoch: {epoch + 1} | Step: {step})"])
@@ -614,7 +620,7 @@ def main(spec_file):
                             step=completed_steps,
                         )
                         
-                        # Log the metrics to wandb if needed
+                        # Log the validation metrics to wandb if needed
                         if extra_args.wandb_token is not None:
 
                                 wandb.log({
@@ -652,7 +658,7 @@ def main(spec_file):
             
             logger.info(f"Epoch {epoch + 1} | Step {completed_steps} | Perplexity: {perplexity} | Average Training Loss: {total_loss.item() / completed_steps} | Evaluation Loss: {eval_loss} | Total Energy Consumption: {tracker._total_energy.kWh}")
             
-            # Log the metrics to wandb if needed
+            # Log the validation metrics to wandb if needed
             if extra_args.wandb_token is not None:
 
                     wandb.log({
@@ -670,7 +676,7 @@ def main(spec_file):
 
             logger.info(f"Epoch {epoch + 1} | Step {completed_steps} | Average Training Loss: {total_loss.item() / completed_steps} | Total Energy Consumption: {tracker._total_energy.kWh}")
 
-            # Log the metrics to wandb if needed
+            # Log the average training metrics to wandb if needed
             if extra_args.wandb_token is not None:
 
                     wandb.log({   
@@ -692,6 +698,13 @@ def main(spec_file):
 
         # Flush the codecarbon tracker
         tracker.flush()
+
+        # Log energy consumption to wandb if needed
+        if extra_args.wandb_token is not None:
+
+            wandb.log({
+                "total_energy_consumption": tracker._total_energy.kWh,      
+            })
 
         # Push the model checkpoint to the hub if needed
         if training_args.push_to_hub and training_args.hub_token is not None: 

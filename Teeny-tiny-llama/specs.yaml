@@ -1,7 +1,7 @@
 model_args:
   model_to_train: "TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T"
   tokenizer_name: "nicholasKluge/Teeny-tiny-llama-tokenizer"
-  model_id: "test-fp16"
+  model_id: "162m"
   train_from_scratch: true
   vocab_size: 32000
   hidden_size: 768
@@ -20,21 +20,22 @@ model_args:
   use_cache: true
 data_args:
   dataset_name: "nicholasKluge/portuguese-corpus-v2-tokenized-2048"
+  folder_path: "/portuguese-corpus-v2-tokenized-2048/data"
   dataset_split: "train"
   train_num_samples: 2610921
   val_num_samples: 25000
   buffer_size: 10000
-  streaming: true
+  streaming: false
   block_size: 2048
   overwrite_cache: false
   preprocessing_num_workers: null
-  sanity_check: true
+  sanity_check: false
 training_args:
   output_dir: "checkpoints"
   do_train: true
   do_eval: true
   evaluation_strategy: "steps"
-  eval_steps: 20
+  eval_steps: 122000
   per_device_train_batch_size: 4
   per_device_eval_batch_size: 4
   gradient_accumulation_steps: 1
@@ -42,12 +43,12 @@ training_args:
   adam_epsilon: 0.00000001
   weight_decay: 0.0
   lr_scheduler_type: "cosine"
-  warmup_steps: 10
+  warmup_steps: 5000
   num_train_epochs: 2
   gradient_checkpointing: false
   seed: 42
   dataloader_pin_memory: true
-  push_to_hub: true
+  push_to_hub: false
   resume_from_checkpoint: null
   hub_model_id: "nicholasKluge/Teeny-tiny-llama"
   hub_token: null
@@ -55,14 +56,14 @@ extra_args:
   wandb_token: null
   logger_name: "Teeny-tiny-llama"
   wandb_log_steps: 1
-  mixed_precision: 'bf16'
-  checkpointing_steps: 20
-  sample_every: 20
+  mixed_precision: 'no'
+  checkpointing_steps: 24400
+  sample_every: 24400
   generation_seeds:
-    - "Meu nome é Nicholas e eu"
-    - "O Brasil é um país"
-    - "A vida é algo que"
-    - "A morte vem para todos"
-    - "A felicidade é um sentimento"
-    - "A tristeza é um sentimento"
-    - "A capital do Brazil é"
+    - "Meu nome é Nicholas e eu estudo na PUCRS, uma universidade privada de Porto Alegre, Rio Grande do Sul, Brasil. A PUCRS é"
+    - "O Brasil é um país que possui muitas belezas naturais, como as cataratas do Iguaçu, o Cristo Redentor e o Pão de Açúcar. O Brasil também é conhecido por"
+    - "Modelos de linguagem são muito úteis para gerar texto. Eles podem ser usados para gerar textos de diversos tipos, como"
+    - "A aprendizagem de máquina é um campo da ciência da computação que estuda como os computadores podem aprender a fazer coisas sem serem explicitamente programados, como, por exemplo,"
+    - "Como diversos outros países da América Latina, o Brasil é um país que possui uma grande diversidade cultural. Por exemplo, o Brasil possui"
+    - "A Filosofia é o estudo de questões fundamentais, como a existência, o conhecimento, a verdade, a moral, a beleza, a mente e a linguagem. Muitos dizem que o estudo da Filosofia é importante porque"
+    - "A capital do Brazil é Brasília. Brasília foi construída na segunda metade da década de 1950, durante o governo de Juscelino Kubitschek. Brasília é conhecida por"

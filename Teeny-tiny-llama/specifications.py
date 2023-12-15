@@ -189,6 +189,18 @@ class DataTrainingArguments:
         }
     )
 
+    folder_path: Optional[str] = field(
+        default=None,
+        metadata={
+            "help": (
+                "The path to the folder containing the dataset."
+                "The `pre-training.py` script does not support the data preprocessing."
+                "Hence, the dataset must be already tokenized."
+                "For this, you can use the `tokenize_dataset.py` script."
+            )
+        }
+    )
+
     dataset_split: Optional[str] = field(
         default="train",
         metadata={"help": "The dataset split to use."},

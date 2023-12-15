@@ -35,7 +35,7 @@ def main(spec_file):
     # Remove non text columns
     dataset = dataset.remove_columns([col for col in dataset.column_names if col != "text"])
 
-    # select 1_000_000 random samples from the dataset
+    # select 2_000_000 random samples from the dataset
     dataset = dataset.shuffle(seed=training_args.seed).select(range(2_000_000))
 
     # Create a SentencePieceBPETokenizer
@@ -44,7 +44,7 @@ def main(spec_file):
     # Train the SentencePieceBPETokenizer on the dataset
     tokenizer.train_from_iterator(
         iterator=dataset['text'],
-        vocab_size=32_000,
+        vocab_size=model_args.vocab_size,
         show_progress=True,
         special_tokens=["<unk>", "<s>", "</s>",  "<pad>"],
     )

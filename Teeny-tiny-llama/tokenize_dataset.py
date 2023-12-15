@@ -6,6 +6,9 @@ from transformers import AutoTokenizer
 
 def main(args):
 
+    if not args.token or not args.tokenizer_name or not args.dataset_name or not args.dataset_split:
+        raise ValueError("One or more required arguments are missing")
+
     login(token=args.token)
 
     # initialize the accelerator
@@ -101,4 +104,4 @@ if __name__ == "__main__":
     main(parser.parse_args())
 
 # How to run:
-# python tokenize_dataset.py --dataset-name nicholasKluge/portuguese-corpus-v2 --dataset-split train --tokenizer-name nicholasKluge/Teeny-tiny-llama-tokenizer --block-size 2048 --test-size 2500 --shuffle True --seed 42 --token <your_token>
+# python tokenize_dataset.py --dataset-name nicholasKluge/portuguese-corpus-v2 --dataset-split train --tokenizer-name nicholasKluge/Teeny-tiny-llama-tokenizer --block-size 2048 --test-size 25000 --shuffle True --seed 42 --token <your_token>

@@ -91,7 +91,7 @@ def main(spec_file):
         dataset = load_dataset(
             data_args.dataset_name, 
             split=data_args.dataset_split,
-            use_auth_token=training_args.hub_token if training_args.hub_token else None,
+            token=training_args.hub_token if training_args.hub_token else None,
             cache_dir=model_args.cache_dir,
             streaming=data_args.streaming,
         )          
@@ -119,7 +119,7 @@ def main(spec_file):
                 "cache_dir": model_args.cache_dir,
                 "use_fast": model_args.use_fast,
                 "revision": model_args.model_revision,
-                "use_auth_token": training_args.hub_token,
+                "token": training_args.hub_token,
                 "trust_remote_code": model_args.trust_remote_code,
                 "bos_token": model_args.bos_token,
                 "sep_token": model_args.sep_token,
@@ -135,7 +135,7 @@ def main(spec_file):
         config_kwargs = {
                 "cache_dir": model_args.cache_dir,
                 "revision": model_args.model_revision,
-                "use_auth_token": training_args.hub_token,
+                "token": training_args.hub_token,
                 "trust_remote_code": model_args.trust_remote_code,
                 "output_hidden_states": model_args.output_hidden_states,
             }
@@ -149,7 +149,7 @@ def main(spec_file):
                 config=configuration,
                 cache_dir=model_args.cache_dir,
                 revision=model_args.model_revision,
-                use_auth_token=training_args.hub_token,
+                token=training_args.hub_token,
                 trust_remote_code=model_args.trust_remote_code,
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )

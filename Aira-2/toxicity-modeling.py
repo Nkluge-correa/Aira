@@ -65,7 +65,7 @@ def main(spec_file):
         dataset = load_dataset(
             data_args.dataset_name, 
             split=data_args.dataset_split,
-            use_auth_token=training_args.hub_token if training_args.hub_token else None,
+            token=training_args.hub_token if training_args.hub_token else None,
             cache_dir=model_args.cache_dir,
             streaming=data_args.streaming,
         )          
