@@ -39,12 +39,17 @@ def main(args):
             desc="Running tokenizer on every text in dataset",
         )
     
+    # In case the dataset has the column `token_type_ids`, we will remove it
+    if "token_type_ids" in dataset.column_names:
+        dataset = dataset.remove_columns("token_type_ids")
+    
     # Group texts together so that we have chunks of max_seq_length
+    # We are not adding any special token here, like the eos_token,
+    # because the tokenizers adds the bos_token by default
     def group_texts(examples):
-        eos_token_id = tokenizer.eos_token_id
 
         concatenated_examples = {
-            k: [t for example in examples[k] for t in example + [eos_token_id]] for k in examples.keys()
+            k: [t for example in examples[k] for t in example] for k in examples.keys()
         }
 
         for k in concatenated_examples.keys():
@@ -61,6 +66,7 @@ def main(args):
             ]
             for k, t in concatenated_examples.items()
         }
+
         return result
 
     with accelerator.main_process_first():
@@ -80,26 +86,23 @@ def main(args):
             desc="Adding labels to the dataset",
         )
     
-    # In case the dataset has the column `token_type_ids`, we will remove it
-    if "token_type_ids" in dataset.column_names:
-        dataset = dataset.remove_columns("token_type_ids")
-    
     # split the dataset in train and validation sets
     dataset = dataset.train_test_split(test_size=args.test_size, shuffle=args.shuffle, seed=args.seed)
+    print(dataset)
 
     # Push dataset to the hub
     dataset.push_to_hub(args.dataset_name + "-tokenized-" + str(args.block_size))
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Tokenize a dataset")
-    parser.add_argument("--dataset-name", help="Name of the dataset to tokenize")
-    parser.add_argument("--dataset-split", help="Split of the dataset to tokenize")
-    parser.add_argument("--tokenizer-name", help="Name of the tokenizer to use")
-    parser.add_argument("--block-size", help="Block size to use")
-    parser.add_argument("--test-size", help="Test size to use")
-    parser.add_argument("--shuffle", help="Shuffle the dataset")
-    parser.add_argument("--seed", help="Seed to use")
-    parser.add_argument("--token", help="Hugging Face token")
+    parser.add_argument("--dataset-name", type=str, help="Name of the dataset to tokenize")
+    parser.add_argument("--dataset-split", type=str, help="Split of the dataset to tokenize")
+    parser.add_argument("--tokenizer-name", type=str, help="Name of the tokenizer to use")
+    parser.add_argument("--block-size", type=int, help="Block size to use")
+    parser.add_argument("--test-size", type=int, help="Test size to use")
+    parser.add_argument("--shuffle", type=bool, help="Shuffle the dataset")
+    parser.add_argument("--seed", type=int, help="Seed to use")
+    parser.add_argument("--token", type=str, help="Hugging Face token")
 
     main(parser.parse_args())
 

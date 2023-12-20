@@ -340,7 +340,7 @@ def main(spec_file):
     logger.info(f"  Total optimization steps = {(len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(len(train_dataloader) * training_args.num_train_epochs), disable=not accelerator.is_local_main_process)
+    progress_bar = tqdm(range(len(train_dataloader) * training_args.num_train_epochs), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
@@ -431,7 +431,7 @@ def main(spec_file):
             model.eval()
             losses = []
             logger.info(f"Running evaluation at the end of Epoch {epoch + 1}.")
-            for step, batch in enumerate(tqdm(eval_dataloader)):
+            for step, batch in enumerate(tqdm(eval_dataloader, total=len(eval_dataloader) / training_args.per_device_eval_batch_size, position=0, leave=True, disable=not accelerator.is_local_main_process, unit=" samples",  desc="Validation")):
                 with torch.no_grad():
                     outputs = model(batch["input_ids"], 
                                 labels=batch["input_ids"], 

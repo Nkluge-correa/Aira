@@ -324,8 +324,8 @@ def main(spec_file):
     lr_scheduler = get_scheduler(
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
-        num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
-        num_training_steps=(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps,
+        num_warmup_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps * training_args.warmup_ratio),
+        num_training_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps),
     )
 
     # Prepare everything with `accelerator`.
@@ -382,10 +382,10 @@ def main(spec_file):
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {training_args.gradient_accumulation_steps}")
-    logger.info(f"  Total optimization steps = {(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps}")
+    logger.info(f"  Total optimization steps = {int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps)}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
+    progress_bar = tqdm(range(int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs)), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
@@ -426,7 +426,7 @@ def main(spec_file):
     # Start training loop and activate codecarbon tracking
     tracker.start()
 
-    for epoch in range(starting_epoch, training_args.num_train_epochs):
+    for epoch in range(starting_epoch, math.ceil(training_args.num_train_epochs)):
 
         # Since our dataset is a streaming dataset, we need to reset the epoch at each iteration
         model.train()

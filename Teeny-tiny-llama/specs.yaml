@@ -19,11 +19,11 @@ model_args:
   low_cpu_mem_usage: null
   use_cache: true
 data_args:
-  dataset_name: "nicholasKluge/portuguese-corpus-v2-tokenized-2048"
-  folder_path: "/portuguese-corpus-v2-tokenized-2048/data"
+  dataset_name: "nicholasKluge/portuguese-corpus-v3-tokenized-small"
+  folder_path: "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-small/data"
   dataset_split: "train"
-  train_num_samples: 2610921
-  val_num_samples: 25000
+  train_num_samples: 1831873
+  val_num_samples: 18000
   buffer_size: 10000
   streaming: false
   block_size: 2048
@@ -35,20 +35,20 @@ training_args:
   do_train: true
   do_eval: true
   evaluation_strategy: "steps"
-  eval_steps: 122000
+  eval_steps: 100000
   per_device_train_batch_size: 4
   per_device_eval_batch_size: 4
   gradient_accumulation_steps: 1
-  learning_rate: 0.001
+  learning_rate: 0.0006
   adam_epsilon: 0.00000001
-  weight_decay: 0.0
+  weight_decay: 0.01
   lr_scheduler_type: "cosine"
-  warmup_steps: 5000
-  num_train_epochs: 2
+  warmup_ratio: 0.01
+  num_train_epochs: 1
   gradient_checkpointing: false
   seed: 42
   dataloader_pin_memory: true
-  push_to_hub: false
+  push_to_hub: true
   resume_from_checkpoint: null
   hub_model_id: "nicholasKluge/Teeny-tiny-llama"
   hub_token: null
@@ -57,8 +57,8 @@ extra_args:
   logger_name: "Teeny-tiny-llama"
   wandb_log_steps: 1
   mixed_precision: 'no'
-  checkpointing_steps: 24400
-  sample_every: 24400
+  checkpointing_steps: 22000
+  sample_every: 22000
   generation_seeds:
     - "Meu nome é Nicholas e eu estudo na PUCRS, uma universidade privada de Porto Alegre, Rio Grande do Sul, Brasil. A PUCRS é"
     - "O Brasil é um país que possui muitas belezas naturais, como as cataratas do Iguaçu, o Cristo Redentor e o Pão de Açúcar. O Brasil também é conhecido por"
