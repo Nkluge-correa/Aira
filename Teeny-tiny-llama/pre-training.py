@@ -30,7 +30,7 @@ import huggingface_hub
 from datasets import load_dataset
 from torch.utils.data import DataLoader
 from codecarbon import OfflineEmissionsTracker
-from huggingface_hub import create_repo, HfApi
+from huggingface_hub import create_repo, HfApi, create_branch
 
 from accelerate import Accelerator, DistributedType
 from accelerate.logging import get_logger
@@ -54,6 +54,7 @@ torch.backends.cudnn.allow_tf32 = True
 
 def main(spec_file):
 
+    spec_file = "specs.yaml"
     # Load the arguments from the spec file
     with open(spec_file, "r") as stream:
         all_kwargs = yaml.safe_load(stream)
@@ -96,7 +97,7 @@ def main(spec_file):
     if training_args.push_to_hub and training_args.hub_token is not None:
         if training_args.hub_model_id is not None:
             create_repo(
-                repo_id=training_args.hub_model_id, 
+                repo_id=f"{training_args.hub_model_id}-{model_args.model_id}", 
                 token=training_args.hub_token,
                 repo_type="model",
                 exist_ok=True,
@@ -120,7 +121,7 @@ def main(spec_file):
         }
 
         tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
-        tokenizer.push_to_hub(training_args.hub_model_id, token=training_args.hub_token)
+        tokenizer.push_to_hub(training_args.hub_model_id + "-" + model_args.model_id, token=training_args.hub_token)
     
     else:
         raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_sentencepiece.py`.")
@@ -154,7 +155,7 @@ def main(spec_file):
         # Load the configurations to create a new model
         configuration = AutoConfig.from_pretrained(model_args.model_to_train, **config_kwargs)
         model = AutoModelForCausalLM.from_config(configuration)
-        model.config.name_or_path = training_args.hub_model_id
+        model.config.name_or_path = training_args.hub_model_id + "-" + model_args.model_id
 
         # Resize the model's embedding layer to match the tokenizer's vocabulary size
         model.resize_token_embeddings(len(tokenizer))
@@ -199,7 +200,7 @@ def main(spec_file):
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )
         
-        model.config.name_or_path = training_args.hub_model_id
+        model.config.name_or_path = training_args.hub_model_id + "-" + model_args.model_id
         # Resize the model's embedding layer to match the tokenizer's vocabulary size
         model.resize_token_embeddings(len(tokenizer))
 
@@ -457,6 +458,7 @@ def main(spec_file):
                 if (step) % extra_args.wandb_log_steps == 0 and extra_args.wandb_token is not None:
                     wandb.log({
                         "loss": loss.detach().float().item(),
+                        "lr": lr_scheduler.get_last_lr()[0],
                         })
 
                 # Backward pass and update optimizer
@@ -497,18 +499,11 @@ def main(spec_file):
 
                             accelerator.wait_for_everyone()
 
-                            # Handle the repository creation if needed
-                            create_repo(
-                                repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",  
-                                token=training_args.hub_token,
-                                repo_type="model",
-                                exist_ok=True,
-                                private=True)
-        
                             unwrapped_model = accelerator.unwrap_model(model)
                             unwrapped_model.save_pretrained(
                                 output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
                             )
+                            tokenizer.save_pretrained(output_dir)
 
                             if accelerator.is_main_process:
 
@@ -520,18 +515,24 @@ def main(spec_file):
                                         token=training_args.hub_token,
                                     )
 
+                                    create_branch(
+                                        repo_id=f"{training_args.hub_model_id}-{model_args.model_id}", 
+                                        repo_type="model", 
+                                        branch=f'step{completed_steps}'
+                                    )
+
                                     api.upload_folder(
-                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
+                                        repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
                                         folder_path=output_dir,
+                                        revision=f'step-{completed_steps}',
                                     )
 
                                     api.upload_file(
                                         path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                                         path_in_repo=f"emissions.csv",
-                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
+                                        repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
+                                        revision=f'step-{completed_steps}',
                                     )
-
-                                    tokenizer.push_to_hub(f"{training_args.hub_model_id}-step-{completed_steps}", token=training_args.hub_token)
 
                                     logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
                                 
@@ -539,7 +540,7 @@ def main(spec_file):
                                     logger.warning(f"Error while uploading checkpoint to Hub: {e}")
                                 
             # Generate text from the model every `sample_every ` steps
-            if step % extra_args.sample_every == 0 and not step == 0:
+            if completed_steps % extra_args.sample_every == 0 and not completed_steps == 0:
                 
                 model.config.use_cache = True
 
@@ -564,15 +565,15 @@ def main(spec_file):
                         texts.append(tokenizer.decode(sample_output))
                     
                     for text in texts:
-                        logger.info(f"Samples (Epoch: {epoch + 1} | Step: {step}): {text}")
+                        logger.info(f"Samples (Epoch: {epoch + 1} | Step: {completed_steps}): {text}")
                     
                     # Log the samples to wandb if needed
                     if extra_args.wandb_token is not None:
 
-                        training_samples = wandb.Table(columns=[f"Samples (Epoch: {epoch + 1} | Step: {step})"])
+                        training_samples = wandb.Table(columns=[f"Samples (Epoch: {epoch + 1} | Step: {completed_steps})"])
                         for text in texts:
                             training_samples.add_data(text)
-                        wandb.log({f"Samples (Epoch: {epoch + 1} | Step: {step})": training_samples})
+                        wandb.log({f"Samples (Epoch: {epoch + 1} | Step: {completed_steps})": training_samples})
                 
                 except Exception as e:
                     logger.warning(f"Error while generating samples: {e}")
@@ -585,7 +586,7 @@ def main(spec_file):
                 # Check if `evaluation_strategy=steps`
                 if training_args.evaluation_strategy == "steps":
 
-                    if step % training_args.eval_steps == 0 and step > 0:
+                    if completed_steps % training_args.eval_steps == 0 and completed_steps > 0:
 
                         accelerator.print()
                         logger.info(f"Running evaluation at step {completed_steps}.")
@@ -711,19 +712,12 @@ def main(spec_file):
             if training_args.hub_model_id is not None:
                 
                 accelerator.wait_for_everyone()
-
-                # Handle the repository creation if needed
-                create_repo(
-                    repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
-                    token=training_args.hub_token,
-                    repo_type="model",
-                    exist_ok=True,
-                    private=True)
                 
                 unwrapped_model = accelerator.unwrap_model(model)
                 unwrapped_model.save_pretrained(
                     output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
                 )
+                tokenizer.save_pretrained(output_dir)
 
                 if accelerator.is_main_process:
 
@@ -735,19 +729,25 @@ def main(spec_file):
                             token=training_args.hub_token,
                         )
 
+                        create_branch(
+                            repo_id=f"{training_args.hub_model_id}-{model_args.model_id}", 
+                            repo_type="model", 
+                            branch=f'step{completed_steps}'
+                        )
+
                         api.upload_folder(
-                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",  
+                            repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",  
                             folder_path=output_dir,
+                            revision=f'epoch-{epoch + 1}',
                         )
 
                         api.upload_file(
                             path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                             path_in_repo=f"emissions.csv",
-                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
+                            repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
+                            revision=f'epoch-{epoch + 1}',
                         )
                         
-                        tokenizer.push_to_hub(f"{training_args.hub_model_id}-step-{completed_steps}", token=training_args.hub_token)
-
                         logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}. Completed steps: {completed_steps}.")
 
                     except Exception as e:
@@ -770,38 +770,30 @@ def main(spec_file):
     if training_args.output_dir is not None:
 
         accelerator.wait_for_everyone()
+        output_dir = os.path.join(training_args.output_dir, "final-checkpoint")
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(
-            training_args.output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
+            output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
         )
 
-        # Save the generation config file
-        generation_config.save_pretrained(training_args.output_dir)
-
-    if accelerator.is_main_process:
-        tokenizer.save_pretrained(training_args.output_dir)
+        tokenizer.save_pretrained(output_dir)
+        generation_config.save_pretrained(output_dir)
 
     if training_args.push_to_hub and training_args.hub_token is not None:
         if training_args.hub_model_id is not None:
 
             try:
                 
-                unwrapped_model.push_to_hub(
-                        repo_id=training_args.hub_model_id,
-                        commit_message=f"Training complete!",
-                    )
+                api.upload_folder(
+                    repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",  
+                    folder_path=output_dir,
+                )
                 
                 api.upload_file(
                     path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                     path_in_repo=f"emissions.csv",
-                    repo_id=training_args.hub_model_id,
+                    repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
                 )
-
-                generation_config.push_to_hub(
-                        repo_id=training_args.hub_model_id,
-                        commit_message=f"Training complete!",
-                        token=training_args.hub_token,
-                    )
 
                 logger.info(f"Final model and emissions pushed to the hub!")
                             
