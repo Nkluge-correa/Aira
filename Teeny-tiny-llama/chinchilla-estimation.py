@@ -10,8 +10,8 @@ def calculate_loss(N, D):
     loss = (A / N**alpha) + (B / D**beta) + E
     return loss
 
-N = 162_000_000  # Number of parameters
-D = 3_780_000_000  # Number of tokens in the training dataset
+N = 711_000_000  # Number of parameters
+D = 14_220_000_000  # Number of tokens in the training dataset
 
 resulting_loss = calculate_loss(N, D)
 

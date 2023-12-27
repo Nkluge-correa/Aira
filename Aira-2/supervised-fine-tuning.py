@@ -94,7 +94,10 @@ def main(spec_file):
             token=training_args.hub_token if training_args.hub_token else None,
             cache_dir=model_args.cache_dir,
             streaming=data_args.streaming,
-        )          
+        )
+
+        # shuffle the dataset
+        dataset = dataset.shuffle(seed=training_args.seed)        
 
         # Sanity check: use only the first 100 examples
         if data_args.sanity_check:
@@ -121,11 +124,11 @@ def main(spec_file):
                 "revision": model_args.model_revision,
                 "token": training_args.hub_token,
                 "trust_remote_code": model_args.trust_remote_code,
-                "bos_token": model_args.bos_token,
+                #"bos_token": model_args.bos_token,
                 "sep_token": model_args.sep_token,
-                "pad_token": model_args.pad_token,
-                "unk_token": model_args.unk_token,
-                "eos_token": model_args.eos_token,
+                #"pad_token": model_args.pad_token,
+                #"unk_token": model_args.unk_token,
+                #"eos_token": model_args.eos_token,
             }
 
         # Load the tokenizer of the base model
@@ -154,8 +157,19 @@ def main(spec_file):
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )
         
+        # Add special tokens to the model config
+        #model.config.bos_token_id = tokenizer.bos_token_id
+        model.config.sep_token_id = tokenizer.sep_token_id
+        #model.config.pad_token_id = tokenizer.pad_token_id
+        #model.config.unk_token_id = tokenizer.unk_token_id
+        #model.config.eos_token_id = tokenizer.eos_token_id
+        
         # Resize the token embeddings of the model to match the tokenizer
         model.resize_token_embeddings(len(tokenizer))
+
+        # Add new `name_or_path` to the model config if needed
+        if training_args.hub_model_id is not None:
+            model.config.name_or_path = training_args.hub_model_id
 
         # Enable gradient checkpointing if `gradient_checkpointing=True`
         if training_args.gradient_checkpointing:
@@ -285,7 +299,7 @@ def main(spec_file):
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
         num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
-        num_training_steps=(len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps,
+        num_training_steps=int((len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps,
     )
 
     # Prepare everything with `accelerator`.
@@ -333,14 +347,14 @@ def main(spec_file):
 
     logger.info("***** Running training *****")
     logger.info(f"  Num examples = {len(train_dataset)}")
-    logger.info(f"  Num Epochs = {training_args.num_train_epochs}")
+    logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch) if training_args.max_steps < 0 else training_args.num_train_epochs:.1f}")
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {training_args.gradient_accumulation_steps}")
-    logger.info(f"  Total optimization steps = {(len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps}")
+    logger.info(f"  Total optimization steps = {int((len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(len(train_dataloader) * training_args.num_train_epochs), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
+    progress_bar = tqdm(range(int((len(train_dataloader) * training_args.num_train_epochs) * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
@@ -368,7 +382,8 @@ def main(spec_file):
                 # Log the loss to wandb
                 if (step) % extra_args.wandb_log_steps == 0 and extra_args.wandb_token is not None:
                     wandb.log({
-                        "loss": loss.detach().float().item(),     
+                        "loss": loss.detach().float().item(),
+                        "lr": lr_scheduler.get_last_lr()[0],
                         })
 
                 # Backward pass and update optimizer
@@ -399,7 +414,7 @@ def main(spec_file):
                                         eos_token_id=tokenizer.eos_token_id,
                                         do_sample=True,
                                         top_k=50,
-                                        max_length=150,
+                                        max_new_tokens=150,
                                         top_p=0.50,
                                         num_return_sequences=5)
                     
@@ -425,7 +440,11 @@ def main(spec_file):
                     model.config.use_cache = False
 
                 model.train()
-        
+
+            # If we have reached the `max_steps`, break the loop
+            if training_args.max_steps > 0 and completed_steps >= training_args.max_steps:
+                break
+            
         # Evaluate the model at the end of each epoch if `do_eval=True`
         if training_args.do_eval:
             model.eval()
@@ -450,7 +469,6 @@ def main(spec_file):
             
             logger.info(f"Epoch {epoch + 1} | Perplexity: {perplexity} | Average Training Loss: {total_loss.item() / completed_steps} | Evaluation Loss: {eval_loss} | Total Energy Consumption: {tracker._total_energy.kWh}")
             
-        
             # Log the metrics to wandb if needed
             if extra_args.wandb_token is not None:
 
@@ -482,7 +500,11 @@ def main(spec_file):
         )
 
         if accelerator.is_main_process:
-            tokenizer.save_pretrained(training_args.output_dir)   
+            tokenizer.save_pretrained(training_args.output_dir)
+
+        # If we have reached the `max_steps`, break the loop
+        if training_args.max_steps > 0 and completed_steps >= training_args.max_steps:
+            break 
         
     # Resume codecarbon tracking
     tracker.stop()
@@ -513,7 +535,7 @@ def main(spec_file):
         top_k=30,
         top_p=0.3,
         temperature=0.3,
-        repetition_penalty=1.1,
+        repetition_penalty=1.2,
     )
 
     generation_config.save_pretrained(training_args.output_dir)

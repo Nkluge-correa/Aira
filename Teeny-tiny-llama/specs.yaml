@@ -1,6 +1,6 @@
 model_args:
-  model_to_train: "TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T"
-  tokenizer_name: "nicholasKluge/Teeny-tiny-llama-tokenizer"
+  model_to_train: "nicholasKluge/TeenyTinyLlama-162m"
+  tokenizer_name: "nicholasKluge/TeenyTinyLlama-162m"
   model_id: "162m"
   train_from_scratch: true
   vocab_size: 32000
@@ -19,8 +19,8 @@ model_args:
   low_cpu_mem_usage: null
   use_cache: true
 data_args:
-  dataset_name: "nicholasKluge/portuguese-corpus-v3-tokenized-small"
-  folder_path: "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-small/data"
+  dataset_name: "nicholasKluge/portuguese-corpus-v3"
+  folder_path: "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-large/data"
   dataset_split: "train"
   train_num_samples: 1831873
   val_num_samples: 18000
@@ -43,18 +43,19 @@ training_args:
   adam_epsilon: 0.00000001
   weight_decay: 0.01
   lr_scheduler_type: "cosine"
-  warmup_ratio: 0.01
+  warmup_steps: 5000
+  max_steps: 457969
   num_train_epochs: 1
   gradient_checkpointing: false
   seed: 42
   dataloader_pin_memory: true
   push_to_hub: true
   resume_from_checkpoint: null
-  hub_model_id: "nicholasKluge/Teeny-tiny-llama"
+  hub_model_id: "nicholasKluge/TeenyTinyLlama-162m"
   hub_token: null
 extra_args:
   wandb_token: null
-  logger_name: "Teeny-tiny-llama"
+  logger_name: "TeenyTinyLlama"
   wandb_log_steps: 1
   mixed_precision: 'no'
   checkpointing_steps: 22000

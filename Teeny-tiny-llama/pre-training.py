@@ -48,13 +48,12 @@ from transformers import (
 
 from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
 
-# Set these environment variables for improved performance in the Ampere GPUs
+# Set these environment variables for improved performance in modern Ampere GPUs (e.g., A100) 
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
 
 def main(spec_file):
 
-    spec_file = "specs.yaml"
     # Load the arguments from the spec file
     with open(spec_file, "r") as stream:
         all_kwargs = yaml.safe_load(stream)
@@ -97,7 +96,7 @@ def main(spec_file):
     if training_args.push_to_hub and training_args.hub_token is not None:
         if training_args.hub_model_id is not None:
             create_repo(
-                repo_id=f"{training_args.hub_model_id}-{model_args.model_id}", 
+                repo_id=f"{training_args.hub_model_id}", 
                 token=training_args.hub_token,
                 repo_type="model",
                 exist_ok=True,
@@ -121,7 +120,7 @@ def main(spec_file):
         }
 
         tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, **tokenizer_kwargs)
-        tokenizer.push_to_hub(training_args.hub_model_id + "-" + model_args.model_id, token=training_args.hub_token)
+        tokenizer.push_to_hub(training_args.hub_model_id, token=training_args.hub_token)
     
     else:
         raise ValueError("Need a tokenizer name to train on. Train a tokenizer from scratch usign the `train_sentencepiece.py`.")
@@ -155,7 +154,7 @@ def main(spec_file):
         # Load the configurations to create a new model
         configuration = AutoConfig.from_pretrained(model_args.model_to_train, **config_kwargs)
         model = AutoModelForCausalLM.from_config(configuration)
-        model.config.name_or_path = training_args.hub_model_id + "-" + model_args.model_id
+        model.config.name_or_path = training_args.hub_model_id
 
         # Resize the model's embedding layer to match the tokenizer's vocabulary size
         model.resize_token_embeddings(len(tokenizer))
@@ -200,7 +199,7 @@ def main(spec_file):
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )
         
-        model.config.name_or_path = training_args.hub_model_id + "-" + model_args.model_id
+        model.config.name_or_path = training_args.hub_model_id
         # Resize the model's embedding layer to match the tokenizer's vocabulary size
         model.resize_token_embeddings(len(tokenizer))
 
@@ -215,7 +214,6 @@ def main(spec_file):
     if training_args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
         model.config.use_cache = False
-
 
     # Load the datasets
     #
@@ -235,9 +233,8 @@ def main(spec_file):
             data_files={
                 "train": f'{data_args.folder_path}/train/*.parquet',
             },  
-            streaming=data_args.streaming,)['train']
+            streaming=data_args.streaming)['train']
     
-
     # We are not streaming the validation dataset, since it is small
     # and can be loaded into memory without any problems.
     eval_dataset = load_dataset(
@@ -245,7 +242,7 @@ def main(spec_file):
             data_files={
                 "test": f'{data_args.folder_path}/test/*.parquet',
             },
-            streaming=False,)['test']
+            streaming=False)['test']
 
     # Set the format to `torch`
     train_dataset = train_dataset.with_format("torch")
@@ -325,8 +322,8 @@ def main(spec_file):
     lr_scheduler = get_scheduler(
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
-        num_warmup_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps * training_args.warmup_ratio),
-        num_training_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps),
+        num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
+        num_training_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps,
     )
 
     # Prepare everything with `accelerator`.
@@ -359,7 +356,7 @@ def main(spec_file):
             name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
             resume="allow",
-            id=extra_args.logger_name.lower() + "-" + model_args.model_id,
+            id=model_args.model_id,
         )
 
     # Intialize codecarbon tracker
@@ -379,14 +376,14 @@ def main(spec_file):
 
     logger.info("***** Running training *****")
     logger.info(f"  Num examples = {data_args.train_num_samples + data_args.val_num_samples} | Training examples: {data_args.train_num_samples} | Validations examples: {data_args.val_num_samples}.")
-    logger.info(f"  Num Epochs = {training_args.num_train_epochs}")
+    logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch) if training_args.max_steps < 0 else training_args.num_train_epochs:.1f}")
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {training_args.gradient_accumulation_steps}")
-    logger.info(f"  Total optimization steps = {int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps)}")
+    logger.info(f"  Total optimization steps = {int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs)), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
+    progress_bar = tqdm(range(int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
@@ -427,7 +424,7 @@ def main(spec_file):
     # Start training loop and activate codecarbon tracking
     tracker.start()
 
-    for epoch in range(starting_epoch, math.ceil(training_args.num_train_epochs)):
+    for epoch in range(starting_epoch, training_args.num_train_epochs):
 
         # Since our dataset is a streaming dataset, we need to reset the epoch at each iteration
         model.train()
@@ -516,22 +513,22 @@ def main(spec_file):
                                     )
 
                                     create_branch(
-                                        repo_id=f"{training_args.hub_model_id}-{model_args.model_id}", 
+                                        repo_id=f"{training_args.hub_model_id}", 
                                         repo_type="model", 
                                         branch=f'step{completed_steps}'
                                     )
 
                                     api.upload_folder(
-                                        repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
+                                        repo_id=f"{training_args.hub_model_id}",
                                         folder_path=output_dir,
-                                        revision=f'step-{completed_steps}',
+                                        revision=f'step{completed_steps}',
                                     )
 
                                     api.upload_file(
                                         path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                                         path_in_repo=f"emissions.csv",
-                                        repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
-                                        revision=f'step-{completed_steps}',
+                                        repo_id=f"{training_args.hub_model_id}",
+                                        revision=f'step{completed_steps}',
                                     )
 
                                     logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
@@ -634,6 +631,10 @@ def main(spec_file):
                                 wandb.alert(title="Validation complete!",
                                     text=f"Current trainin stats -- Epoch: {epoch + 1} | Completed Steps: {completed_steps} | Evaluation Loss: {eval_loss} | Perplexity: {perplexity} | Total Energy Consumption: {tracker._total_energy.kWh}", 
                                     level="INFO")
+                
+            # If we have reached the `max_steps`, break the loop
+            if training_args.max_steps > 0 and completed_steps >= training_args.max_steps:
+                break
 
         # Check if evaluation is needed in the end of the epoch
         if training_args.do_eval:
@@ -730,32 +731,36 @@ def main(spec_file):
                         )
 
                         create_branch(
-                            repo_id=f"{training_args.hub_model_id}-{model_args.model_id}", 
+                            repo_id=f"{training_args.hub_model_id}", 
                             repo_type="model", 
                             branch=f'step{completed_steps}'
                         )
 
                         api.upload_folder(
-                            repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",  
+                            repo_id=f"{training_args.hub_model_id}",  
                             folder_path=output_dir,
-                            revision=f'epoch-{epoch + 1}',
+                            revision=f'step{completed_steps}',
                         )
 
                         api.upload_file(
                             path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                             path_in_repo=f"emissions.csv",
                             repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
-                            revision=f'epoch-{epoch + 1}',
+                            revision=f'step{completed_steps}',
                         )
                         
-                        logger.info(f"Checkpoint pushed to the hub at the end of epoch {epoch + 1}. Completed steps: {completed_steps}.")
+                        logger.info(f"Checkpoint pushed to the hub at step {completed_steps}.")
 
                     except Exception as e:
                         logger.warning(f"Error while uploading checkpoint to Hub: {e}")
+        
+        # If we have reached the `max_steps`, break the loop
+        if training_args.max_steps > 0 and completed_steps >= training_args.max_steps:
+            break
 
     # Resume codecarbon tracking
-    logger.info("Training complete!")
     tracker.stop()
+    logger.info("Training complete!")
 
     # Resume wandb tracking
     if extra_args.wandb_token is not None:
@@ -785,14 +790,14 @@ def main(spec_file):
             try:
                 
                 api.upload_folder(
-                    repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",  
+                    repo_id=f"{training_args.hub_model_id}",  
                     folder_path=output_dir,
                 )
                 
                 api.upload_file(
                     path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                     path_in_repo=f"emissions.csv",
-                    repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
+                    repo_id=f"{training_args.hub_model_id}",
                 )
 
                 logger.info(f"Final model and emissions pushed to the hub!")

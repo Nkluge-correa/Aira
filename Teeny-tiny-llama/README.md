@@ -1,19 +1,29 @@
-# Teeny-tiny-llama (Portuguese)
+# TeenyTinyLlama-162m
 
-<img src="./logo/teeny-tiny-llama-logo-0.jfif" alt="A little llama wearing a hat and a monocle on top of a red mushroom." height="400">
+<img src="./logo/logo-round.png" alt="A little llama wearing a mushroom hat and a monocle." height="200">
 
-The Teeny-tiny-llama is a compact language model based on the Llama 2 architecture ([Tiny-llama implementation](https://huggingface.co/TinyLlama)). This model is designed to deliver efficient natural language processing capabilities (in Portuguese-BR) while being resource-conscious.
+Given the lack of available monolingual foundational models in non-English languages and the fact that some of the most used and downloaded models by the community are those small enough to allow individual researchers and hobbyists to use them in low-resource environments, we developed the TeenyTinyLlama: _a series of small foundational models trained on Portuguese._
 
-Teeny-tiny-llama has been trained by leveraging scaling laws to determine the optimal number of tokens per parameter while also incorporating preference pre-training.
+TeenyTinyLlama is a compact language model based on the Llama 2 architecture ([TinyLlama implementation](https://huggingface.co/TinyLlama)). This model is designed to deliver efficient natural language processing capabilities while being resource-conscious.
 
-## Features
+Also, these models were trained by leveraging [scaling laws](https://arxiv.org/abs/2203.15556) to determine the optimal number of tokens per parameter while incorporating [preference pre-training](https://arxiv.org/abs/2112.00861).
 
-- Compact Design: Teeny-tiny-llama is a downsized version of the Llama 2 architecture, making it suitable for applications with limited computational resources.
+## Cite as 🤗
 
-- Optimized Scaling: The model has been pre-trained using scaling logs to identify the ideal token-to-parameter ratio.
+```latex
 
-- Custom Portuguese Dataset: Teeny-tiny-llama has been trained on a custom Portuguese dataset. This dataset includes diverse linguistic contexts and preference pre-training, allowing the model to better cater to Portuguese language nuances and be better suited for fine-tuning tasks like instruction-tuning.
+@misc{nicholas22llama,
+  doi = {10.5281/zenodo.6989727},
+  url = {https://huggingface.co/nicholasKluge/TeenyTinyLlama-162m},
+  author = {Nicholas Kluge Corrêa},
+  title = {TeenyTinyLlama},
+  year = {2023},
+  publisher = {HuggingFace},
+  journal = {HuggingFace repository},
+}
 
-## Current Status
+```
 
-We are waiting for the credits/funds that will allow for the training of our model. Training is supposed to start in December 2023.
+## License
+
+The TeenyTinyLlama-162m is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
