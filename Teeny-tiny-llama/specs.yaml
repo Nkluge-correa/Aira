@@ -1,15 +1,15 @@
 model_args:
-  model_to_train: "nicholasKluge/TeenyTinyLlama-162m"
-  tokenizer_name: "nicholasKluge/TeenyTinyLlama-162m"
-  model_id: "162m"
+  model_to_train: "nicholasKluge/TeenyTinyLlama-160m"
+  tokenizer_name: "nicholasKluge/TeenyTinyLlama-160m"
+  model_id: "460m"
   train_from_scratch: true
   vocab_size: 32000
-  hidden_size: 768
-  intermediate_size: 3072
+  hidden_size: 1024
+  intermediate_size: 4096
   max_position_embeddings: 2048
-  num_attention_heads: 12
-  num_hidden_layers: 12
-  num_key_value_heads: 12
+  num_attention_heads: 16
+  num_hidden_layers: 24
+  num_key_value_heads: 16
   output_hidden_states: false
   cache_dir: null
   use_fast_tokenizer: true
@@ -22,8 +22,8 @@ data_args:
   dataset_name: "nicholasKluge/portuguese-corpus-v3"
   folder_path: "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-large/data"
   dataset_split: "train"
-  train_num_samples: 1831873
-  val_num_samples: 18000
+  train_num_samples: 3033690
+  val_num_samples: 30000
   buffer_size: 10000
   streaming: false
   block_size: 2048
@@ -36,30 +36,30 @@ training_args:
   do_eval: true
   evaluation_strategy: "steps"
   eval_steps: 100000
-  per_device_train_batch_size: 4
-  per_device_eval_batch_size: 4
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 2
   gradient_accumulation_steps: 1
-  learning_rate: 0.0006
+  learning_rate: 0.0003
   adam_epsilon: 0.00000001
   weight_decay: 0.01
   lr_scheduler_type: "cosine"
-  warmup_steps: 5000
-  max_steps: 457969
-  num_train_epochs: 1
+  warmup_steps: 8000 
+  max_steps: 2375000
+  num_train_epochs: 2
   gradient_checkpointing: false
   seed: 42
   dataloader_pin_memory: true
   push_to_hub: true
   resume_from_checkpoint: null
-  hub_model_id: "nicholasKluge/TeenyTinyLlama-162m"
+  hub_model_id: "nicholasKluge/TeenyTinyLlama-460m"
   hub_token: null
 extra_args:
   wandb_token: null
   logger_name: "TeenyTinyLlama"
   wandb_log_steps: 1
   mixed_precision: 'no'
-  checkpointing_steps: 22000
-  sample_every: 22000
+  checkpointing_steps: 25000
+  sample_every: 25000
   generation_seeds:
     - "Meu nome é Nicholas e eu estudo na PUCRS, uma universidade privada de Porto Alegre, Rio Grande do Sul, Brasil. A PUCRS é"
     - "O Brasil é um país que possui muitas belezas naturais, como as cataratas do Iguaçu, o Cristo Redentor e o Pão de Açúcar. O Brasil também é conhecido por"

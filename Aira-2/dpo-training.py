@@ -83,9 +83,9 @@ def main(spec_file):
     # Load the tokenizer, the model, and the reference model
     if model_args.base_model is not None:
 
-        model = AutoModelForCausalLM.from_pretrained(model_args.base_model)
-        model_ref = AutoModelForCausalLM.from_pretrained(model_args.model_ref)
-        tokenizer = AutoTokenizer.from_pretrained(model_args.base_model)
+        model = AutoModelForCausalLM.from_pretrained(model_args.base_model, token=training_args.hub_token if training_args.hub_token else None)
+        model_ref = AutoModelForCausalLM.from_pretrained(model_args.model_ref, token=training_args.hub_token if training_args.hub_token else None)
+        tokenizer = AutoTokenizer.from_pretrained(model_args.base_model, token=training_args.hub_token if training_args.hub_token else None)
 
         model.config.use_cache = False
         

@@ -323,7 +323,7 @@ def main(spec_file):
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
         num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
-        num_training_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps,
+        num_training_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps < 0 else training_args.max_steps,
     )
 
     # Prepare everything with `accelerator`.
@@ -351,7 +351,7 @@ def main(spec_file):
         # Initialize wandb
         wandb.init(
             project=extra_args.logger_name, 
-            notes="Training the Teeny-Tiny-Llama model on a custom Portuguese-BR dataset.",
+            notes="Training the TeenyTinyLlama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
             name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
@@ -376,14 +376,14 @@ def main(spec_file):
 
     logger.info("***** Running training *****")
     logger.info(f"  Num examples = {data_args.train_num_samples + data_args.val_num_samples} | Training examples: {data_args.train_num_samples} | Validations examples: {data_args.val_num_samples}.")
-    logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch) if training_args.max_steps < 0 else training_args.num_train_epochs:.1f}")
+    logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch) if training_args.max_steps > 0 else training_args.num_train_epochs:.1f}")
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {training_args.gradient_accumulation_steps}")
-    logger.info(f"  Total optimization steps = {int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps}")
+    logger.info(f"  Total optimization steps = {int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps < 0 else training_args.max_steps}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps > 0 else training_args.max_steps), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
+    progress_bar = tqdm(range(int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps < 0 else training_args.max_steps), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
@@ -512,7 +512,7 @@ def main(spec_file):
                                         token=training_args.hub_token,
                                     )
 
-                                    create_branch(
+                                    api.create_branch(
                                         repo_id=f"{training_args.hub_model_id}", 
                                         repo_type="model", 
                                         branch=f'step{completed_steps}'
@@ -730,7 +730,7 @@ def main(spec_file):
                             token=training_args.hub_token,
                         )
 
-                        create_branch(
+                        api.create_branch(
                             repo_id=f"{training_args.hub_model_id}", 
                             repo_type="model", 
                             branch=f'step{completed_steps}'
@@ -739,13 +739,13 @@ def main(spec_file):
                         api.upload_folder(
                             repo_id=f"{training_args.hub_model_id}",  
                             folder_path=output_dir,
-                            revision=f'step{completed_steps}',
+                            revision=f'step{completed_steps}', 
                         )
 
                         api.upload_file(
                             path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                             path_in_repo=f"emissions.csv",
-                            repo_id=f"{training_args.hub_model_id}-{model_args.model_id}",
+                            repo_id=f"{training_args.hub_model_id}",
                             revision=f'step{completed_steps}',
                         )
                         

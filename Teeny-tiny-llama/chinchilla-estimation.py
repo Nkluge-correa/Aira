@@ -1,5 +1,5 @@
 def calculate_loss(N, D):
-    # Parameters from the Chinchilla paper
+    # Parameters from the [Chinchilla paper](https://arxiv.org/abs/2203.15556)
     A = 406.4
     B = 410.7
     E = 1.69
@@ -10,8 +10,8 @@ def calculate_loss(N, D):
     loss = (A / N**alpha) + (B / D**beta) + E
     return loss
 
-N = 711_000_000  # Number of parameters
-D = 14_220_000_000  # Number of tokens in the training dataset
+N = 468_372_288  # Number of parameters
+D = 9_720_000_000  # Number of tokens in the training dataset
 
 resulting_loss = calculate_loss(N, D)
 
