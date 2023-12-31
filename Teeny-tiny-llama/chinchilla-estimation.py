@@ -11,7 +11,7 @@ def calculate_loss(N, D):
     return loss
 
 N = 468_372_288  # Number of parameters
-D = 9_720_000_000  # Number of tokens in the training dataset
+D = 9_400_000_000  # Number of tokens in the training dataset
 
 resulting_loss = calculate_loss(N, D)
 

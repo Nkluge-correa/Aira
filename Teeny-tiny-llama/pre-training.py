@@ -316,14 +316,14 @@ def main(spec_file):
     )
     
     # Scheduler and math around the number of training steps.
-    num_update_steps_per_epoch = math.ceil(data_args.train_num_samples / (training_args.per_device_train_batch_size * training_args.gradient_accumulation_steps))
+    num_update_steps_per_epoch = math.ceil((data_args.train_num_samples / training_args.per_device_train_batch_size)  / training_args.gradient_accumulation_steps)
 
     # Create a scheduler to set the learning rate at each training step
     lr_scheduler = get_scheduler(
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
         num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
-        num_training_steps=int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps < 0 else training_args.max_steps,
+        num_training_steps=training_args.max_steps * training_args.gradient_accumulation_steps,
     )
 
     # Prepare everything with `accelerator`.
@@ -353,10 +353,10 @@ def main(spec_file):
             project=extra_args.logger_name, 
             notes="Training the TeenyTinyLlama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
-            name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
+            #name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
-            resume="allow",
-            id=model_args.model_id,
+            #resume="allow",
+            #id=model_args.model_id,
         )
 
     # Intialize codecarbon tracker
@@ -376,14 +376,14 @@ def main(spec_file):
 
     logger.info("***** Running training *****")
     logger.info(f"  Num examples = {data_args.train_num_samples + data_args.val_num_samples} | Training examples: {data_args.train_num_samples} | Validations examples: {data_args.val_num_samples}.")
-    logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch) if training_args.max_steps > 0 else training_args.num_train_epochs:.1f}")
+    logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch):.1f}")
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
     logger.info(f"  Gradient Accumulation steps = {training_args.gradient_accumulation_steps}")
-    logger.info(f"  Total optimization steps = {int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps < 0 else training_args.max_steps}")
+    logger.info(f"  Total optimization steps = {training_args.max_steps}")
 
     # Only show the progress bar once on each machine.
-    progress_bar = tqdm(range(int(math.ceil(data_args.train_num_samples / training_args.per_device_train_batch_size) * training_args.num_train_epochs * training_args.gradient_accumulation_steps) if training_args.max_steps < 0 else training_args.max_steps), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
+    progress_bar = tqdm(range(training_args.max_steps), disable=not accelerator.is_local_main_process, unit=" samples", desc="Training")
     completed_steps = 0
     starting_epoch = 0
 
