@@ -353,10 +353,10 @@ def main(spec_file):
             project=extra_args.logger_name, 
             notes="Training the TeenyTinyLlama model on a custom Portuguese-BR dataset.",
             tags=["Energy Consumption", "Language Modeling", "Portuguese"],
-            #name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
+            name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
-            #resume="allow",
-            #id=model_args.model_id,
+            resume="allow",
+            id=training_args.hub_model_id,
         )
 
     # Intialize codecarbon tracker
@@ -368,6 +368,11 @@ def main(spec_file):
         tracking_mode='machine',
         country_iso_code='DEU', # set to your country's ISO code
     )
+
+    # Initialize huggingface hub API if needed
+    if training_args.push_to_hub and training_args.hub_token is not None:
+        if training_args.hub_model_id is not None:
+            api = HfApi(token=training_args.hub_token)
 
     logger.info(f'Geo Location: ISO: {tracker._geo.country_iso_code} | Country: {tracker._geo.country_name} | Region : {tracker._geo.region}')
 
@@ -508,27 +513,31 @@ def main(spec_file):
 
                                     logger.info(f"""Checkpoint directory (`{output_dir}`) being uploaded to the hub.""")
 
-                                    api = HfApi(
-                                        token=training_args.hub_token,
-                                    )
+                                    #api.create_branch(
+                                    #    repo_id=f"{training_args.hub_model_id}", 
+                                    #    repo_type="model", 
+                                    #    branch=f'step{completed_steps}'
+                                    #)
 
-                                    api.create_branch(
-                                        repo_id=f"{training_args.hub_model_id}", 
-                                        repo_type="model", 
-                                        branch=f'step{completed_steps}'
+                                    create_repo(
+                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
+                                        token=training_args.hub_token,
+                                        repo_type="model",
+                                        exist_ok=True,
+                                        private=True
                                     )
 
                                     api.upload_folder(
-                                        repo_id=f"{training_args.hub_model_id}",
+                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",
                                         folder_path=output_dir,
-                                        revision=f'step{completed_steps}',
+                                    #    revision=f'step{completed_steps}',
                                     )
 
                                     api.upload_file(
                                         path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                                         path_in_repo=f"emissions.csv",
-                                        repo_id=f"{training_args.hub_model_id}",
-                                        revision=f'step{completed_steps}',
+                                        repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",
+                                    #    revision=f'step{completed_steps}',
                                     )
 
                                     logger.info(f"Checkpoint pushed to the hub at step {completed_steps}!")
@@ -551,6 +560,7 @@ def main(spec_file):
                                         do_sample=True,
                                         top_k=50,
                                         max_length=150,
+                                        repetition_penalty=1.2,
                                         top_p=0.50,
                                         num_return_sequences=5)
                     
@@ -726,27 +736,31 @@ def main(spec_file):
 
                         logger.info(f"""Checkpoint directory (`{output_dir}`) being uploaded to the hub.""")
 
-                        api = HfApi(
-                            token=training_args.hub_token,
-                        )
+                        #api.create_branch(
+                        #    repo_id=f"{training_args.hub_model_id}", 
+                        #    repo_type="model", 
+                        #    branch=f'step{completed_steps}'
+                        #)
 
-                        api.create_branch(
-                            repo_id=f"{training_args.hub_model_id}", 
-                            repo_type="model", 
-                            branch=f'step{completed_steps}'
+                        create_repo(
+                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}", 
+                            token=training_args.hub_token,
+                            repo_type="model",
+                            exist_ok=True,
+                            private=True
                         )
 
                         api.upload_folder(
-                            repo_id=f"{training_args.hub_model_id}",  
+                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",
                             folder_path=output_dir,
-                            revision=f'step{completed_steps}', 
+                        #    revision=f'step{completed_steps}',
                         )
 
                         api.upload_file(
                             path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
                             path_in_repo=f"emissions.csv",
-                            repo_id=f"{training_args.hub_model_id}",
-                            revision=f'step{completed_steps}',
+                            repo_id=f"{training_args.hub_model_id}-step-{completed_steps}",
+                        #    revision=f'step{completed_steps}',
                         )
                         
                         logger.info(f"Checkpoint pushed to the hub at step {completed_steps}.")
@@ -766,23 +780,19 @@ def main(spec_file):
     if extra_args.wandb_token is not None:
         wandb.alert(title="Training complete!", text="Training complete!", level="INFO")
         wandb.finish()
-
-    # Resume the tracking of the accelerator if needed
-    if extra_args.with_tracking:
-        accelerator.end_training()
-    
+  
     # Save the model checkpoint at the end of training, push it to the hub if needed
     if training_args.output_dir is not None:
 
         accelerator.wait_for_everyone()
         output_dir = os.path.join(training_args.output_dir, "final-checkpoint")
+        accelerator.save_state(output_dir)
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(
             output_dir, is_main_process=accelerator.is_main_process, save_function=accelerator.save
         )
 
         tokenizer.save_pretrained(output_dir)
-        generation_config.save_pretrained(output_dir)
 
     if training_args.push_to_hub and training_args.hub_token is not None:
         if training_args.hub_model_id is not None:

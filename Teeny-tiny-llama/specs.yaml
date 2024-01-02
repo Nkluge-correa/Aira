@@ -29,7 +29,7 @@ data_args:
   block_size: 2048
   overwrite_cache: false
   preprocessing_num_workers: null
-  sanity_check: false
+  sanity_check: true
 training_args:
   output_dir: "checkpoints"
   do_train: true
@@ -38,13 +38,13 @@ training_args:
   eval_steps: 100000
   per_device_train_batch_size: 2
   per_device_eval_batch_size: 2
-  gradient_accumulation_steps: 2 # 1 2
+  gradient_accumulation_steps: 2
   learning_rate: 0.0003
   adam_epsilon: 0.00000001
   weight_decay: 0.01
   lr_scheduler_type: "cosine"
-  warmup_steps: 20000 # 10000 20000 
-  max_steps: 2295000 # 1155000 2295000
+  warmup_steps: 10000
+  max_steps: 1155000
   num_train_epochs: 2
   gradient_checkpointing: false
   seed: 42
