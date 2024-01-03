@@ -266,7 +266,7 @@ def main(spec_file):
         # Change the `total_num_samples` to reflect the size of the training set and the validation set
         data_args.train_num_samples, data_args.val_num_samples = 400, 40
 
-    # Create the Training DataLoader and Evaluation DataLoade
+    # Create the Training DataLoader and Evaluation DataLoader
     if training_args.do_train and training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
@@ -356,7 +356,7 @@ def main(spec_file):
             name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-{time.strftime("%d-%m-%Y")}""",
             config=all_kwargs,
             resume="allow",
-            id=training_args.hub_model_id,
+            id=extra_args.logger_name + model_args.model_id,
         )
 
     # Intialize codecarbon tracker
