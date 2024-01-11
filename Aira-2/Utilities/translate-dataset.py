@@ -1,16 +1,44 @@
 import deep_translator
 import pandas as pd
 import argparse
-import tqdm 
+import tqdm
 import time
 import glob
 import os
 
-def main(input_file, column_name, batch_size, source_language, target_language):
+def truncate_sentence(sentence, max_length=4950):
+    return sentence[:max_length]
+
+def translate_and_save_batch(batch, source_lang, target_lang, count, output_folder):
+    try:
+        translated_sentences = deep_translator.GoogleTranslator(source=source_lang, target=target_lang).translate_batch(batch)
+        for sentence in translated_sentences:
+            with open(f'{output_folder}/{count}.md', 'a') as f:
+                f.write(sentence)
+            count += 1
+    except Exception as e:
+        print(e)
+        done = False
+        while not done:
+            try:
+                translated_sentences = deep_translator.GoogleTranslator(source=source_lang, target=target_lang).translate_batch(batch)
+
+                print("Server responded ...")
+                for sentence in translated_sentences:
+                    with open(f'{output_folder}/{count}.md', 'a') as f:
+                        f.write(sentence)
+                    count += 1
+                done = True
+            except Exception as e:
+                print(e)
+                time.sleep(5)
+                pass
+
+def main(input_file, column_name, batch_size, source_language, target_language, max_sentence_length=4950):
 
     source_lang = deep_translator.GoogleTranslator().get_supported_languages(as_dict=True)[source_language]
-    target_lang = deep_translator.GoogleTranslator().get_supported_languages(as_dict=True)[target_language] 
-    
+    target_lang = deep_translator.GoogleTranslator().get_supported_languages(as_dict=True)[target_language]
+
     if not os.path.exists(column_name):
         os.makedirs(column_name)
 
@@ -19,37 +47,19 @@ def main(input_file, column_name, batch_size, source_language, target_language):
     df = pd.read_parquet(input_file)
 
     texts = df[column_name].tolist()[current_count:]
-    
-    batches = []
 
+    batches = []
     count = 0 + current_count
 
-    for i in range(0, len(texts), batch_size):
-        batch = texts[i:i + batch_size]
-        batches.append(batch)
+    for text in texts:
+        if len(text) > max_sentence_length:
+            text = truncate_sentence(text, max_sentence_length)
+        batches.append(text)
 
-    for batch in tqdm.tqdm(batches):
-        try:
-            translated_sentences = deep_translator.GoogleTranslator(source=source_lang, target=target_lang).translate_batch (batch)
-            for sentence in translated_sentences:
-                with open(f'{column_name}/{count}.md', 'a') as f:
-                    f.write(sentence)
-                count += 1
-        except:
-            print("Error, server offline...")
-            done = False
-            while not done:
-                try:
-                    translated_sentences = deep_translator.ChatGptTranslator(api_key="your_api_key", target=target_language).translate_batch(batch)
-                    print("Server responded ...")
-                    for sentence in translated_sentences:
-                        with open(f'{column_name}/{count}.md', 'a') as f:
-                            f.write(sentence)
-                        count += 1
-                    done = True
-                except:
-                    time.sleep(5)
-                    pass
+    for i in tqdm.tqdm(range(0, len(batches), batch_size)):
+        batch = batches[i:i + batch_size]
+        translate_and_save_batch(batch, source_lang, target_lang, count, column_name)
+        count += len(batch)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
@@ -58,9 +68,11 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=20, help="Batch size")
     parser.add_argument('--source_language', type=str, default='english', help=f"Source language: {deep_translator.GoogleTranslator().get_supported_languages(as_dict=True)}")
     parser.add_argument('--target_language', type=str, default='portuguese', help=f"Target language: {deep_translator.GoogleTranslator().get_supported_languages(as_dict=True)}")
+    parser.add_argument('--max_sentence_length', type=int, default=4950, help="Maximum length of a sentence before truncation")
 
     args = parser.parse_args()
 
-    main(args.input_file, args.column_name, args.batch_size, args.source_language, args.target_language)
+    main(args.input_file, args.column_name, args.batch_size, args.source_language, args.target_language, args.max_sentence_length)
 
-# example: python translate-dataset.py --input_file train.parquet --column_name prompt --batch_size 20 --source_language english --target_language portuguese
+# how to run:
+# python translate-dataset.py --input_file ultrachat50K_en.parquet --column_name completion --batch_size 20 --source_language english --target_language portuguese --max_sentence_length 4950

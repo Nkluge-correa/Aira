@@ -69,11 +69,11 @@ intro = """
 
 Desenvolvemos os nossos chatbots de conversação de domínio aberto através de ajuste fino por instruções. Esta abordagem tem muitas limitações. Apesar de podermos criar um chatbot capaz de responder a perguntas sobre qualquer assunto, é difícil forçar o modelo a produzir respostas de boa qualidade. E por boa, queremos dizer texto **factual** e **não tóxico**. Isto leva-nos a dois dos problemas mais comuns quando lidando com modelos generativos utilizados em aplicações de conversação:
 
-- **Alucinações:** Esse modelo pode produzir conteúdo que pode ser confundido com a verdade, mas que é, de fato, enganoso ou totalmente falso, ou seja, alucinação.
+**Alucinações:** Esse modelo pode produzir conteúdo que pode ser confundido com a verdade, mas que é, de fato, enganoso ou totalmente falso, ou seja, alucinação.
 
-- **Vieses e toxicidade:** Esse modelo herda os estereótipos sociais e históricos dos dados usados para treiná-lo. Devido a esses vieses, o modelo pode produzir conteúdo tóxico, ou seja, nocivo, ofensivo ou prejudicial a indivíduos, grupos ou comunidades.
+**Vieses e toxicidade:** Esse modelo herda os estereótipos sociais e históricos dos dados usados para treiná-lo. Devido a esses vieses, o modelo pode produzir conteúdo tóxico, ou seja, nocivo, ofensivo ou prejudicial a indivíduos, grupos ou comunidades.
 
-- **Repetição e verbosidade:** O modelo pode ficar preso em loops de repetição (especialmente se a penalidade de repetição durante as gerações for definida com um valor escasso) ou produzir respostas prolixas sem relação com o prompt que recebeu.
+**Repetição e verbosidade:** O modelo pode ficar preso em loops de repetição (especialmente se a penalidade de repetição durante as gerações for definida com um valor escasso) ou produzir respostas prolixas sem relação com o prompt que recebeu.
 
 ## Uso Intendido
 

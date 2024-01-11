@@ -568,4 +568,4 @@ if __name__ == "__main__":
     main(args.spec_file)
 
 # How to run:
-# python supervised-fine-tuning.py --spec-file supervised-fine-specs.yaml
+# python supervised-fine-tuning.py --spec-file supervised-fine-tuning-specs.yaml

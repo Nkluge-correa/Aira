@@ -107,9 +107,9 @@ def main(args):
     logger.info(f"Step {args.completed_steps} | Perplexity: {perplexity} | Evaluation Loss: {eval_loss} | Total Energy Consumption: {tracker._total_energy.kWh + args.total_energy_consumption}")
     
     # print the results as a markdown table
-    print("| Step | Perplexity | Evaluation Loss | Total Energy Consumption |")
-    print("| ---- | ---------- | --------------- |--------------------- --- |")
-    print(f"| {args.completed_steps} | {perplexity} | {eval_loss} | {tracker._total_energy.kWh + args.total_energy_consumption} |")
+    print("| Step | Evaluation Loss | Perplexity | Total Energy Consumption |")
+    print("| ---- | --------------- | ---------- |------------------------- |")
+    print(f"| {args.completed_steps} | {eval_loss} | {perplexity} | {tracker._total_energy.kWh + args.total_energy_consumption} |")
     
     tracker.stop()
 
@@ -126,4 +126,4 @@ if __name__ == "__main__":
     main(args)
 
 # How to run this script:
-# python evaluation.py --logger_name "TeenyTinyLlama" --model_checkpoint_path "TeenyTinyLlama-460m" --revision "step100000" --eval_folder_path "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-large/data" --per_device_eval_batch_size 16 --completed_steps 100000 --total_energy_consumption 9.149488284015176
+# python evaluation.py --logger_name "TeenyTinyLlama" --model_checkpoint_path "nicholasKluge/TeenyTinyLlama-460m" --revision "main" --eval_folder_path "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-large/data" --per_device_eval_batch_size 2 --completed_steps 200000 --total_energy_consumption 18.5564449
