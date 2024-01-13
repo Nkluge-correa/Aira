@@ -1,5 +1,5 @@
 model_args:
-  base_model: "nicholasKluge/TeenyTinyLlama-162m"
+  base_model: "gpt2"
   use_fast: true
   output_hidden_states: false
   cache_dir: null
@@ -7,7 +7,7 @@ model_args:
   trust_remote_code: false
   low_cpu_mem_usage: false
   bos_token: '<|startofinstruction|>'
-  sep_token: '<s/s>'
+  sep_token: '<|endofinstruction|>'
   eos_token: '<|endofcompletion|>'
   pad_token: '<|pad|>'
   unk_token: '<|unk|>'
@@ -16,7 +16,7 @@ data_args:
     dataset_split: "portuguese"
     validation_split_percentage: 0.1
     streaming: false
-    max_length: null
+    max_length: 600
     preprocessing_num_workers: null
     sanity_check: false
 training_args:
@@ -32,16 +32,15 @@ training_args:
   learning_rate: 0.00005
   adam_epsilon: 0.00000001
   lr_scheduler_type: "cosine"
-  warmup_steps: 10
+  warmup_steps: 100
   seed: 42
-  max_steps: 100
   dataloader_pin_memory: true
   hub_token: null
   push_to_hub: true
-  hub_model_id: "nicholasKluge/TeenyTinyLlama-162m-Instruct-2"
+  hub_model_id: "nicholasKluge/Aira-2-portuguese-124M"
 extra_args:
   project_name: "Aira-2"
   wandb_token: null
   wandb_log_steps: 1
-  sample_every: 20
+  sample_every: 500
   mixed_precision: 'no'

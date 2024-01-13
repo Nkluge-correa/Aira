@@ -12,8 +12,6 @@ class ModelArguments:
         metadata={
             "help": (
                 "The model checkpoint for weights initialization. "
-                "Models that have the same embedding size as the default one (768), are: "
-                "`EleutherAI/pythia-160m-deduped`, `gpt2`, and `distilgpt2`."
             )
         },
     )
@@ -23,7 +21,7 @@ class ModelArguments:
         metadata={
             "help": (
                 "The model id of the model to train.",
-                "Options are: `162m`, `334m`, and `606m`.",
+                "Options are: `160m` and `460m`.",
                 "Caution: different `model_id` require different model configurations."
             )    
         },
@@ -49,9 +47,8 @@ class ModelArguments:
         metadata={
             "help": (
                 "The hidden size of the model. Only used if `train_from_scratch` is set to `True`."
-                "For `model_id=162m`, `hidden_size` should be set to `768`."
-                "For `model_id=334m`, `hidden_size` should be set to `1024`."
-                "For `model_id=606m`, `hidden_size` should be set to `1280`."
+                "For `model_id=160m`, `hidden_size` should be set to `768`."
+                "For `model_id=460m`, `hidden_size` should be set to `1024`."
             )
         },
     )
@@ -61,9 +58,8 @@ class ModelArguments:
         metadata={
             "help": (
                 "The intermediate size of the model. Only used if `train_from_scratch` is set to `True`."
-                "For `model_id=162m`, `intermediate_size` should be set to `3072`."
-                "For `model_id=334m`, `intermediate_size` should be set to `4096`."
-                "For `model_id=606m`, `intermediate_size` should be set to `5128`."
+                "For `model_id=160m`, `intermediate_size` should be set to `3072`."
+                "For `model_id=460m`, `intermediate_size` should be set to `4096`."
             )
         },
     )
@@ -78,9 +74,8 @@ class ModelArguments:
         metadata={
             "help": (
                 "The number of attention heads used by the model. Only used if `train_from_scratch` is set to `True`."
-                "For `model_id=162m`, `num_attention_heads` should be set to `12`."
-                "For `model_id=334m`, `num_attention_heads` should be set to `16`."
-                "For `model_id=606m`, `num_attention_heads` should be set to `20`."
+                "For `model_id=160m`, `num_attention_heads` should be set to `12`."
+                "For `model_id=460m`, `num_attention_heads` should be set to `16`."
             )
         },
     )
@@ -90,9 +85,8 @@ class ModelArguments:
         metadata={
             "help": (
                 "The number of hidden layers used by the model. Only used if `train_from_scratch` is set to `True`."
-                "For `model_id=162m`, `num_hidden_layers` should be set to `12`."
-                "For `model_id=334m`, `num_hidden_layers` should be set to `16`."
-                "For `model_id=606m`, `num_hidden_layers` should be set to `20`."
+                "For `model_id=160m`, `num_hidden_layers` should be set to `12`."
+                "For `model_id=460m`, `num_hidden_layers` should be set to `24`."
             )    
         },
     )
@@ -102,9 +96,8 @@ class ModelArguments:
         metadata={
             "help": (
                 "The number of key-value attention heads used by the model. Only used if `train_from_scratch` is set to `True`."
-                "For `model_id=162m`, `num_key_value_heads` should be set to `12`."
-                "For `model_id=334m`, `num_key_value_heads` should be set to `16`."
-                "For `model_id=606m`, `num_key_value_heads` should be set to `20`."
+                "For `model_id=160m`, `num_key_value_heads` should be set to `12`."
+                "For `model_id=460m`, `num_key_value_heads` should be set to `16`."
             )
         },
     )

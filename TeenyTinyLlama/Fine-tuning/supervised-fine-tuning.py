@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import math
 import yaml
 import torch
@@ -8,9 +9,10 @@ import random
 import logging
 import argparse
 from tqdm import tqdm
+from datasets import load_dataset
+from tokenizers import AddedToken
 from codecarbon import EmissionsTracker
 from torch.utils.data import DataLoader
-from datasets import load_dataset, Dataset
 from huggingface_hub import create_repo, HfApi
 
 from transformers import (
@@ -62,7 +64,7 @@ def main(spec_file):
             raise ValueError("No model id provided. Try running with `hub_model_id=your-user-name/your-model-name`")   
 
     # Set the logger
-    logger = get_logger(extra_args.project_name)
+    logger = get_logger(extra_args.logger_name)
 
     # Create configurations for the logger
     logging.basicConfig(
@@ -93,7 +95,6 @@ def main(spec_file):
             split=data_args.dataset_split,
             token=training_args.hub_token if training_args.hub_token else None,
             cache_dir=model_args.cache_dir,
-            streaming=data_args.streaming,
         )
 
         # shuffle the dataset
@@ -104,12 +105,8 @@ def main(spec_file):
             dataset = dataset.select(range(100))
 
             logger.info(f"Sanity check: using only the first 100 examples")
-        
-        dataset_df = dataset.to_pandas()
 
-        column_names = dataset_df.columns.tolist()
-
-        logger.info(f"Loaded dataset: {data_args.dataset_name} | Split: {data_args.dataset_split} | Number of examples: {len(dataset_df):,}")
+        logger.info(f"Loaded dataset: {data_args.dataset_name} | Split: {data_args.dataset_split} | Number of examples: {len(dataset):,}")
 
     else:
 
@@ -124,15 +121,24 @@ def main(spec_file):
                 "revision": model_args.model_revision,
                 "token": training_args.hub_token,
                 "trust_remote_code": model_args.trust_remote_code,
-                "bos_token": model_args.bos_token,
-                "sep_token": model_args.sep_token,
-                "pad_token": model_args.pad_token,
-                "unk_token": model_args.unk_token,
-                "eos_token": model_args.eos_token,
             }
 
         # Load the tokenizer of the base model
         tokenizer = AutoTokenizer.from_pretrained(model_args.base_model, **tokenizer_kwargs)
+
+        # Add special tokens
+        special_tokens_dict = {
+            "additional_special_tokens": [
+                AddedToken(model_args.boi_token, lstrip=False, rstrip=False, normalized=True, single_word=False),
+                AddedToken(model_args.eoi_token, lstrip=False, rstrip=False, normalized=True, single_word=False),
+            ]
+        }
+        tokenizer.add_special_tokens(special_tokens_dict)
+
+        logger.info(f"Special tokens added to the tokenizer: {tokenizer.all_special_tokens}")
+        
+        # Add chat template to the tokenizer
+        tokenizer.chat_template = model_args.chat_template
 
         # Set the configuration for the `base_model`
         config_kwargs = {
@@ -156,14 +162,7 @@ def main(spec_file):
                 trust_remote_code=model_args.trust_remote_code,
                 low_cpu_mem_usage=model_args.low_cpu_mem_usage,
             )
-        
-        # Add special tokens to the model config
-        model.config.bos_token_id = tokenizer.bos_token_id
-        model.config.sep_token_id = tokenizer.sep_token_id
-        model.config.pad_token_id = tokenizer.pad_token_id
-        model.config.unk_token_id = tokenizer.unk_token_id
-        model.config.eos_token_id = tokenizer.eos_token_id
-        
+              
         # Resize the token embeddings of the model to match the tokenizer
         model.resize_token_embeddings(len(tokenizer))
 
@@ -182,22 +181,14 @@ def main(spec_file):
 
         raise ValueError("No base model provided. Try running with `base_model=gpt2`")
 
-    # Add the `demonstrations` column to the dataset
-    dataset_df['demonstrations'] = tokenizer.bos_token + dataset_df['prompt'] + tokenizer.sep_token + dataset_df['completion'] + tokenizer.eos_token
-
-    # Get the maximum length of the demonstrations if it is not provided
-    if data_args.max_length is None:
-        dataset_df['length'] = dataset_df['demonstrations'].apply(lambda x: len(tokenizer.encode(x)))
-        data_args.max_length = dataset_df['length'].max()
-        dataset_df.drop(columns=['length'], inplace=True)    
-        logger.info(f"Maximum length of demonstrations set to `None`. Using max_length of demonstrations: {data_args.max_length}")
-
-    # Turn the pandas dataframe into a HuggingFace Dataset
-    dataset = Dataset.from_pandas(dataset_df)
+    
+    # Create a formated Chat column
+    dataset = dataset.map(lambda x: {"formatted_conversations": tokenizer.apply_chat_template(x["conversations"], tokenize=False, add_generation_prompt=False)})
+    column_names = dataset.column_names
 
     # Tokenize all texts in the dataset
     def tokenize_function(examples):
-        return tokenizer(examples['demonstrations'],
+        return tokenizer(examples['formatted_conversations'],
             add_special_tokens=False,
             truncation=True,
             max_length=data_args.max_length,
@@ -330,18 +321,19 @@ def main(spec_file):
 
         # Initialize wandb
         wandb.init(
-            project=extra_args.project_name, 
-            notes="Fine tuning base model on the AIRA dataset",
-            tags=["Alignment", "Fine-tuning", "Aira"],
-            config=all_kwargs
+            project=extra_args.logger_name, 
+            notes="Fine tuning TeenyTinyLlama",
+            tags=["Alignment", "Fine-tuning", "Energy Consumption", "Language Modeling", "Portuguese"],
+            config=all_kwargs,
+            name=f"""{extra_args.logger_name.lower()}-{model_args.model_id}-Chat-{time.strftime("%d-%m-%Y")}""",
         )
 
     # Intialize codecarbon tracker
     tracker = EmissionsTracker(
-        project_name=extra_args.project_name,
+        project_name=extra_args.logger_name,
         log_level="critical", # set to "critical" to silence codecarbon
         output_dir=training_args.output_dir,
-        output_file=f"{extra_args.project_name}.csv",
+        output_file=f"{extra_args.logger_name}.csv",
         tracking_mode='machine'
     )
 
@@ -410,12 +402,11 @@ def main(spec_file):
 
                     model.eval()
 
-                    inputs = tokenizer(tokenizer.bos_token + dataset_df.prompt.sample().iloc[0] + tokenizer.sep_token, add_special_tokens=False, return_tensors="pt").to('cuda:0')
+                    inputs = tokenizer.apply_chat_template( [{"role": "user", "content" : random.choice(extra_args.generation_seeds)}], tokenize=False, add_generation_prompt=True)
+
+                    inputs = tokenizer(inputs, add_special_tokens=False, return_tensors="pt").to('cuda:0')
                         
                     sample_outputs = model.generate(**inputs,
-                                        bos_token_id=tokenizer.bos_token_id,
-                                        pad_token_id=tokenizer.pad_token_id,
-                                        eos_token_id=tokenizer.eos_token_id,
                                         do_sample=True,
                                         top_k=50,
                                         max_new_tokens=150,
@@ -444,7 +435,7 @@ def main(spec_file):
                     model.config.use_cache = False
 
                 model.train()
-
+            
         # Evaluate the model at the end of each epoch if `do_eval=True`
         if training_args.do_eval:
             model.eval()
@@ -521,7 +512,7 @@ def main(spec_file):
         eos_token_id=tokenizer.eos_token_id,
         pad_token_id=tokenizer.pad_token_id,
         unk_token_id=tokenizer.unk_token_id,
-        max_new_tokens=512,
+        max_new_tokens=model.config.max_position_embeddings,
         min_length=0,
         do_sample=True,
         use_cache=False,

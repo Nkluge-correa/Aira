@@ -50,7 +50,7 @@ training_args:
   seed: 42
   dataloader_pin_memory: true
   push_to_hub: true
-  resume_from_checkpoint: "/content/checkpoints/step_750001"
+  resume_from_checkpoint: "/content/checkpoints/step_950001"
   hub_model_id: "nicholasKluge/TeenyTinyLlama-460m"
   hub_token: null
 extra_args:

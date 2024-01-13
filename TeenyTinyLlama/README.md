@@ -1,6 +1,6 @@
-# TeenyTinyLlama-162m
+# TeenyTinyLlama
 
-<img src="./logo/logo-round.png" alt="A little llama wearing a mushroom hat and a monocle." height="200">
+<img src="./logo/logo.png" alt="A little llama wearing a mushroom hat and a monocle." height="200">
 
 Given the lack of available monolingual foundational models in non-English languages and the fact that some of the most used and downloaded models by the community are those small enough to allow individual researchers and hobbyists to use them in low-resource environments, we developed the TeenyTinyLlama: _a series of small foundational models trained on Portuguese._
 
@@ -14,10 +14,10 @@ Also, these models were trained by leveraging [scaling laws](https://arxiv.org/a
 
 @misc{nicholas22llama,
   doi = {10.5281/zenodo.6989727},
-  url = {https://huggingface.co/nicholasKluge/TeenyTinyLlama-162m},
+  url = {https://huggingface.co/nicholasKluge/TeenyTinyLlama-160m},
   author = {Nicholas Kluge Corrêa},
   title = {TeenyTinyLlama},
-  year = {2023},
+  year = {2024},
   publisher = {HuggingFace},
   journal = {HuggingFace repository},
 }
@@ -26,4 +26,4 @@ Also, these models were trained by leveraging [scaling laws](https://arxiv.org/a
 
 ## License
 
-The TeenyTinyLlama-162m is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+The TeenyTinyLlama is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.

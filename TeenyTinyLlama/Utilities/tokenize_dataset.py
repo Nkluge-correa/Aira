@@ -107,4 +107,4 @@ if __name__ == "__main__":
     main(parser.parse_args())
 
 # How to run:
-# python tokenize_dataset.py --dataset-name nicholasKluge/portuguese-corpus-v2 --dataset-split train --tokenizer-name nicholasKluge/Teeny-tiny-llama-tokenizer --block-size 2048 --test-size 25000 --shuffle True --seed 42 --token <your_token>
+# python tokenize_dataset.py --dataset-name nicholasKluge/portuguese-corpus-v3 --dataset-split train --tokenizer-name nicholasKluge/TeenyTinyLlama-460m --block-size 2048 --test-size 25000 --shuffle True --seed 42 --token <your_token>

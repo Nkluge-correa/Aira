@@ -126,4 +126,4 @@ if __name__ == "__main__":
     main(args)
 
 # How to run this script:
-# python evaluation.py --logger_name "TeenyTinyLlama" --model_checkpoint_path "nicholasKluge/TeenyTinyLlama-460m" --revision "main" --eval_folder_path "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-large/data" --per_device_eval_batch_size 2 --completed_steps 200000 --total_energy_consumption 18.5564449
+# python evaluation.py --logger_name "TeenyTinyLlama" --model_checkpoint_path "nicholasKluge/TeenyTinyLlama-460m" --revision "main" --eval_folder_path "/portuguese-corpus-v3-tokenized-large/data" --per_device_eval_batch_size 2 --completed_steps 200000 --total_energy_consumption 18.5564449
