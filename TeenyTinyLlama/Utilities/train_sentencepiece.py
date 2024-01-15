@@ -1,5 +1,4 @@
 import json
-import yaml
 import argparse
 from tqdm import tqdm
 
@@ -7,27 +6,13 @@ from datasets import load_dataset
 from tokenizers import SentencePieceBPETokenizer
 from transformers import LlamaTokenizerFast, TrainingArguments, AutoTokenizer
 
-from specifications import ModelArguments, DataTrainingArguments, ExtraArguments
-
-def main(spec_file):
-    
-    # Load the arguments from the spec file
-    with open(spec_file, "r") as stream:
-        kwargs = yaml.safe_load(stream)
-    
-    # Get the arguments for the model, data, training, and extra
-    model_args = ModelArguments(**kwargs['model_args'])
-    data_args = DataTrainingArguments(**kwargs['data_args'])
-    training_args = TrainingArguments(**kwargs['training_args'])
-    extra_args = ExtraArguments(**kwargs['extra_args'])
+def main(args):
 
     # Load the dataset from the huggingface Hub and prepare it for training
-    if data_args.dataset_name is not None and not data_args.dataset_is_tokenized:
-        dataset = load_dataset(data_args.dataset_name, 
-            split=data_args.dataset_split, 
-            token=training_args.hub_token if training_args.hub_token else None,
-            cache_dir=model_args.cache_dir,
-            streaming=data_args.streaming,
+    if args.dataset_name is not None:
+        dataset = load_dataset(args.dataset_name, 
+            split=args.dataset_split, 
+            token=args.hub_token if args.hub_token else None,
         )
     else:
         raise ValueError("No dataset name provided or dataset is already tokenized") 
@@ -35,8 +20,8 @@ def main(spec_file):
     # Remove non text columns
     dataset = dataset.remove_columns([col for col in dataset.column_names if col != "text"])
 
-    # select 2_000_000 random samples from the dataset
-    dataset = dataset.shuffle(seed=training_args.seed).select(range(2_000_000))
+    # select `num_samples` from the dataset
+    dataset = dataset.shuffle(seed=42).select(range(arg.num_samples))
 
     # Create a SentencePieceBPETokenizer
     tokenizer = SentencePieceBPETokenizer()
@@ -44,23 +29,23 @@ def main(spec_file):
     # Train the SentencePieceBPETokenizer on the dataset
     tokenizer.train_from_iterator(
         iterator=dataset['text'],
-        vocab_size=model_args.vocab_size,
+        vocab_size=args.vocab_size,
         show_progress=True,
         special_tokens=["<unk>", "<s>", "</s>",  "<pad>"],
     )
 
     # Save the tokenizer
-    tokenizer.save(extra_args.logger_name + "-sentencepiece-tokenizer.json", pretty=True)
+    tokenizer.save("new-sentencepiece-tokenizer.json", pretty=True)
 
     # Load reference tokenizer
-    if model_args.tokenizer_name is not None and training_args.hub_token is not None:
-        reference_tokenizer = AutoTokenizer.from_pretrained(model_args.tokenizer_name, token=training_args.hub_token if training_args.hub_token else None)
+    if args.reference_tokenizer is not None and args.hub_token is not None:
+        reference_tokenizer = AutoTokenizer.from_pretrained(args.reference_tokenizer, token=args.hub_token if args.hub_token else None)
         reference_tokenizer.save_pretrained("reference-tokenizer")
     else:
-        raise ValueError("No tokenizer name provided or no hub token provided. Try using `tokenizer_name=meta-llama/Llama-2-7b`")
+        raise ValueError("No tokenizer name provided or no hub token provided. Try using `--reference_tokenizer 'meta-llama/Llama-2-7b-hf'")
 
     # Read and dump the json file for the new tokenizer and the reference tokenizer
-    with open(extra_args.logger_name + "-sentencepiece-tokenizer.json") as f:
+    with open("new-sentencepiece-tokenizer.json") as f:
         new_llama_tokenizer_json = json.load(f)
 
     with open("reference-tokenizer/tokenizer.json") as f:
@@ -75,13 +60,12 @@ def main(spec_file):
     new_llama_tokenizer_json["model"]['byte_fallback'] = reference_tokenizer_json["model"]['byte_fallback']
 
     # Dump the new tokenizer's config
-    with open(extra_args.logger_name + "-sentencepiece-tokenizer.json", "w") as f:
+    with open("new-sentencepiece-tokenizer.json", "w") as f:
         json.dump(new_llama_tokenizer_json, f, indent=2, ensure_ascii=False)
 
     # Load the new tokenizer as a LlamaTokenizerFast
     new_llama_tokenizer = LlamaTokenizerFast(
-        tokenizer_file=extra_args.logger_name + "-sentencepiece-tokenizer.json",
-        name_or_path=training_args.hub_model_id + "-tokenizer",
+        tokenizer_file="new-sentencepiece-tokenizer.json",
         unk_token="<unk>",
         unk_token_id=0,
         bos_token="<s>",
@@ -91,17 +75,51 @@ def main(spec_file):
         pad_token="<pad>",
         pad_token_id=3,
         padding_side="right",
-        max_model_input_sizes={extra_args.logger_name: data_args.block_size},
     )
 
     # Save the new tokenizer
-    new_llama_tokenizer.save_pretrained(extra_args.logger_name + "-tokenizer")
+    new_llama_tokenizer.save_pretrained("new-llama-tokenizer")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a new Llama tokenizer")
-    parser.add_argument("--spec-file", help="Path to the spec YAML file")
+    parser.add_argument(
+        "--dataset_name",
+        type=str,
+        default=None,
+        help="The name of the dataset to be tokenized",
+    )
+    parser.add_argument(
+        "--dataset_split",
+        type=str,
+        default=None,
+        help="The split of the dataset to be tokenized",
+    )
+    parser.add_argument(
+        "--hub_token",
+        type=str,
+        default=None,
+        help="The token to access the dataset on the hub",
+    )
+    parser.add_argument(
+        "--reference_tokenizer",
+        type=str,
+        default=None,
+        help="The name of the reference tokenizer to use",
+    )
+    parser.add_argument(
+        "--num_samples",
+        type=int,
+        default=None,
+        help="Number of samples to use from the dataset",
+    )
+    parser.add_argument(
+        "--vocab_size",
+        type=int,
+        default=None,
+        help="Vocabulary size to use for the tokenizer",
+    )
     args = parser.parse_args()
-    main(args.spec_file)
+    main(args)
 
 # How to run:
-# python train_sentencepiece.py --spec-file specs.yaml
+# python train_sentencepiece.py --dataset_name "NeelNanda/pile-10k" --dataset_split "train" --hub_token "hf_..." --reference_tokenizer "meta-llama/Llama-2-7b-hf" --num_samples 2000000 --vocab_size 32000

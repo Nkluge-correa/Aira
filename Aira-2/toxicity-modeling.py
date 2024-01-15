@@ -101,16 +101,16 @@ def main(spec_file):
     def preprocess(examples):
         kwargs = {"padding": "max_length", "truncation": True, "max_length": data_args.max_length, "return_tensors": "pt"}
 
-        non_toxic_response = examples["non_toxic_response"]
-        toxic_response = examples["toxic_response"]
+        prompt_plus_chosen_response = examples["instruction"] + tokenizer.sep_token + examples["chosen_response"]
+        prompt_plus_rejected_response = examples["instruction"] + tokenizer.sep_token + examples["rejected_response"]
 
         # Then tokenize these modified fields.
-        tokens_non_toxic_response = tokenizer.encode_plus(non_toxic_response, **kwargs)
-        tokens_toxic_response = tokenizer.encode_plus(toxic_response, **kwargs)
+        tokens_chosen = tokenizer.encode_plus(prompt_plus_chosen_response, **kwargs)
+        tokens_rejected = tokenizer.encode_plus(prompt_plus_rejected_response, **kwargs)
 
         return {
-            "input_ids_chosen": tokens_non_toxic_response["input_ids"][0], "attention_mask_chosen": tokens_non_toxic_response["attention_mask"][0],
-            "input_ids_rejected": tokens_toxic_response["input_ids"][0], "attention_mask_rejected": tokens_toxic_response["attention_mask"][0]
+            "input_ids_chosen": tokens_chosen["input_ids"][0], "attention_mask_chosen": tokens_chosen["attention_mask"][0],
+            "input_ids_rejected": tokens_rejected["input_ids"][0], "attention_mask_rejected": tokens_rejected["attention_mask"][0]
         }
     
     # Apply preprocessing function on the dataset

@@ -52,6 +52,8 @@ In our [demo](https://nkluge-correa.github.io/Aira/), we provide the user with a
 
 ## Limitations
 
-🤥 Generative models can perpetuate the generation of pseudo-informative content, that is, false information that may appear truthful.
+- **Hallucinations:** This model can produce content that can be mistaken for truth but is, in fact, misleading or entirely false, i.e., hallucination.
 
-🤬 In certain types of tasks, generative models can produce harmful and discriminatory content inspired by historical stereotypes.
+- **Biases and Toxicity:** This model inherits the social and historical stereotypes from the data used to train it. Given these biases, the model can produce toxic content, i.e., harmful, offensive, or detrimental to individuals, groups, or communities.
+
+- **Repetition and Verbosity:** The model may get stuck on repetition loops (especially if the repetition penalty during generations is set to a meager value) or produce verbose responses unrelated to the prompt it was given.

@@ -44,13 +44,13 @@ training_args:
   weight_decay: 0.01
   lr_scheduler_type: "cosine"
   warmup_steps: 10000
-  max_steps: 1155000
+  max_steps: 1200000
   num_train_epochs: 2
   gradient_checkpointing: false
   seed: 42
   dataloader_pin_memory: true
   push_to_hub: true
-  resume_from_checkpoint: "/content/checkpoints/step_950001"
+  resume_from_checkpoint: "/content/checkpoints/step_1150001"
   hub_model_id: "nicholasKluge/TeenyTinyLlama-460m"
   hub_token: null
 extra_args:

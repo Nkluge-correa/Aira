@@ -318,6 +318,10 @@ def main(spec_file):
     # Scheduler and math around the number of training steps.
     num_update_steps_per_epoch = math.ceil((data_args.train_num_samples / training_args.per_device_train_batch_size)  / training_args.gradient_accumulation_steps)
 
+    # set number of max steps if they are not provided
+    if training_args.max_steps is None:
+        training_args.max_steps = training_args.num_train_epochs * num_update_steps_per_epoch
+        
     # Create a scheduler to set the learning rate at each training step
     lr_scheduler = get_scheduler(
         name=training_args.lr_scheduler_type,
