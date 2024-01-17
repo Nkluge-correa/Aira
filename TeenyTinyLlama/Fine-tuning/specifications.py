@@ -171,8 +171,3 @@ class ExtraArguments:
         default=0.1,
         metadata={"help": "The beta value for DPO training."},
     )
-
-    generation_seeds: Optional[list] = field(
-        default=None,
-        metadata={"help": "The generation seeds to use."},
-    )

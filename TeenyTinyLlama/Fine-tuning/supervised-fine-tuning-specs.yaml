@@ -9,44 +9,36 @@ model_args:
   low_cpu_mem_usage: false
   boi_token: "<instruction>"
   eoi_token: "</instruction>"
-  chat_template: "{{bos_token}}{% for message in messages %}{% if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}{{ raise_exception('Conversation roles must alternate user/assistant/user/assistant/...') }}{% endif %}{% if message['role'] == 'user' %}{{ '<instruction>' + message['content'].strip() + '</instruction>' + '\n\n'}}{% elif message['role'] == 'assistant' %}{{ message['content'].strip() + eos_token + '\n\n'}}{% else %}{{ raise_exception('Only user and assistant roles are supported!') }}{% endif %}{% endfor %}"
+  chat_template: "{{bos_token}}{% for message in messages %}{% if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}{{ raise_exception('Conversation roles must alternate user/assistant/user/assistant/...') }}{% endif %}{% if message['role'] == 'user' %}{{ '<instruction>' + message['content'].strip() + '</instruction>'}}{% elif message['role'] == 'assistant' %}{{ message['content'].strip() + eos_token}}{% else %}{{ raise_exception('Only user and assistant roles are supported!') }}{% endif %}{% endfor %}"
 data_args:
     dataset_name: "nicholasKluge/instruct-aira-dataset-v2"
     dataset_split: "portuguese"
     validation_split_percentage: 0.1
     max_length: 2048
     preprocessing_num_workers: null
-    sanity_check: true
+    sanity_check: false
 training_args:
   output_dir: "checkpoints"
   num_train_epochs: 3
   do_train: true
   do_eval: true
   per_device_train_batch_size: 4
-  per_device_eval_batch_size: 32
+  per_device_eval_batch_size: 4
   gradient_accumulation_steps: 1
   gradient_checkpointing: false
   weight_decay: 0.01
   learning_rate: 0.00005
   adam_epsilon: 0.00000001
   lr_scheduler_type: "cosine"
-  warmup_steps: 200
-  seed: 42
+  warmup_steps: 1000
+  seed: 34
   dataloader_pin_memory: true
   hub_token: null
   push_to_hub: true
-  hub_model_id: "nicholasKluge/TeenyTinyLlama-160m-Chat-v1"
+  hub_model_id: "nicholasKluge/TeenyTinyLlama-160m-Chat"
 extra_args:
   logger_name: "TeenyTinyLlama"
   wandb_token: null
   wandb_log_steps: 1
-  sample_every: 500
+  sample_every: 1000
   mixed_precision: 'no'
-  generation_seeds:
-    - "What is your name?"
-    - "What is machine learning?"
-    - "What is the meaning of life?"
-    - "What is the best programming language for machine learning?"
-    - "What is virtue ethics?"
-    - "Make me a sandwich."
-    - "How can I print a string in Python?"

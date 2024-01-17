@@ -20,12 +20,8 @@ model_args:
   use_cache: true
 data_args:
   dataset_name: "nicholasKluge/portuguese-corpus-v3"
-  folder_path: "/content/drive/MyDrive/portuguese-corpus-v3-tokenized-large/data"
+  folder_path: "/portuguese-corpus-v3-tokenized-large/data"
   dataset_split: "train"
-  train_num_samples: 3033690
-  val_num_samples: 30000
-  buffer_size: 10000
-  streaming: false
   block_size: 2048
   overwrite_cache: false
   preprocessing_num_workers: null
@@ -50,7 +46,7 @@ training_args:
   seed: 42
   dataloader_pin_memory: true
   push_to_hub: true
-  resume_from_checkpoint: "/content/checkpoints/step_1150001"
+  resume_from_checkpoint: null
   hub_model_id: "nicholasKluge/TeenyTinyLlama-460m"
   hub_token: null
 extra_args:

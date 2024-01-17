@@ -4,9 +4,7 @@
 
 Given the lack of available monolingual foundational models in non-English languages and the fact that some of the most used and downloaded models by the community are those small enough to allow individual researchers and hobbyists to use them in low-resource environments, we developed the TeenyTinyLlama: _a series of small foundational models trained on Portuguese._
 
-TeenyTinyLlama is a compact language model based on the Llama 2 architecture ([TinyLlama implementation](https://huggingface.co/TinyLlama)). This model is designed to deliver efficient natural language processing capabilities while being resource-conscious.
-
-Also, these models were trained by leveraging [scaling laws](https://arxiv.org/abs/2203.15556) to determine the optimal number of tokens per parameter while incorporating [preference pre-training](https://arxiv.org/abs/2112.00861).
+TeenyTinyLlama is a compact language model based on the Llama 2 architecture ([TinyLlama implementation](https://huggingface.co/TinyLlama)). This model is designed to deliver efficient natural language processing capabilities while being resource-conscious These models were trained by leveraging [scaling laws](https://arxiv.org/abs/2203.15556) to determine the optimal number of tokens per parameter while incorporating [preference pre-training](https://arxiv.org/abs/2112.00861).
 
 ## Cite as 🤗
 

@@ -20,7 +20,7 @@ training_args:
   save_strategy: "steps"
   logging_strategy: "steps"
   logging_steps: 200
-  max_steps: 2400
+  max_steps: 15000
   save_steps: 200
   per_device_train_batch_size: 8
   per_device_eval_batch_size: 8
@@ -29,7 +29,7 @@ training_args:
   optim: "adamw_torch"
   learning_rate: 0.00001
   lr_scheduler_type: "cosine"
-  warmup_steps: 200
+  warmup_steps: 1000
   hub_token: null
   push_to_hub: true
   hub_model_id: "nicholasKluge/TeenyTinyLlama-160m-Chat-DPO"

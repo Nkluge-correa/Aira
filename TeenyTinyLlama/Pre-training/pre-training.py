@@ -217,7 +217,6 @@ def main(spec_file):
 
     # Load the datasets
     #
-    # Streaming datasets work faster if they are in a local directory
     # The dataset folder must contain a list o parquet files, and you 
     # can achieve this by simply cloning the dataset from the hub 
     # to a local directory:
@@ -232,45 +231,34 @@ def main(spec_file):
             'parquet', 
             data_files={
                 "train": f'{data_args.folder_path}/train/*.parquet',
-            },  
-            streaming=data_args.streaming)['train']
+            })['train']
     
-    # We are not streaming the validation dataset, since it is small
-    # and can be loaded into memory without any problems.
     eval_dataset = load_dataset(
             'parquet',
             data_files={
                 "test": f'{data_args.folder_path}/test/*.parquet',
-            },
-            streaming=False)['test']
+            })['test']
 
     # Set the format to `torch`
     train_dataset = train_dataset.with_format("torch")
     eval_dataset = eval_dataset.with_format("torch") 
-    
-    # Shuffle the `train_dataset` and set a buffer size if in streaming mode
-    train_dataset = train_dataset.shuffle(seed=training_args.seed, buffer_size=data_args.buffer_size) \
-        if data_args.streaming else train_dataset
 
-    logger.info(f"Loaded dataset: {data_args.dataset_name} | Number of examples: {data_args.train_num_samples + data_args.val_num_samples:,}")
-    logger.info(f"Size of train dataset: {data_args.train_num_samples:,} ({data_args.train_num_samples * data_args.block_size:,} tokens)| Size of validation dataset: {data_args.val_num_samples:,}")
+    logger.info(f"Loaded dataset: {data_args.dataset_name} | Number of examples: {len(train_dataset) + len(eval_dataset):,}")
+    logger.info(f"Size of train dataset: {len(train_dataset):,} ({len(train_dataset) * data_args.block_size:,} tokens)| Size of validation dataset: {len(eval_dataset):,}")
 
     # If we wat to do a sanity check, we will use a small subset of the dataset
     if data_args.sanity_check:
 
         logger.info(f"`Sanity check` is set to `True`. Train set size: 400 | Validation set size: 40")
 
-        train_dataset = train_dataset.take(400) if data_args.streaming else train_dataset.select(range(400)) 
+        train_dataset = train_dataset.select(range(400)) 
         eval_dataset = eval_dataset.select(range(40))
-
-        # Change the `total_num_samples` to reflect the size of the training set and the validation set
-        data_args.train_num_samples, data_args.val_num_samples = 400, 40
 
     # Create the Training DataLoader and Evaluation DataLoader
     if training_args.do_train and training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=not data_args.streaming, # Streaming datasets do not support shuffling in the DataLoader. When True, the data reshuffled at every epoch
+            shuffle=True,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -288,7 +276,7 @@ def main(spec_file):
     elif training_args.do_train and not training_args.do_eval:
         train_dataloader = DataLoader(
             train_dataset,
-            shuffle=not data_args.streaming,
+            shuffle=True,
             collate_fn=default_data_collator, 
             batch_size=training_args.per_device_train_batch_size,
             pin_memory=training_args.dataloader_pin_memory,
@@ -316,7 +304,7 @@ def main(spec_file):
     )
     
     # Scheduler and math around the number of training steps.
-    num_update_steps_per_epoch = math.ceil((data_args.train_num_samples / training_args.per_device_train_batch_size)  / training_args.gradient_accumulation_steps)
+    num_update_steps_per_epoch = math.ceil(len(train_dataloader)   / training_args.gradient_accumulation_steps)
 
     # set number of max steps if they are not provided
     if training_args.max_steps is None:
@@ -345,7 +333,13 @@ def main(spec_file):
     
     # On TPU, the tie weights in our model have been disconnected, so we need to restore the ties.
     if accelerator.distributed_type == DistributedType.TPU:
-        model.tie_weights() 
+        model.tie_weights()
+
+    # We need to recalculate our total training steps as the size of the training dataloader may have changed.
+    num_update_steps_per_epoch = math.ceil(len(train_dataloader) / training_args.gradient_accumulation_steps)
+    training_args.max_steps = training_args.num_train_epochs * num_update_steps_per_epoch
+    # Afterwards we recalculate our number of training epochs
+    training_args.num_train_epochs = math.ceil(training_args.max_steps / num_update_steps_per_epoch)
 
     # Initialize the W&B tracker
     if extra_args.wandb_token is not None: 
@@ -384,7 +378,7 @@ def main(spec_file):
     total_batch_size = training_args.per_device_train_batch_size * accelerator.num_processes * training_args.gradient_accumulation_steps
 
     logger.info("***** Running training *****")
-    logger.info(f"  Num examples = {data_args.train_num_samples + data_args.val_num_samples} | Training examples: {data_args.train_num_samples} | Validations examples: {data_args.val_num_samples}.")
+    logger.info(f"  Num examples = {len(train_dataset) + len(eval_dataset)} | Training examples: {len(train_dataset)} | Validations examples: {len(eval_dataset)}.")
     logger.info(f"  Num Epochs = {(training_args.max_steps / num_update_steps_per_epoch):.1f}")
     logger.info(f"  Instantaneous batch size per device = {training_args.per_device_train_batch_size}")
     logger.info(f"  Total train batch size (w. parallel, distributed & accumulation) = {total_batch_size}")
@@ -422,9 +416,9 @@ def main(spec_file):
         else:
             # need to multiply `gradient_accumulation_steps` to reflect real steps
             resume_step = int(training_difference.replace("step_", "")) * training_args.gradient_accumulation_steps
-            starting_epoch = resume_step // math.ceil(data_args.train_num_samples/training_args.per_device_train_batch_size)
+            starting_epoch = resume_step // len(train_dataloader)
             completed_steps = resume_step // training_args.gradient_accumulation_steps
-            resume_step -= starting_epoch * math.ceil(data_args.train_num_samples/training_args.per_device_train_batch_size)
+            resume_step -= starting_epoch * len(train_dataloader)
     
     # Update the progress_bar if load from checkpoint
     progress_bar.update(completed_steps)
@@ -435,9 +429,7 @@ def main(spec_file):
 
     for epoch in range(starting_epoch, training_args.num_train_epochs):
 
-        # Since our dataset is a streaming dataset, we need to reset the epoch at each iteration
         model.train()
-        train_dataset.set_epoch(epoch) if data_args.streaming else None
         logger.info(f'Beginning epoch {epoch + 1} of {training_args.num_train_epochs}')
 
         total_loss = 0

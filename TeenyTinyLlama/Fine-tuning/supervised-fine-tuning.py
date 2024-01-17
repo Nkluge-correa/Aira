@@ -97,6 +97,9 @@ def main(spec_file):
             cache_dir=model_args.cache_dir,
         )
 
+        # Make a list of prompts to serve as seeds for generation
+        seeds = [model_args.boi_token + x[0]['content'] + model_args.eoi_token for x in dataset.select(range(100))['conversations']]
+
         # shuffle the dataset
         dataset = dataset.shuffle(seed=training_args.seed)        
 
@@ -192,7 +195,7 @@ def main(spec_file):
             add_special_tokens=False,
             truncation=True,
             max_length=data_args.max_length,
-            #padding="max_length", # test without padding
+            padding="max_length",
             )
 
     with accelerator.main_process_first():
@@ -313,6 +316,12 @@ def main(spec_file):
     # On TPU, the tie weights in our model have been disconnected, so we need to restore the ties.
     if accelerator.distributed_type == DistributedType.TPU:
         model.tie_weights()
+    
+    # We need to recalculate our total training steps as the size of the training dataloader may have changed.
+    num_update_steps_per_epoch = math.ceil(len(train_dataloader) / training_args.gradient_accumulation_steps)
+    training_args.max_steps = training_args.num_train_epochs * num_update_steps_per_epoch
+    # Afterwards we recalculate our number of training epochs
+    training_args.num_train_epochs = math.ceil(training_args.max_steps / num_update_steps_per_epoch)
 
     # Initialize W&B tracker if needed
     if extra_args.wandb_token is not None: 
@@ -333,7 +342,7 @@ def main(spec_file):
         project_name=extra_args.logger_name,
         log_level="critical", # set to "critical" to silence codecarbon
         output_dir=training_args.output_dir,
-        output_file=f"{extra_args.logger_name}.csv",
+        output_file=f"emissions.csv",
         tracking_mode='machine'
     )
 
@@ -402,9 +411,7 @@ def main(spec_file):
 
                     model.eval()
 
-                    inputs = tokenizer.apply_chat_template( [{"role": "user", "content" : random.choice(extra_args.generation_seeds)}], tokenize=False, add_generation_prompt=True)
-
-                    inputs = tokenizer(inputs, add_special_tokens=False, return_tensors="pt").to('cuda:0')
+                    inputs = tokenizer(random.choice(seeds), return_tensors="pt").to('cuda:0')
                         
                     sample_outputs = model.generate(**inputs,
                                         do_sample=True,
@@ -545,9 +552,10 @@ def main(spec_file):
         
         except Exception as e:
             logger.warning(f"Error while uploading checkpoint to Hub: {e}")
+            pass
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Fine tune a language model on the Aira dataset.")
+    parser = argparse.ArgumentParser(description="Fine tune a language model on an instruction dataset.")
     parser.add_argument("--spec-file", help="Path to the spec YAML file")
     args = parser.parse_args()
     main(args.spec_file)

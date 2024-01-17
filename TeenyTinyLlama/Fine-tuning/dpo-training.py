@@ -209,27 +209,33 @@ def main(spec_file):
     # Push the model checkpoint to the hub if needed
     if training_args.push_to_hub and training_args.hub_token is not None:
 
-        logger.info(f"""Ouput directory (`{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}`) being uploaded to the hub.""")
+        try:
 
-        api = HfApi(
-            token=training_args.hub_token,
-        )
+            logger.info(f"""Ouput directory (`{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}`) being uploaded to the hub.""")
 
-        api.upload_folder(
-            repo_id=training_args.hub_model_id,
-            folder_path=os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}"),
-        )
+            api = HfApi(
+                token=training_args.hub_token,
+            )
 
-        api.upload_file(
-            path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
-            path_in_repo=f"emissions.csv",
-            repo_id=training_args.hub_model_id,
-        )
+            api.upload_folder(
+                repo_id=training_args.hub_model_id,
+                folder_path=os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}"),
+            )
+
+            api.upload_file(
+                path_or_fileobj=f"./{training_args.output_dir}/emissions.csv",
+                path_in_repo=f"emissions.csv",
+                repo_id=training_args.hub_model_id,
+            )
+            
+            logger.info(f"""Output directory (`{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}`) uploaded to the hub!""")
         
-        logger.info(f"""Output directory (`{os.path.join(training_args.output_dir, f"checkpoint-{training_args.max_steps}")}`) uploaded to the hub!""")
+        except Exception as e:
+            logger.info(f"""Error while uploading the model to the hub: {e}""")
+            pass
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Fine tune a language model on the Aira reward dataset via DPO.")
+    parser = argparse.ArgumentParser(description="Fine tune a language model on reward dataset via DPO.")
     parser.add_argument("--spec-file", help="Path to the spec YAML file")
     args = parser.parse_args()
     main(args.spec_file)

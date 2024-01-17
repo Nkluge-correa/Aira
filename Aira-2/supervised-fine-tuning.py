@@ -201,7 +201,7 @@ def main(spec_file):
             add_special_tokens=False,
             truncation=True,
             max_length=data_args.max_length,
-            #padding="max_length", # test without padding
+            padding="max_length",
             )
 
     with accelerator.main_process_first():
