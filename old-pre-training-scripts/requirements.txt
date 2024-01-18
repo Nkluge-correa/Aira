@@ -1,5 +1,0 @@
-transformers
-torch
-datasets
-tokenizers
-codecarbon

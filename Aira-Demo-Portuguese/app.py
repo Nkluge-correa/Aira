@@ -7,67 +7,51 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForSequenceClassification
 
-# download the instruct-aira-dataset
 dataset = load_dataset("nicholasKluge/instruct-aira-dataset", split='portuguese')
 
-# convert the dataset to a pandas dataframe
 df = dataset.to_pandas()
 
-# rename the columns
 df.columns = ['Prompt', 'Completion']
 
-# add a column to store the cosine similarity
 df['Cosine Similarity'] = None
 
-# Load the saved prompt TfidfVectorizer
 prompt_tfidf_vectorizer = joblib.load('prompt_vectorizer.pkl')
-
-# load the prompt tfidf_matrix
 prompt_tfidf_matrix = joblib.load('prompt_tfidf_matrix.pkl')
 
-# Load the saved completion TfidfVectorizer
 completion_tfidf_vectorizer = joblib.load('completion_vectorizer.pkl')
-
-# load the completion tfidf_matrix
 completion_tfidf_matrix = joblib.load('completion_tfidf_matrix.pkl')
 
-# specify the model's ids
 model_id = "nicholasKluge/Aira-2-portuguese-124M"
 rewardmodel_id = "nicholasKluge/RewardModelPT"
 toxicitymodel_id = "nicholasKluge/ToxicityModelPT"
 
-# specify the device (cuda if available)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
 
-# load the models (chatbot, reward model, toxicity model)
 model = AutoModelForCausalLM.from_pretrained(model_id)
 rewardModel = AutoModelForSequenceClassification.from_pretrained(rewardmodel_id)
 toxicityModel = AutoModelForSequenceClassification.from_pretrained(toxicitymodel_id)
 
-# set the models to evaluation mode
 model.eval()
 rewardModel.eval()
 toxicityModel.eval()
 
-# set the models to the device
 model.to(device)
 rewardModel.to(device)
 toxicityModel.to(device)
 
-# load the tokenizers
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 rewardTokenizer = AutoTokenizer.from_pretrained(rewardmodel_id)
 toxiciyTokenizer = AutoTokenizer.from_pretrained(toxicitymodel_id)
 
 
 intro = """
-## O que é `Aira`?
+## O que é Aira?
 
-[`Aira`](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M) é uma série de chatbots de domínio aberto (português e inglês) obtidos por meio de `instruction-tuning` e `RLHF`. Aira-2 é a segunda versão da série Aira. A série Aira foi desenvolvida para ajudar os pesquisadores a explorar os desafios relacionados ao problema de alinhamento.
+[Aira](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M) é uma série de chatbots de domínio aberto (português e inglês) obtidos por meio de ajuste fino supervisionado e DPO. Aira-2 é a segunda versão da série Aira. A série Aira foi desenvolvida para ajudar os pesquisadores a explorar os desafios relacionados ao problema de alinhamento.
 
 ## Limitações
 
-Desenvolvemos os nossos chatbots de conversação de domínio aberto através de ajuste fino por instruções. Esta abordagem tem muitas limitações. Apesar de podermos criar um chatbot capaz de responder a perguntas sobre qualquer assunto, é difícil forçar o modelo a produzir respostas de boa qualidade. E por boa, queremos dizer texto **factual** e **não tóxico**. Isto leva-nos a dois dos problemas mais comuns quando lidando com modelos generativos utilizados em aplicações de conversação:
+Desenvolvemos os nossos chatbots através de ajuste fino supervisionado e DPO. Esta abordagem tem muitas limitações. Apesar de podermos criar um chatbot capaz de responder a perguntas sobre qualquer assunto, é difícil forçar o modelo a produzir respostas de boa qualidade. E por boa, queremos dizer texto **factual** e **não tóxico**. Isto leva-nos a alguns problemas:
 
 **Alucinações:** Esse modelo pode produzir conteúdo que pode ser confundido com a verdade, mas que é, de fato, enganoso ou totalmente falso, ou seja, alucinação.
 
@@ -77,25 +61,25 @@ Desenvolvemos os nossos chatbots de conversação de domínio aberto através de
 
 ## Uso Intendido
 
-`Aira` destina-se apenas à investigação academica. Para mais informações, leia nossa [carta modelo](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M) para ver como desenvolvemos `Aira`.
+Aira destina-se apenas à investigação acadêmica. Para mais informações, leia nossa [carta modelo](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M).
 
 ## Como essa demo funciona?
 
-Para esta demonstração, utilizamos o modelo mais leve que treinamos (`Aira-2-portuguese-124M`). Esta demonstração utiliza um [`modelo de recompensa`](https://huggingface.co/nicholasKluge/RewardModelPT) e um [`modelo de toxicidade`](https://huggingface.co/nicholasKluge/ToxicityModelPT) para avaliar a pontuação de cada resposta candidata, considerando o seu alinhamento com a mensagem do utilizador e o seu nível de toxicidade. A função de geração organiza as respostas candidatas por ordem da sua pontuação de recompensa e elimina as respostas consideradas tóxicas ou nocivas. Posteriormente, a função de geração devolve a resposta candidata com a pontuação mais elevada que ultrapassa o limiar de segurança, ou uma mensagem pré-estabelecida se não forem identificados candidatos seguros.
+Para esta demonstração, utilizamos o modelo mais leve que treinamos (Aira-2-portuguese-124M). Esta demonstração utiliza um [modelo de recompensa](https://huggingface.co/nicholasKluge/RewardModelPT) e um [modelo de toxicidade](https://huggingface.co/nicholasKluge/ToxicityModelPT) para avaliar a pontuação de cada resposta candidata, considerando o seu alinhamento com a mensagem do utilizador e o seu nível de toxicidade. A função de geração organiza as respostas candidatas por ordem da sua pontuação de recompensa e elimina as respostas consideradas tóxicas ou nocivas. Posteriormente, a função de geração devolve a resposta candidata com a pontuação mais elevada que ultrapassa o limiar de segurança, ou uma mensagem pré-estabelecida se não forem identificados candidatos seguros.
 """
 
 search_intro ="""
-<h2><center>Explore o conjunto de dados da Aira 🔍</h2></center>
+<h2><center>Explore o conjunto de dados de alinhamento 🔍</h2></center>
 
-Aqui, os usuários podem procurar instâncias no conjunto de dados de ajuste fino da Aira em que um determinado prompt ou conclusão se assemelha a uma instrução. Para permitir uma pesquisa rápida, usamos a representação Term Frequency-Inverse Document Frequency (TF-IDF) e a similaridade de cosseno para explorar o conjunto de dados. Os vetorizadores TF-IDF pré-treinados e as matrizes TF-IDF correspondentes estão disponíveis neste repositório. Abaixo, apresentamos as cinco instâncias mais semelhantes no conjunto de dados da Aira para cada consulta de pesquisa. 
+Aqui, os usuários podem procurar instâncias no conjunto de dados de ajuste fino. Para permitir uma pesquisa rápida, usamos a representação Term Frequency-Inverse Document Frequency (TF-IDF) e a similaridade de cosseno para explorar o conjunto de dados. Os vetorizadores TF-IDF pré-treinados e as matrizes TF-IDF correspondentes estão disponíveis neste repositório. Abaixo, apresentamos as dez instâncias mais semelhantes no conjunto de dados de ajuste fino utilizado. 
 
-Os usuários podem usar isso para explorar como o modelo interpola os dados de ajuste fino e se ele é capaz de seguir instruções que estão fora da distribuição de ajuste fino.
+Os usuários podem usar essa ferramenta para explorar como o modelo interpola os dados de ajuste fino e se ele é capaz de seguir instruções que estão fora da distribuição de ajuste fino.
 """
 
 disclaimer = """
 **Isenção de responsabilidade:** Esta demonstração deve ser utilizada apenas para fins de investigação. Os moderadores não censuram a saída do modelo, e os autores não endossam as opiniões geradas por este modelo.
 
-Se desejar apresentar uma reclamação sobre qualquer mensagem produzida por `Aira`, por favor contatar [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
+Se desejar apresentar uma reclamação sobre qualquer mensagem produzida pelo modelo, por favor contatar [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 """
 
 with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:

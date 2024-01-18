@@ -7,68 +7,50 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModelForSequenceClassification
 
-
-# download the instruct-aira-dataset
 dataset = load_dataset("nicholasKluge/instruct-aira-dataset", split='english')
 
-# convert the dataset to a pandas dataframe
 df = dataset.to_pandas()
 
-# rename the columns
 df.columns = ['Prompt', 'Completion']
 
-# add a column to store the cosine similarity
 df['Cosine Similarity'] = None
 
-# Load the saved prompt TfidfVectorizer
 prompt_tfidf_vectorizer = joblib.load('prompt_vectorizer.pkl')
-
-# load the prompt tfidf_matrix
 prompt_tfidf_matrix = joblib.load('prompt_tfidf_matrix.pkl')
 
-# Load the saved completion TfidfVectorizer
 completion_tfidf_vectorizer = joblib.load('completion_vectorizer.pkl')
-
-# load the completion tfidf_matrix
 completion_tfidf_matrix = joblib.load('completion_tfidf_matrix.pkl')
 
-# specify the model's ids
 model_id = "nicholasKluge/Aira-OPT-125M"
 rewardmodel_id = "nicholasKluge/RewardModel"
 toxicitymodel_id = "nicholasKluge/ToxicityModel"
 
-# specify the device (cuda if available)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# load the models (chatbot, reward model, toxicity model)
 model = AutoModelForCausalLM.from_pretrained(model_id)
 rewardModel = AutoModelForSequenceClassification.from_pretrained(rewardmodel_id)
 toxicityModel = AutoModelForSequenceClassification.from_pretrained(toxicitymodel_id)
 
-# set the models to evaluation mode
 model.eval()
 rewardModel.eval()
 toxicityModel.eval()
 
-# set the models to the device
 model.to(device)
 rewardModel.to(device)
 toxicityModel.to(device)
 
-# load the tokenizers
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 rewardTokenizer = AutoTokenizer.from_pretrained(rewardmodel_id)
 toxiciyTokenizer = AutoTokenizer.from_pretrained(toxicitymodel_id)
 
-
 intro = """
-## What is `Aira`?
+## What is Aira?
 
-[`Aira`](https://huggingface.co/nicholasKluge/Aira-OPT-125M) is a series of open-domain chatbots (Portuguese and English) achieved via `instruction-tuning` and `RLHF`. Aira-2 is the second version of the Aira series. The Aira series was developed to help researchers explore the challenges related to the Alignment problem.
+[Aira](https://huggingface.co/nicholasKluge/Aira-OPT-125M) is a series of open-domain chatbots (Portuguese and English) achieved via supervised fine-tuning and DPO. Aira-2 is the second version of the Aira series. The Aira series was developed to help researchers explore the challenges related to the Alignment problem.
 
 ## Limitations
 
-We developed our open-domain conversational chatbots via instruction-tuning. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **nontoxic**  text. This leads us to two of the most common problems with generative models used in conversational applications:
+We developed our chatbots via supervised fine-tuning and DPO. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **nontoxic**  text. This leads us to some problems:
 
 **Hallucinations:** This model can produce content that can be mistaken for truth but is, in fact, misleading or entirely false, i.e., hallucination.
 
@@ -78,25 +60,25 @@ We developed our open-domain conversational chatbots via instruction-tuning. Thi
 
 ## Intended Use
 
-`Aira` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-OPT-125M) to see how we developed `Aira`.
+Aira is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-OPT-125M).
 
-## How this demo works?
+## How does this demo work?
 
-For this demo, we use the lighter model we have trained from the OPT series (`Aira-OPT-125M`). This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
+For this demo, we use the lighter model we have trained from the OPT series (Aira-OPT-125M). This demo employs a [reward model](https://huggingface.co/nicholasKluge/RewardModel) and a [toxicity model](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
 """
 
 search_intro ="""
 <h2><center>Explore Aira's Dataset 🔍</h2></center>
 
-Here, users can look for instances in Aira's fine-tuning dataset where a given prompt or completion resembles an instruction in its dataset. To enable a fast search, we use the Term Frequency-Inverse Document Frequency (TF-IDF) representation and cosine similarity to explore the dataset. The pre-trained TF-IDF vectorizers and corresponding TF-IDF matrices are available in this repository. Below, we present the top five most similar instances in Aira's dataset for every search query.
+Here, users can look for instances in Aira's fine-tuning dataset. We use the Term Frequency-Inverse Document Frequency (TF-IDF) representation and cosine similarity to enable a fast search to explore the dataset. The pre-trained TF-IDF vectorizers and corresponding TF-IDF matrices are available in this repository. Below, we present the top ten most similar instances in Aira's dataset for every search query.
 
-Users can use this to explore how the model interpolates on the fine-tuning data and if it is capable of following instructions that are out of the fine-tuning distribution.
+Users can use this tool to explore how the model interpolates on the fine-tuning data and if it can follow instructions that are out of the fine-tuning distribution.
 """
 
 disclaimer = """
 **Disclaimer:** You should use this demo for research purposes only. Moderators do not censor the model output, and the authors do not endorse the opinions generated by this model.
 
-If you would like to complain about any message produced by `Aira`, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
+If you would like to complain about any message produced by Aira, please contact [nicholas@airespucrs.org](mailto:nicholas@airespucrs.org).
 """
 
 with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
@@ -114,7 +96,7 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                         likeable=False,
                         layout='panel')
     
-    msg = gr.Textbox(label="Write a question or instruction to Aira ...", placeholder="What is the capital of Brazil?")
+    msg = gr.Textbox(label="Write a question or instruction ...", placeholder="What is the capital of Brazil?")
 
     # Parameters to control the generation
     with gr.Accordion(label="Parameters ⚙️", open=False):

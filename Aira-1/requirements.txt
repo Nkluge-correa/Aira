@@ -1,8 +1,0 @@
-dash
-dash_bootstrap_components
-openai
-tensorflow
-transformers
-scikit-learn
-pandas
-plotly
