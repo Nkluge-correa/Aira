@@ -302,8 +302,8 @@ def main(spec_file):
     lr_scheduler = get_scheduler(
         name=training_args.lr_scheduler_type,
         optimizer=optimizer,
-        num_warmup_steps=training_args.warmup_steps * training_args.gradient_accumulation_steps,
-        num_training_steps=training_args.max_steps * training_args.gradient_accumulation_steps,
+        num_warmup_steps=training_args.warmup_steps,
+        num_training_steps=training_args.max_steps,
     )
 
     # Prepare everything with `accelerator`.
