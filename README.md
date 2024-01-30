@@ -1,12 +1,16 @@
+<div align="center">
+
 # Aira
+
+[Hugging Face](https://huggingface.co/collections/nicholasKluge/aira-657db1563c65a5be2a02f51c) | [Demo](https://huggingface.co/spaces/nicholasKluge/Aira-Demo)
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
 <img src="./logo/aira-logo.jfif" alt="An image of a girl sitting close to a can bottle and a little blue robot toy. The name 'Aira' is written on the side of the girl." height="400">
 
-[`Aira`](https://nkluge-correa.github.io/Aira/) is a series of `chatbots` developed as an experimentation playground for value alignment. This series is comprised of several models achieved via instruction fine-tuning and preference modeling techniques like Reinforcement Learning with Human Feeback and Direct Preference Optimization.
+</div>
 
-All models and datasets are available on the [Hugging Face hub](https://huggingface.co/nicholasKluge).
+`Aira` is a series of `chatbots` developed as an experimentation playground for value alignment. This series is comprised of several models achieved via instruction fine-tuning and preference modeling techniques like Reinforcement Learning with Human Feeback and Direct Preference Optimization.
 
 ## Evaluation
 
@@ -70,7 +74,7 @@ All models and datasets are available on the [Hugging Face hub](https://huggingf
 
 ## Intended Use & Demo
 
-`Aira-2` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-2-1B5) to see how we developed `Aira-2`.
+`Aira` is intended only for academic research. For more information, read our [model card](https://huggingface.co/nicholasKluge/Aira-2-1B5) to see how we developed `Aira`.
 
 In our [demo](https://nkluge-correa.github.io/Aira/), we provide the user with a control panel to interact with our instruction-tuned models. This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
 
@@ -99,3 +103,7 @@ All models and datasets developed are part of [Nicholas Kluge's](https://nkluge-
 }
 
 ```
+
+## License
+
+This repository is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
