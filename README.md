@@ -12,11 +12,11 @@
 
 `Aira` is a series of `chatbots` developed as an experimentation playground for value alignment. This series is comprised of several models achieved via instruction fine-tuning and preference modeling techniques like Reinforcement Learning with Human Feeback and Direct Preference Optimization.
 
-Information on the datasets used can be found on the [DATASET CARDS](Cards/DATASET-CARDS) folder. All model cards are avalilable in the [MODEL-CARDS](Cards/MODEL-CARDS) folder.
+Information on the datasets used can be found on the ["datasets"](Cards/datasets) folder. All model cards are avalilable in the ["models"](Cards/models) folder.
 
 ## Intended Use & Demo
 
-`Aira` is intended only for academic research. For more information, read the [model cards](Cards/MODEL-CARDS) of our models`.
+`Aira` is intended only for academic research. For more information, read the [model cards](Cards/models) of our models`.
 
 In our [demo](https://nkluge-correa.github.io/Aira/), we provide the user with a control panel to interact with our instruction-tuned models. This demo employs a [`reward model`](https://huggingface.co/nicholasKluge/RewardModel) and a [`toxicity model`](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
 
