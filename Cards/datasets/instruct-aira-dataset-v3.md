@@ -6,7 +6,6 @@ license: apache-2.0
 size_categories:
 - 10K<n<100K
 task_categories:
-- conversational
 - text-generation
 pretty_name: Instruct-Aira Dataset version 3.0
 tags:
