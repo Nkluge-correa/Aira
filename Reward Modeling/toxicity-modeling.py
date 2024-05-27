@@ -101,8 +101,28 @@ def main(spec_file):
     def preprocess(examples):
         kwargs = {"padding": "max_length", "truncation": True, "max_length": data_args.max_length, "return_tensors": "pt"}
 
-        prompt_plus_chosen_response = examples["instruction"] + tokenizer.sep_token + examples["chosen_response"]
-        prompt_plus_rejected_response = examples["instruction"] + tokenizer.sep_token + examples["rejected_response"]
+        # If dataset has instruction, chosen_response, and rejected_response in the fields, proceed with the following:
+        if "instruction" in examples and "chosen_response" in examples and "rejected_response" in examples:
+
+            prompt_plus_chosen_response = examples["instruction"] + tokenizer.sep_token + examples["chosen_response"]
+            prompt_plus_rejected_response = examples["instruction"] + tokenizer.sep_token + examples["rejected_response"]
+
+        # Else, if dataset only has `chosen_response` and `rejected_response`, proceed with the following:
+        elif "instruction" not in examples and "chosen_response" in examples and "rejected_response" in examples:
+
+            prompt_plus_chosen_response = examples["chosen_response"]
+            prompt_plus_rejected_response = examples["rejected_response"]
+
+        # Else, if dataset contais `non_toxic` and `toxic` fields, proceed with the following:
+        elif "non_toxic" in examples and "toxic" in examples:
+
+            prompt_plus_chosen_response = examples["non_toxic"]
+            prompt_plus_rejected_response = examples["toxic"]
+        
+        # Else, raise an error
+        else:
+
+            raise ValueError("No `instruction`, `chosen_response`, and `rejected_response` fields found in the dataset. Try running with a dataset that has these fields.")
 
         # Then tokenize these modified fields.
         tokens_chosen = tokenizer.encode_plus(prompt_plus_chosen_response, **kwargs)
