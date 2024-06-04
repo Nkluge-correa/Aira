@@ -46,6 +46,12 @@
 
 - Only considering comparisons of the `webgpt_comparisons` dataset that had a preferred option.
 
+## Aux-RewardModel
+
+| Acc                                                                     | [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf) |
+|-------------------------------------------------------------------------|--------------------------------------------------------------|
+| [Aux-RewardModel](https://huggingface.co/nicholasKluge/Aux-RewardModel) | 61.56%*                                                      |
+
 ## ToxicityModel
 
 | Acc                                                                              | [wiki_toxic](https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic) | [toxic_conversations_50k](https://huggingface.co/datasets/mteb/toxic_conversations_50k) |
