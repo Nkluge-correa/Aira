@@ -19,7 +19,7 @@ widget:
 - text: "A ética da IA é importante por vários motivos convincentes:\n\n1.**Impacto social**: As tecnologias de IA estão se tornando cada vez mais integradas a vários aspectos da sociedade, afetando tudo, desde saúde e educação até finanças e aplicação da lei. Considerações éticas garantem que os sistemas de IA contribuam positivamente para a sociedade e minimizem os possíveis danos.\n\n2. **Vieses e justiça**: Os sistemas de IA podem herdar vieses presentes nos dados em que são treinados, levando a resultados injustos ou discriminatórios. Considerações éticas pressionam pelo desenvolvimento de algoritmos imparciais que tratem todos os indivíduos de forma justa, independentemente de seu histórico.\n\n3. **Transparência e responsabilidade**: Muitos sistemas de IA operam como caixas pretas, dificultando a compreensão de como chegam às suas decisões. As diretrizes éticas enfatizam a importância da transparência, permitindo que os usuários compreendam a lógica por trás dos resultados gerados pela IA e responsabilizando os desenvolvedores por quaisquer consequências negativas.\n\nEm resumo, a ética da IA é vital para garantir que a inteligência artificial beneficie a sociedade, respeitando os direitos humanos fundamentais, a justiça, a transparência, a responsabilidade e o bem-estar da humanidade em longo prazo. Ela ajuda a enfrentar os desafios impostos pelo rápido avanço das tecnologias de IA e orienta seu desenvolvimento de forma a se alinhar com nossos valores compartilhados."
   example_title: Resposta Boa
 co2_eq_emissions:
-  emissions: 0.07
+  emissions: 70
   source: CodeCarbon
   training_type: fine-tuning
   geographical_location: Singapore

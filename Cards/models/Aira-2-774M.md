@@ -31,7 +31,7 @@ inference:
     length_penalty: 0.3
     early_stopping: true
 co2_eq_emissions:
-  emissions: 0.77
+  emissions: 770
   source: CodeCarbon
   training_type: fine-tuning
   geographical_location: United States of America

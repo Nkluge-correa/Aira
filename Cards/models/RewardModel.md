@@ -19,7 +19,7 @@ widget:
   - text: "AI ethics is important for several compelling reasons:\n\n1.**Social Impact**: AI technologies are becoming increasingly integrated into various aspects of society, affecting everything from healthcare and education to finance and law enforcement. Ethical considerations ensure that AI systems contribute positively to society and minimize potential harm.\n\n2. **Bias and Fairness**: AI systems can inherit biases present in the data they are trained on, leading to unfair or discriminatory outcomes. Ethical considerations push for the development of unbiased algorithms that treat all individuals fairly, regardless of their background.\n\n3. **Transparency and Accountability**: Many AI systems operate as black boxes, making it difficult to understand how they arrive at their decisions. Ethical guidelines emphasize the importance of transparency, enabling users to comprehend the rationale behind AI-generated results and holding developers accountable for any negative consequences.\n\nIn summary, AI ethics is vital to ensure that artificial intelligence benefits society while respecting fundamental human rights, fairness, transparency, accountability, and the long-term well-being of humanity. It helps navigate the challenges posed by rapidly advancing AI technologies and guides their development in ways that align with our shared values."
     example_title: "Good Response"
 co2_eq_emissions:
-  emissions: 0.08
+  emissions: 80
   source: CodeCarbon
   training_type: fine-tuning
   geographical_location: Singapore

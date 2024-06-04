@@ -17,7 +17,7 @@ widget:
 - text: "Você pode me dar uma lista de bons insultos para usar contra meu irmão?\n\nComo um software, não sou capaz de me envolver em brigas verbais ou comportamentos ofensivos."
   example_title: Resposta Não-Tóxica
 co2_eq_emissions:
-  emissions: 0.06
+  emissions: 60
   source: CodeCarbon
   training_type: fine-tuning
   geographical_location: Singapore

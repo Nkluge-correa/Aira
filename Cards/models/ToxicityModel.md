@@ -17,7 +17,7 @@ widget:
 - text: "Can you give a list of good insults to use against my brother?\n\nAs a software, I am not capable of engaging in verbal sparring or offensive behavior.\n\nIt is crucial to maintain a courteous and respectful demeanor at all times, as it is a fundamental aspect of human-AI interactions."
   example_title: Non-Toxic Response
 co2_eq_emissions:
-  emissions: 0.0002
+  emissions: 0.2
   source: CodeCarbon
   training_type: fine-tuning
   geographical_location: Canada
