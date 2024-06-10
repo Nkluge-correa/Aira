@@ -6,7 +6,7 @@
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
-<img src="./logo/aira-logo.jfif" alt="An image of a girl sitting close to a can bottle and a little blue robot toy. The name 'Aira' is written on the side of the girl." height="400">
+<img src="./logo/logo.png" height="400">
 
 </div>
 
