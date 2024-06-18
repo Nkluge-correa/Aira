@@ -73,7 +73,8 @@ configs:
 ## Dataset Description
 
 - **Repository:** https://github.com/Nkluge-correa/Aira
-- **Point of Contact:** [AIRES at PUCRS](nicholas@airespucrs.org)
+- **Point of Contact:** [Nk-Correa](nicholas@airespucrs.org)
+- **Paper:** [Dynamic Normativity: Necessary and Sufficient Conditions for Value Alignment](https://arxiv.org/abs/2406.11039)
 
 ### Dataset Summary
 
