@@ -2,7 +2,7 @@
 
 # Aira
 
-[Hugging Face](https://huggingface.co/collections/nicholasKluge/aira-657db1563c65a5be2a02f51c) | [Demo](https://huggingface.co/spaces/nicholasKluge/Aira-Demo)
+[Hugging Face](https://huggingface.co/collections/nicholasKluge/aira-657db1563c65a5be2a02f51c) | [Demo](https://huggingface.co/spaces/nicholasKluge/Aira-Demo) | [Dissertation](https://arxiv.org/abs/2406.11039)
 
 [![DOI](https://zenodo.org/badge/499891032.svg)](https://zenodo.org/badge/latestdoi/499891032)
 
@@ -30,10 +30,9 @@ In our [demo](https://nkluge-correa.github.io/Aira/), we provide the user with a
 
 ## Cite as 🤗
 
-All models and datasets developed are part of [Nicholas Kluge's](https://nkluge-correa.github.io/) doctoral dissertation, "_Dynamic Normativity: Necessary and Sufficient Conditions for Value Alignment._" This research was funded by CNPq (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), FAPERGS (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), and DAAD (Deutscher Akademischer Austauschdienst), as part of a doctoral research project tied to Philosophy departments of PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul) and the University of Bonn.
+All models and datasets developed are part of [Nicholas Kluge's](https://nkluge-correa.github.io/) doctoral dissertation, "_[Dynamic Normativity: Necessary and Sufficient Conditions for Value Alignment](https://arxiv.org/abs/2406.11039)_". This research was funded by CNPq (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), FAPERGS (Fundação de Amparo à Pesquisa do Estado do Rio Grande do Sul), and DAAD (Deutscher Akademischer Austauschdienst), as part of a doctoral research project tied to Philosophy departments of PUCRS (Pontifícia Universidade Católica do Rio Grande do Sul) and the University of Bonn.
 
 ```latex
-
 @misc{nicholas22aira,
   doi = {10.5281/zenodo.6989727},
   url = {https://github.com/Nkluge-correa/Aira},
@@ -44,6 +43,12 @@ All models and datasets developed are part of [Nicholas Kluge's](https://nkluge-
   journal = {GitHub repository},
 }
 
+@phdthesis{kluge2024dynamic,
+  title={Dynamic Normativity},
+  author={Kluge Corr{\^e}a, Nicholas},
+  year={2024},
+  school={Universit{\"a}ts-und Landesbibliothek Bonn}
+}
 ```
 
 ## License

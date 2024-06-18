@@ -119,17 +119,22 @@ Idiot, Dumbass, Moron, Stupid, Fool, Fuck Face. Score: -7.300
 ## Cite as 🤗
 
 ```latex
-
 @misc{nicholas22aira,
   doi = {10.5281/zenodo.6989727},
-  url = {https://huggingface.co/nicholasKluge/ToxicityModel},
+  url = {https://github.com/Nkluge-correa/Aira},
   author = {Nicholas Kluge Corrêa},
   title = {Aira},
   year = {2023},
-  publisher = {HuggingFace},
-  journal = {HuggingFace repository},
+  publisher = {GitHub},
+  journal = {GitHub repository},
 }
 
+@phdthesis{kluge2024dynamic,
+  title={Dynamic Normativity},
+  author={Kluge Corr{\^e}a, Nicholas},
+  year={2024},
+  school={Universit{\"a}ts-und Landesbibliothek Bonn}
+}
 ```
 
 ## License
