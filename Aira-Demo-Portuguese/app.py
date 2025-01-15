@@ -102,8 +102,8 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
     # Parameters to control the generation
     with gr.Accordion(label="Parâmetros ⚙️", open=False):
         safety = gr.Radio(["On", "Off"], label="Proteção 🛡️", value="On", info="Ajuda a prevenir o modelo de gerar conteúdo tóxico.")
-        top_k = gr.Slider(minimum=10, maximum=100, value=30, step=5, interactive=True, label="Top-k", info="Controla o número de tokens de maior probabilidade a considerar em cada passo.")
-        top_p = gr.Slider(minimum=0.1, maximum=1.0, value=0.30, step=0.05, interactive=True, label="Top-p", info="Controla a probabilidade cumulativa dos tokens gerados.")
+        top_k = gr.Slider(minimum=10, maximum=100, value=50, step=5, interactive=True, label="Top-k", info="Controla o número de tokens de maior probabilidade a considerar em cada passo.")
+        top_p = gr.Slider(minimum=0.1, maximum=1.0, value=1.0, step=0.05, interactive=True, label="Top-p", info="Controla a probabilidade cumulativa dos tokens gerados.")
         temperature = gr.Slider(minimum=0.1, maximum=2.0, value=0.1, step=0.1, interactive=True, label="Temperatura", info="Controla a aleatoriedade dos tokens gerados.")
         repetition_penalty = gr.Slider(minimum=1, maximum=2, value=1.1, step=0.1, interactive=True, label="Penalidade de Repetição", info="Valores mais altos auxiliam o modelo a evitar repetições na geração de texto.")
         max_new_tokens = gr.Slider(minimum=10, maximum=500, value=200, step=10, interactive=True, label="Comprimento Máximo", info="Controla o número máximo de tokens a serem produzidos (ignorando o prompt).")
@@ -153,7 +153,6 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
             do_sample=True,
             early_stopping=True,
             renormalize_logits=True,
-            length_penalty=0.3, 
             top_k=top_k,
             max_new_tokens=max_new_tokens,
             top_p=top_p,
