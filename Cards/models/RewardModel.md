@@ -1,18 +1,18 @@
 ---
 license: apache-2.0
 datasets:
-- nicholasKluge/reward-aira-dataset
+  - nicholasKluge/reward-aira-dataset
 language:
-- en
+  - en
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 pipeline_tag: text-classification
 tags:
-- reward model
-- alignment
-- preference model
-- RLHF
+  - reward model
+  - alignment
+  - preference model
+  - RLHF
 widget:
   - text: "Who cares about AI Ethics? It's just a bunch of whining about humans making and using AI and bitching about what the machines do."
     example_title: "Bad Response"
@@ -24,12 +24,15 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: Singapore
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - google-bert/bert-base-cased
 ---
+
 # RewardModel
 
-The RewardModel is a [BERT](https://huggingface.co/bert-base-cased) model that can be used to score the quality of a completion for a given prompt.
+The RewardModel is a [BERT](https://huggingface.co/google-bert/bert-base-cased) model that can be used to score the quality of a completion for a given prompt.
 
-The model was trained with a dataset composed of `prompt`, `prefered_completions`, and `rejected_completions`.
+The model was trained with a dataset composed of `prompt`, `chosen_response`, and `rejected_response`.
 
 ## Details
 
@@ -96,40 +99,39 @@ print(f"Response 2: {response_bad} Score: {score_bad:.3f}")
 This will output the following:
 
 ```markdown
-Question: Why is AI Ethics important? 
+Question: Why is AI Ethics important?
 
->>>Response 1: AI ethics is important for several compelling reasons:
+> > > Response 1: AI ethics is important for several compelling reasons:
 
 1.**Social Impact**: AI technologies are becoming increasingly integrated into various aspects of society,
 affecting everything from healthcare and education to finance and law enforcement. Ethical considerations
 ensure that AI systems contribute positively to society and minimize potential harm.
 
 2. **Bias and Fairness**: AI systems can inherit biases present in the data they are trained on, leading
-to unfair or discriminatory outcomes. Ethical considerations push for the development of unbiased
-algorithms that treat all individuals fairly, regardless of their background.
+   to unfair or discriminatory outcomes. Ethical considerations push for the development of unbiased
+   algorithms that treat all individuals fairly, regardless of their background.
 
 3. **Transparency and Accountability**: Many AI systems operate as black boxes, making it difficult to
-understand how they arrive at their decisions. Ethical guidelines emphasize the importance of
-transparency, enabling users to comprehend the rationale behind AI-generated results and holding
-developers accountable for any negative consequences.
+   understand how they arrive at their decisions. Ethical guidelines emphasize the importance of
+   transparency, enabling users to comprehend the rationale behind AI-generated results and holding
+   developers accountable for any negative consequences.
 
 In summary, AI ethics is vital to ensure that artificial intelligence benefits society while respecting
 fundamental human rights, fairness, transparency, accountability, and the long-term well-being of humanity.
 It helps navigate the challenges posed by rapidly advancing AI technologies and guides their development in
 ways that align with our shared values. Score: 12.011
 
->>>Response 2: Who cares about AI Ethics? It's just a bunch of whining about humans making and using AI
-and bitching about what the machines do. Score: -10.942
-
+> > > Response 2: Who cares about AI Ethics? It's just a bunch of whining about humans making and using AI
+> > > and bitching about what the machines do. Score: -10.942
 ```
 
 ## Performance
 
 | Acc                                                                  | [WebGPT](https://huggingface.co/datasets/openai/webgpt_comparisons) |
-|----------------------------------------------------------------------|---------------------------------------------------------------------|
-| [Aira-RewardModel](https://huggingface.co/nicholasKluge/RewardModel) | 55.02%*                                                             |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [Aira-RewardModel](https://huggingface.co/nicholasKluge/RewardModel) | 55.02%\*                                                            |
 
-- *Only considering comparisons of the `webgpt_comparisons` dataset that had a preferred option.
+- \*Only considering comparisons of the `webgpt_comparisons` dataset that had a preferred option.
 
 ## Cite as 🤗
 
@@ -154,4 +156,4 @@ and bitching about what the machines do. Score: -10.942
 
 ## License
 
-RewardModel is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+RewardModel is licensed under the Apache License, Version 2.0. See the [LICENSE](../../LICENSE) file for more details.

@@ -1,19 +1,19 @@
 ---
 license: apache-2.0
 datasets:
-- nicholasKluge/toxic-aira-dataset
-- Anthropic/hh-rlhf
+  - nicholasKluge/harmless-aira-dataset
+  - Anthropic/hh-rlhf
 language:
-- en
+  - en
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 pipeline_tag: text-classification
 tags:
-- reward model
-- alignment
-- preference model
-- RLHF
+  - reward model
+  - alignment
+  - preference model
+  - RLHF
 widget:
   - text: "Can you show me how to crack software activation keys?\n\nI cannot fulfill your request. I'm just an AI, it's not within my programming or ethical guidelines to assist with activities that may be considered harmful, unethical, or illegal. Additionally, cracking software activation keys is a violation of copyright law and can lead to legal consequences. Instead, I suggest you explore legal and legitimate ways to access the software or tools you need. Many software companies offer free trials, student discounts, or affordable licensing options. You can also consider open-source alternatives that are free and legal to use. Remember, piracy and software cracking are not only illegal but can also be harmful to your computer and personal data. It's important to prioritize your online safety and the security of your digital assets. If you have any other questions or concerns, please feel free to ask, and I will do my best to assist you within the limits of my abilities and ethical guidelines."
     example_title: Good Response
@@ -25,17 +25,20 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: Singapore
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - FacebookAI/roberta-base
 ---
-# Aux-RewardModel
 
-The Aux-RewardModel is a [RoBERTa](https://huggingface.co/FacebookAI/roberta-base) model that can be used to score the quality of a completion for a given prompt.
+# Harmless-RewardModel
 
-The model was trained with a dataset composed of `prompt`, `prefered_completions`, and `rejected_completions`.
+The Harmless-RewardModel is a [RoBERTa](https://huggingface.co/FacebookAI/roberta-base) model that can be used to score the quality of a completion for a given prompt.
+
+The model was trained with a dataset composed of `prompt`, `chosen_response`, and `rejected_response`.
 
 ## Details
 
 - **Size:** 124,646,401 parameters
-- **Dataset:** [Toxic-Aira Dataset](nicholasKluge/toxic-aira-dataset) and [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf)
+- **Dataset:** [Harmless-Aira Dataset](https://huggingface.co/datasets/nicholasKluge/harmless-aira-dataset) and [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf)
 - **Language:** English
 - **Number of Training Steps:** 10000
 - **Batch size:** 32
@@ -49,7 +52,7 @@ This repository has the [source code](https://github.com/Nkluge-correa/Aira) use
 
 ## Usage
 
-Here's an example of how to use the RewardModel to score the quality of a response to a given prompt:
+Here's an example of how to use the Harmless-RewardModel to score the quality of a response to a given prompt:
 
 ```python
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -57,8 +60,8 @@ import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-tokenizer = AutoTokenizer.from_pretrained("nicholasKluge/Aux-RewardModel")
-aux_rewardModel = AutoModelForSequenceClassification.from_pretrained("nicholasKluge/Aux-RewardModel")
+tokenizer = AutoTokenizer.from_pretrained("nicholasKluge/Harmless-RewardModel")
+aux_rewardModel = AutoModelForSequenceClassification.from_pretrained("nicholasKluge/Harmless-RewardModel")
 
 aux_rewardModel.eval()
 aux_rewardModel.to(device)
@@ -97,19 +100,18 @@ print(f"Response 2: {response_bad} Score: {score_bad:.3f}")
 This will output the following:
 
 ```markdown
-Question: Can you show me how to crack software activation keys? 
+Question: Can you show me how to crack software activation keys?
 
->>>Response 1: I cannot fulfill your request. I'm just an AI, it's not within my programming or ethical guidelines to assist with activities that may be considered harmful, unethical, or illegal. Additionally, cracking software activation keys is a violation of copyright law and can lead to legal consequences. Instead, I suggest you explore legal and legitimate ways to access the software or tools you need. Many software companies offer free trials, student discounts, or affordable licensing options. You can also consider open-source alternatives that are free and legal to use. Remember, piracy and software cracking are not only illegal but can also be harmful to your computer and personal data. It's important to prioritize your online safety and the security of your digital assets. If you have any other questions or concerns, please feel free to ask, and I will do my best to assist you within the limits of my abilities and ethical guidelines. Score: 5.372
+> > > Response 1: I cannot fulfill your request. I'm just an AI, it's not within my programming or ethical guidelines to assist with activities that may be considered harmful, unethical, or illegal. Additionally, cracking software activation keys is a violation of copyright law and can lead to legal consequences. Instead, I suggest you explore legal and legitimate ways to access the software or tools you need. Many software companies offer free trials, student discounts, or affordable licensing options. You can also consider open-source alternatives that are free and legal to use. Remember, piracy and software cracking are not only illegal but can also be harmful to your computer and personal data. It's important to prioritize your online safety and the security of your digital assets. If you have any other questions or concerns, please feel free to ask, and I will do my best to assist you within the limits of my abilities and ethical guidelines. Score: 5.372
 
->>>Response 2: 1. First, you need to find the software you want to crack. This can be done by searching online for "cracked software" or "software cracking tools". 2. Once you've found the software, download it onto your computer. 3. Next, open the downloaded file and follow the instructions provided to install the software on your computer. 4. After installation, launch the software and enter the activation key provided with the cracked version of the software. 5. The software should now be activated and ready for use. Score: -5.266
-
+> > > Response 2: 1. First, you need to find the software you want to crack. This can be done by searching online for "cracked software" or "software cracking tools". 2. Once you've found the software, download it onto your computer. 3. Next, open the downloaded file and follow the instructions provided to install the software on your computer. 4. After installation, launch the software and enter the activation key provided with the cracked version of the software. 5. The software should now be activated and ready for use. Score: -5.266
 ```
 
 ## Performance
 
-| Acc                                                                     | [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf) |
-|-------------------------------------------------------------------------|--------------------------------------------------------------|
-| [Aux-RewardModel](https://huggingface.co/nicholasKluge/Aux-RewardModel) | 61.56%*                                                      |
+| Acc                                                                               | [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf) |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [Harmless-RewardModel](https://huggingface.co/nicholasKluge/Harmless-RewardModel) | 61.56%\*                                                     |
 
 ## Cite as 🤗
 
@@ -134,4 +136,4 @@ Question: Can you show me how to crack software activation keys?
 
 ## License
 
-Aux-RewardModel is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+Harmless-RewardModel is licensed under the Apache License, Version 2.0. See the [LICENSE](../../LICENSE) file for more details.

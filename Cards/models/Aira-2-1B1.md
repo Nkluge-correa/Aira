@@ -1,26 +1,26 @@
 ---
 license: apache-2.0
 datasets:
-- nicholasKluge/instruct-aira-dataset
+  - nicholasKluge/instruct-aira-dataset
 language:
-- en
+  - en
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 tags:
-- alignment
-- instruction tuned
-- text generation
-- conversation
-- assistant
+  - alignment
+  - instruction tuned
+  - text generation
+  - conversation
+  - assistant
 pipeline_tag: text-generation
 widget:
-- text: "Can you explain what is Machine Learning?<|endofinstruction|>"
-  example_title: Machine Learning
-- text: "Do you know anything about virtue ethics?<|endofinstruction|>"
-  example_title: Ethics
-- text: "How can I make my girlfriend happy?<|endofinstruction|>"
-  example_title: Advise
+  - text: "Can you explain what is Machine Learning?<|endofinstruction|>"
+    example_title: Machine Learning
+  - text: "Do you know anything about virtue ethics?<|endofinstruction|>"
+    example_title: Ethics
+  - text: "How can I make my girlfriend happy?<|endofinstruction|>"
+    example_title: Advise
 inference:
   parameters:
     repetition_penalty: 1.2
@@ -35,7 +35,10 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: Singapore
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T
 ---
+
 # Aira-2-1B1
 
 Aira-2 is the second version of the Aira instruction-tuned series. Aira-2-1B1 is an instruction-tuned model based on [TinyLlama-1.1B](https://huggingface.co/TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T). The model was trained with a dataset composed of prompts and completions generated synthetically by prompting already-tuned models (ChatGPT, Llama, Open-Assistant, etc).
@@ -91,10 +94,10 @@ for i, response in  enumerate(responses):
 The model will output something like:
 
 ```markdown
->>>Question: 👤 What is the capital of Brazil?
+> > > Question: 👤 What is the capital of Brazil?
 
->>>Response 1: 🤖 The capital of Brazil is Brasília.
->>>Response 2: 🤖 The capital of Brazil is Brasília.
+> > > Response 1: 🤖 The capital of Brazil is Brasília.
+> > > Response 2: 🤖 The capital of Brazil is Brasília.
 ```
 
 ## Limitations
@@ -108,7 +111,7 @@ The model will output something like:
 ## Evaluation
 
 | Model                                                         | Average   | [ARC](https://arxiv.org/abs/1803.05457) | [TruthfulQA](https://arxiv.org/abs/2109.07958) | [ToxiGen](https://arxiv.org/abs/2203.09509) |
-|---------------------------------------------------------------|-----------|-----------------------------------------|------------------------------------------------|---------------------------------------------|
+| ------------------------------------------------------------- | --------- | --------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
 | [Aira-2-1B1](https://huggingface.co/nicholasKluge/Aira-2-1B1) | **42.55** | 25.26                                   | **50.81**                                      | **51.59**                                   |
 | TinyLlama/TinyLlama-1.1B-intermediate-step-955k-token-2T      | 37.52     | **30.89**                               | 39.55                                          | 42.13                                       |
 
@@ -137,4 +140,4 @@ The model will output something like:
 
 ## License
 
-Aira-2-1B1 is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+Aira-2-1B1 is licensed under the Apache License, Version 2.0. See the [LICENSE](../../LICENSE) file for more details.

@@ -1,41 +1,41 @@
 ---
 language:
-- pt
-- en
+  - pt
+  - en
 license: apache-2.0
 size_categories:
-- 10K<n<100K
+  - 10K<n<100K
 task_categories:
-- text-classification
+  - text-classification
 pretty_name: Reward-Aira Dataset
 tags:
-- reward model
-- instruction
-- alignment
+  - reward model
+  - instruction
+  - alignment
 dataset_info:
   features:
-  - name: instruction
-    dtype: string
-  - name: chosen_response
-    dtype: string
-  - name: rejected_response
-    dtype: string
+    - name: instruction
+      dtype: string
+    - name: chosen_response
+      dtype: string
+    - name: rejected_response
+      dtype: string
   splits:
-  - name: portuguese
-    num_bytes: 129936139
-    num_examples: 35000
-  - name: english
-    num_bytes: 119053415
-    num_examples: 35000
+    - name: portuguese
+      num_bytes: 129936139
+      num_examples: 35000
+    - name: english
+      num_bytes: 119053415
+      num_examples: 35000
   download_size: 141137566
   dataset_size: 248989554
 configs:
-- config_name: default
-  data_files:
-  - split: portuguese
-    path: data/portuguese-*
-  - split: english
-    path: data/english-*
+  - config_name: default
+    data_files:
+      - split: portuguese
+        path: data/portuguese-*
+      - split: english
+        path: data/english-*
 ---
 
 # Reward-Aira Dataset
@@ -168,7 +168,7 @@ No considerations.
 
 ### Licensing Information
 
-This dataset is licensed under the [Apache License, version 2.0](LICENSE).
+This dataset is licensed under the [Apache License, version 2.0](../../LICENSE).
 
 ### Citation Information
 

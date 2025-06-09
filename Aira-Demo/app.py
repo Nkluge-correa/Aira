@@ -23,25 +23,25 @@ completion_tfidf_matrix = joblib.load('completion_tfidf_matrix.pkl')
 
 model_id = "nicholasKluge/Aira-OPT-125M"
 rewardmodel_id = "nicholasKluge/RewardModel"
-toxicitymodel_id = "nicholasKluge/ToxicityModel"
+guardrail_id = "nicholasKluge/ToxiGuardrail"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = AutoModelForCausalLM.from_pretrained(model_id)
 rewardModel = AutoModelForSequenceClassification.from_pretrained(rewardmodel_id)
-toxicityModel = AutoModelForSequenceClassification.from_pretrained(toxicitymodel_id)
+guardrail = AutoModelForSequenceClassification.from_pretrained(guardrail_id)
 
 model.eval()
 rewardModel.eval()
-toxicityModel.eval()
+guardrail.eval()
 
 model.to(device)
 rewardModel.to(device)
-toxicityModel.to(device)
+guardrail.to(device)
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 rewardTokenizer = AutoTokenizer.from_pretrained(rewardmodel_id)
-toxiciyTokenizer = AutoTokenizer.from_pretrained(toxicitymodel_id)
+guardrailTokenizer = AutoTokenizer.from_pretrained(guardrail_id)
 
 intro = """
 ## What is Aira?
@@ -50,7 +50,7 @@ intro = """
 
 ## Limitations
 
-We developed our chatbots via supervised fine-tuning and DPO. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **nontoxic**  text. This leads us to some problems:
+We developed our chatbots via supervised fine-tuning and DPO. This approach has a lot of limitations. Even though we can make a chatbot that can answer questions about anything, forcing the model to produce good-quality responses is hard. And by good, we mean **factual** and **harmless**  text. This leads us to some problems:
 
 **Hallucinations:** This model can produce content that can be mistaken for truth but is, in fact, misleading or entirely false, i.e., hallucination.
 
@@ -64,13 +64,13 @@ Aira is intended only for academic research. For more information, read our [mod
 
 ## How does this demo work?
 
-For this demo, we use the lighter model we have trained from the OPT series (Aira-OPT-125M). This demo employs a [reward model](https://huggingface.co/nicholasKluge/RewardModel) and a [toxicity model](https://huggingface.co/nicholasKluge/ToxicityModel) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of toxicity. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
+For this demo, we use the lighter model we have trained from the OPT series (Aira-OPT-125M) and a best-of-n sampling strategy. This demo employs a [reward model](https://huggingface.co/nicholasKluge/RewardModel) and a [guardrail model](https://huggingface.co/nicholasKluge/ToxiGuardrail) to evaluate the score of each candidate's response, considering its alignment with the user's message and its level of potential harm. The generation function arranges the candidate responses in order of their reward scores and eliminates any responses deemed toxic or harmful. Subsequently, the generation function returns the candidate response with the highest score that surpasses the safety threshold, or a default message if no safe candidates are identified.
 """
 
 search_intro ="""
 <h2><center>Explore Aira's Dataset 🔍</h2></center>
 
-Here, users can look for instances in Aira's fine-tuning dataset. We use the Term Frequency-Inverse Document Frequency (TF-IDF) representation and cosine similarity to enable a fast search to explore the dataset. The pre-trained TF-IDF vectorizers and corresponding TF-IDF matrices are available in this repository. Below, we present the top ten most similar instances in Aira's dataset for every search query.
+Here, users can look for instances in Aira's SFT dataset. We use the Term Frequency-Inverse Document Frequency (TF-IDF) representation and cosine similarity to enable a fast search to explore the dataset. The pre-trained TF-IDF vectorizers and corresponding TF-IDF matrices are available in this repository. Below, we present the top ten most similar instances in Aira's dataset for every search query.
 
 Users can use this tool to explore how the model interpolates on the fine-tuning data and if it can follow instructions that are out of the fine-tuning distribution.
 """
@@ -93,7 +93,6 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                         avatar_images=("./astronaut.png", "./robot.png"),
                         render_markdown= True,
                         line_breaks=True,
-                        likeable=False,
                         layout='panel')
     
     msg = gr.Textbox(label="Write a question or instruction ...", placeholder="What is the capital of Brazil?")
@@ -156,10 +155,10 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
 
         decoded_text = [tokenizer.decode(tokens, skip_special_tokens=True).replace(user_msg, "") for tokens in generated_response]
 
-        rewards = list()
+        rewards = []
 
         if safety == "On":
-            toxicities = list()
+            guardrail_scores = []
 
         for text in decoded_text:
             reward_tokens = rewardTokenizer(user_msg, text,
@@ -176,23 +175,23 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
 
             if safety == "On":
 
-                toxicity_tokens = toxiciyTokenizer(user_msg + " " + text,
+                safety_tokens = guardrailTokenizer(user_msg + " " + text,
                             truncation=True,
                             max_length=512,
                             return_token_type_ids=False,
                             return_tensors="pt",
                             return_attention_mask=True)
                 
-                toxicity_tokens.to(toxicityModel.device)
+                safety_tokens.to(guardrail.device)
                 
-                toxicity = toxicityModel(**toxicity_tokens)[0].item()
-                toxicities.append(toxicity)
+                guardrail_score = guardrail(**safety_tokens)[0].item()
+                guardrail_scores.append(guardrail_score)
                 
-                toxicity_threshold = 5
+                guardrail_threshold = 5 # Adjust this threshold based on your safety requirements
 
         if safety == "On":
-            ordered_generations = sorted(zip(decoded_text, rewards, toxicities), key=lambda x: x[1], reverse=True)
-            ordered_generations = [(x, y, z) for (x, y, z) in ordered_generations if z >= toxicity_threshold]
+            ordered_generations = sorted(zip(decoded_text, rewards, guardrail_scores), key=lambda x: x[1], reverse=True)
+            ordered_generations = [(x, y, z) for (x, y, z) in ordered_generations if z >= guardrail_threshold]
 
         else:
             ordered_generations = sorted(zip(decoded_text, rewards), key=lambda x: x[1], reverse=True)

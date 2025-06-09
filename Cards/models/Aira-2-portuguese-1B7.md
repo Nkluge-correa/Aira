@@ -1,26 +1,26 @@
 ---
 license: bigscience-bloom-rail-1.0
 datasets:
-- nicholasKluge/instruct-aira-dataset
+  - nicholasKluge/instruct-aira-dataset
 language:
-- pt
+  - pt
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 tags:
-- alignment
-- instruction tuned
-- text generation
-- conversation
-- assistant
+  - alignment
+  - instruction tuned
+  - text generation
+  - conversation
+  - assistant
 pipeline_tag: text-generation
 widget:
-- text: "<|startofinstruction|>Me explique o que é Aprendizagem de Máquina?<|endofinstruction|>"
-  example_title: Aprendizagem de Máquina
-- text: "<|startofinstruction|>Você sabe alguma coisa sobre a Ética das Virtudes?<|endofinstruction|>"
-  example_title: Ética
-- text: "<|startofinstruction|>Como eu posso fazer a minha namorada feliz?<|endofinstruction|>"
-  example_title: Conselho
+  - text: "<|startofinstruction|>Me explique o que é Aprendizagem de Máquina?<|endofinstruction|>"
+    example_title: Aprendizagem de Máquina
+  - text: "<|startofinstruction|>Você sabe alguma coisa sobre a Ética das Virtudes?<|endofinstruction|>"
+    example_title: Ética
+  - text: "<|startofinstruction|>Como eu posso fazer a minha namorada feliz?<|endofinstruction|>"
+    example_title: Conselho
 inference:
   parameters:
     repetition_penalty: 1.2
@@ -35,7 +35,10 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: Singapore
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - bigscience/bloom-1b7
 ---
+
 # Aira-2-portuguese-1B7
 
 Aira-2 is the second version of the Aira instruction-tuned series. Aira-2-portuguese-1B7 is an instruction-tuned model based on [BLOOM](https://huggingface.co/bigscience/bloom-1b7). The model was trained with a dataset composed of prompts and completions generated synthetically by prompting already-tuned models (ChatGPT, Llama, Open-Assistant, etc).
@@ -96,10 +99,10 @@ for i, response in  enumerate(responses):
 The model will output something like:
 
 ```markdown
->>> Question: 👤 Qual a capital da Alemanha?
+> > > Question: 👤 Qual a capital da Alemanha?
 
->>>Response 1: 🤖 A capital da Alemanha é Berlim. É a maior cidade da Alemanha e serve como centro administrativo, cultural e político da Alemanha.
->>>Response 2: 🤖 A capital da Alemanha é Berlim. É a maior cidade da Alemanha e serve como centro administrativo, cultural e político da Alemanha.
+> > > Response 1: 🤖 A capital da Alemanha é Berlim. É a maior cidade da Alemanha e serve como centro administrativo, cultural e político da Alemanha.
+> > > Response 2: 🤖 A capital da Alemanha é Berlim. É a maior cidade da Alemanha e serve como centro administrativo, cultural e político da Alemanha.
 ```
 
 ## Limitations
@@ -133,4 +136,4 @@ The model will output something like:
 
 ## License
 
-Aira-2-portuguese-1B7 is licensed under the RAIL License since it is a model derived from BLOOM. See the [LICENSE](LICENSE) file for more details.
+Aira-2-portuguese-1B7 is licensed under the RAIL License since it is a model derived from BLOOM. See the [LICENSE](https://huggingface.co/nicholasKluge/Aira-2-portuguese-1B7/blob/main/LICENSE) file for more details.

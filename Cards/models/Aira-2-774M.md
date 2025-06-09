@@ -1,26 +1,26 @@
 ---
 license: apache-2.0
 datasets:
-- nicholasKluge/instruct-aira-dataset
+  - nicholasKluge/instruct-aira-dataset
 language:
-- en
+  - en
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 tags:
-- alignment
-- instruction tuned
-- text generation
-- conversation
-- assistant
+  - alignment
+  - instruction tuned
+  - text generation
+  - conversation
+  - assistant
 pipeline_tag: text-generation
 widget:
-- text: "<|startofinstruction|>Can you explain what is Machine Learning?<|endofinstruction|>"
-  example_title: Machine Learning
-- text: "<|startofinstruction|>Do you know anything about virtue ethics?<|endofinstruction|>"
-  example_title: Ethics
-- text: "<|startofinstruction|>How can I make my girlfriend happy?<|endofinstruction|>"
-  example_title: Advise
+  - text: "<|startofinstruction|>Can you explain what is Machine Learning?<|endofinstruction|>"
+    example_title: Machine Learning
+  - text: "<|startofinstruction|>Do you know anything about virtue ethics?<|endofinstruction|>"
+    example_title: Ethics
+  - text: "<|startofinstruction|>How can I make my girlfriend happy?<|endofinstruction|>"
+    example_title: Advise
 inference:
   parameters:
     repetition_penalty: 1.2
@@ -35,7 +35,10 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: United States of America
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - gpt2-large
 ---
+
 # Aira-2-774M
 
 Aira-2 is the second version of the Aira instruction-tuned series. Aira-2-774M is an instruction-tuned model based on [GPT-2](https://huggingface.co/gpt2-large). The model was trained with a dataset composed of prompts and completions generated synthetically by prompting already-tuned models (ChatGPT, Llama, Open-Assistant, etc).
@@ -91,10 +94,10 @@ for i, response in  enumerate(responses):
 The model will output something like:
 
 ```markdown
->>>Question: 👤 What is the capital of Brazil?
+> > > Question: 👤 What is the capital of Brazil?
 
->>>Response 1: 🤖 The capital of Brazil is Brasília.
->>>Response 2: 🤖 The capital of Brazil is Brasília.
+> > > Response 1: 🤖 The capital of Brazil is Brasília.
+> > > Response 2: 🤖 The capital of Brazil is Brasília.
 ```
 
 ## Limitations
@@ -107,17 +110,17 @@ The model will output something like:
 
 ## Evaluation
 
-|Model                                                                   |Average   |[ARC](https://arxiv.org/abs/1803.05457) |[TruthfulQA](https://arxiv.org/abs/2109.07958) |[ToxiGen](https://arxiv.org/abs/2203.09509) |
-| ---------------------------------------------------------------------- | -------- | -------------------------------------- | --------------------------------------------- | ------------------------------------------ |
-|[Aira-2-124M-DPO](https://huggingface.co/nicholasKluge/Aira-2-124M-DPO) |**40.68** |**24.66**                               |**42.61**                                      |**54.79**                                   |
-|[Aira-2-124M](https://huggingface.co/nicholasKluge/Aira-2-124M)         |38.07     |24.57                                   |41.02                                          |48.62                                       |
-|GPT-2                                                                   |35.37     |21.84                                   |40.67                                          |43.62                                       |
-|[Aira-2-355M](https://huggingface.co/nicholasKluge/Aira-2-355M)         |**39.68** |**27.56**                               |38.53                                          |**53.19**                                   |
-|GPT-2-medium                                                            |36.43     |27.05                                   |**40.76**                                      |41.49                                       |
-|[Aira-2-774M](https://huggingface.co/nicholasKluge/Aira-2-774M)         |**42.26** |**28.75**                               |**41.33**                                      |**56.70**                                   |
-|GPT-2-large                                                             |35.16     |25.94                                   |38.71                                          |40.85                                       |
-|[Aira-2-1B5](https://huggingface.co/nicholasKluge/Aira-2-1B5)           |**42.22** |28.92                                   |**41.16**                                      |**56.60**                                   |
-|GPT-2-xl                                                                |36.84     |**30.29**                               |38.54                                          |41.70                                       |
+| Model                                                                   | Average   | [ARC](https://arxiv.org/abs/1803.05457) | [TruthfulQA](https://arxiv.org/abs/2109.07958) | [ToxiGen](https://arxiv.org/abs/2203.09509) |
+| ----------------------------------------------------------------------- | --------- | --------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
+| [Aira-2-124M-DPO](https://huggingface.co/nicholasKluge/Aira-2-124M-DPO) | **40.68** | **24.66**                               | **42.61**                                      | **54.79**                                   |
+| [Aira-2-124M](https://huggingface.co/nicholasKluge/Aira-2-124M)         | 38.07     | 24.57                                   | 41.02                                          | 48.62                                       |
+| GPT-2                                                                   | 35.37     | 21.84                                   | 40.67                                          | 43.62                                       |
+| [Aira-2-355M](https://huggingface.co/nicholasKluge/Aira-2-355M)         | **39.68** | **27.56**                               | 38.53                                          | **53.19**                                   |
+| GPT-2-medium                                                            | 36.43     | 27.05                                   | **40.76**                                      | 41.49                                       |
+| [Aira-2-774M](https://huggingface.co/nicholasKluge/Aira-2-774M)         | **42.26** | **28.75**                               | **41.33**                                      | **56.70**                                   |
+| GPT-2-large                                                             | 35.16     | 25.94                                   | 38.71                                          | 40.85                                       |
+| [Aira-2-1B5](https://huggingface.co/nicholasKluge/Aira-2-1B5)           | **42.22** | 28.92                                   | **41.16**                                      | **56.60**                                   |
+| GPT-2-xl                                                                | 36.84     | **30.29**                               | 38.54                                          | 41.70                                       |
 
 - Evaluations were performed using the [Language Model Evaluation Harness](https://github.com/EleutherAI/lm-evaluation-harness) (by [EleutherAI](https://www.eleuther.ai/)).
 
@@ -144,4 +147,4 @@ The model will output something like:
 
 ## License
 
-Aira-2-774M is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+Aira-2-774M is licensed under the Apache License, Version 2.0. See the [LICENSE](../../LICENSE) file for more details.

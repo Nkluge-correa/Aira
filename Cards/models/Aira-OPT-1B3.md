@@ -1,26 +1,26 @@
 ---
 license: other
 datasets:
-- nicholasKluge/instruct-aira-dataset
+  - nicholasKluge/instruct-aira-dataset
 language:
-- en
+  - en
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 tags:
-- alignment
-- instruction tuned
-- text generation
-- conversation
-- assistant
+  - alignment
+  - instruction tuned
+  - text generation
+  - conversation
+  - assistant
 pipeline_tag: text-generation
 widget:
-- text: "Can you explain what is Machine Learning?<|endofinstruction|>"
-  example_title: Machine Learning
-- text: "Do you know anything about virtue ethics?<|endofinstruction|>"
-  example_title: Ethics
-- text: "How can I make my girlfriend happy?<|endofinstruction|>"
-  example_title: Advise
+  - text: "Can you explain what is Machine Learning?<|endofinstruction|>"
+    example_title: Machine Learning
+  - text: "Do you know anything about virtue ethics?<|endofinstruction|>"
+    example_title: Ethics
+  - text: "How can I make my girlfriend happy?<|endofinstruction|>"
+    example_title: Advise
 inference:
   parameters:
     repetition_penalty: 1.2
@@ -35,7 +35,10 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: Singapore
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - facebook/opt-1.3b
 ---
+
 # Aira-OPT-1B3
 
 Aira-2 is the second version of the Aira instruction-tuned series. Aira-OPT-1B3 is an instruction-tuned model based on [OPT](https://huggingface.co/facebook/opt-1.3b). The model was trained with a dataset composed of prompts and completions generated synthetically by prompting already-tuned models (ChatGPT, Llama, Open-Assistant, etc).
@@ -91,10 +94,10 @@ for i, response in  enumerate(responses):
 The model will output something like:
 
 ```markdown
->>>Question: 👤 What is the capital of Brazil?
+> > > Question: 👤 What is the capital of Brazil?
 
->>>Response 1: 🤖 The capital of Brazil is Brasília.
->>>Response 2: 🤖 The capital of Brazil is Brasília.
+> > > Response 1: 🤖 The capital of Brazil is Brasília.
+> > > Response 2: 🤖 The capital of Brazil is Brasília.
 ```
 
 ## Limitations
@@ -108,7 +111,7 @@ The model will output something like:
 ## Evaluation
 
 | Model                                                               | Average   | [ARC](https://arxiv.org/abs/1803.05457) | [TruthfulQA](https://arxiv.org/abs/2109.07958) | [ToxiGen](https://arxiv.org/abs/2203.09509) |
-|---------------------------------------------------------------------|-----------|-----------------------------------------|------------------------------------------------|---------------------------------------------|
+| ------------------------------------------------------------------- | --------- | --------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
 | [Aira-OPT-125M](https://huggingface.co/nicholasKluge/Aira-OPT-125M) | **43.34** | **24.65**                               | **49.11**                                      | **56.27**                                   |
 | OPT-125M                                                            | 40.29     | 22.78                                   | 42.88                                          | 55.21                                       |
 | [Aira-OPT-350M](https://huggingface.co/nicholasKluge/Aira-OPT-350M) | **41.56** | **25.00**                               | **42.13**                                      | **57.55**                                   |
@@ -141,4 +144,4 @@ The model will output something like:
 
 ## License
 
-Aira-OPT-1B3 is licensed under the OPT-175B License Agreement, Copyright (c) Meta Platforms, Inc. All Rights Reserved. See the [LICENSE](LICENSE.md) file for more details.
+Aira-OPT-1B3 is licensed under the OPT-175B License Agreement, Copyright (c) Meta Platforms, Inc. All Rights Reserved. See the [LICENSE](https://huggingface.co/nicholasKluge/Aira-OPT-1B3/blob/main/LICENSE.md) file for more details.

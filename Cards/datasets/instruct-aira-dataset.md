@@ -1,45 +1,45 @@
 ---
 language:
-- pt
-- en
-- es
+  - pt
+  - en
+  - es
 license: apache-2.0
 size_categories:
-- 10K<n<100K
+  - 10K<n<100K
 task_categories:
-- text-generation
+  - text-generation
 pretty_name: Instruct-Aira Dataset
 tags:
-- alignment
-- instruction
-- chat
+  - alignment
+  - instruction
+  - chat
 dataset_info:
   features:
-  - name: prompt
-    dtype: string
-  - name: completion
-    dtype: string
+    - name: prompt
+      dtype: string
+    - name: completion
+      dtype: string
   splits:
-  - name: portuguese
-    num_bytes: 52023662
-    num_examples: 40945
-  - name: english
-    num_bytes: 47254561
-    num_examples: 41762
-  - name: spanish
-    num_bytes: 53176782
-    num_examples: 40946
+    - name: portuguese
+      num_bytes: 52023662
+      num_examples: 40945
+    - name: english
+      num_bytes: 47254561
+      num_examples: 41762
+    - name: spanish
+      num_bytes: 53176782
+      num_examples: 40946
   download_size: 85078532
   dataset_size: 152455005
 configs:
-- config_name: default
-  data_files:
-  - split: portuguese
-    path: data/portuguese-*
-  - split: english
-    path: data/english-*
-  - split: spanish
-    path: data/spanish-*
+  - config_name: default
+    data_files:
+      - split: portuguese
+        path: data/portuguese-*
+      - split: english
+        path: data/english-*
+      - split: spanish
+        path: data/spanish-*
 ---
 
 # Instruct-Aira Dataset
@@ -178,7 +178,7 @@ No considerations.
 
 ### Licensing Information
 
-This dataset is licensed under the [Apache License, version 2.0](LICENSE).
+This dataset is licensed under the [Apache License, version 2.0](../../LICENSE).
 
 ### Citation Information
 

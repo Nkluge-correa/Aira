@@ -1,26 +1,26 @@
 ---
 license: apache-2.0
 datasets:
-- nicholasKluge/instruct-aira-dataset
+  - nicholasKluge/instruct-aira-dataset
 language:
-- pt
+  - pt
 metrics:
-- accuracy
+  - accuracy
 library_name: transformers
 tags:
-- alignment
-- instruction tuned
-- text generation
-- conversation
-- assistant
+  - alignment
+  - instruction tuned
+  - text generation
+  - conversation
+  - assistant
 pipeline_tag: text-generation
 widget:
-- text: "<|startofinstruction|>Você pode me explicar o que é Aprendizagem de Máquina?<|endofinstruction|>"
-  example_title: Aprendizagem de Máquina
-- text: "<|startofinstruction|>Você sabe alguma coisa sobre Ética das Virtudes?<|endofinstruction|>"
-  example_title: Ética
-- text: "<|startofinstruction|>Como eu posso fazer a minha namorada feliz?<|endofinstruction|>"
-  example_title: Conselho
+  - text: "<|startofinstruction|>Você pode me explicar o que é Aprendizagem de Máquina?<|endofinstruction|>"
+    example_title: Aprendizagem de Máquina
+  - text: "<|startofinstruction|>Você sabe alguma coisa sobre Ética das Virtudes?<|endofinstruction|>"
+    example_title: Ética
+  - text: "<|startofinstruction|>Como eu posso fazer a minha namorada feliz?<|endofinstruction|>"
+    example_title: Conselho
 inference:
   parameters:
     repetition_penalty: 1.2
@@ -35,7 +35,10 @@ co2_eq_emissions:
   training_type: fine-tuning
   geographical_location: Singapore
   hardware_used: NVIDIA A100-SXM4-40GB
+base_model:
+  - pierreguillou/gpt2-small-portuguese
 ---
+
 # Aira-2-portuguese-124M
 
 Aira-2 is the second version of the Aira instruction-tuned series. Aira-2-portuguese-124M is an instruction-tuned model based on [GPT-2](https://huggingface.co/pierreguillou/gpt2-small-portuguese). The model was trained with a dataset composed of prompt, completions generated synthetically by prompting already-tuned models (ChatGPT, Llama, Open-Assistant, etc).
@@ -91,10 +94,10 @@ for i, response in  enumerate(responses):
 The model will output something like:
 
 ```markdown
->>> Question: 👤 Qual a capital do Brasil?
+> > > Question: 👤 Qual a capital do Brasil?
 
->>>Response 1: 🤖 A capital do Brasil é Brasília.
->>>Response 2: 🤖 A capital do Brasil é Brasília.
+> > > Response 1: 🤖 A capital do Brasil é Brasília.
+> > > Response 2: 🤖 A capital do Brasil é Brasília.
 ```
 
 ## Limitations
@@ -108,7 +111,7 @@ The model will output something like:
 ## Evaluation
 
 | Model                                                                                 | Average   | [ARC](https://arxiv.org/abs/1803.05457) | [TruthfulQA](https://arxiv.org/abs/2109.07958) | [ToxiGen](https://arxiv.org/abs/2203.09509) |
-|---------------------------------------------------------------------------------------|-----------|-----------------------------------------|------------------------------------------------|---------------------------------------------|
+| ------------------------------------------------------------------------------------- | --------- | --------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
 | [Aira-2-portuguese-124M](https://huggingface.co/nicholasKluge/Aira-2-portuguese-124M) | **32.73** | **24.87**                               | 40.60                                          | None                                        |
 | Gpt2-small-portuguese                                                                 | 31.96     | 22.48                                   | **41.44**                                      | None                                        |
 
@@ -137,4 +140,4 @@ The model will output something like:
 
 ## License
 
-Aira-2-portuguese-124M is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more details.
+Aira-2-portuguese-124M is licensed under the Apache License, Version 2.0. See the [LICENSE](../../LICENSE) file for more details.

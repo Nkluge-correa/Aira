@@ -23,25 +23,25 @@ completion_tfidf_matrix = joblib.load('completion_tfidf_matrix.pkl')
 
 model_id = "nicholasKluge/Aira-2-portuguese-124M"
 rewardmodel_id = "nicholasKluge/RewardModelPT"
-toxicitymodel_id = "nicholasKluge/ToxicityModelPT"
+guardrail_id = "nicholasKluge/ToxiGuardrailPT"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
 
 model = AutoModelForCausalLM.from_pretrained(model_id)
 rewardModel = AutoModelForSequenceClassification.from_pretrained(rewardmodel_id)
-toxicityModel = AutoModelForSequenceClassification.from_pretrained(toxicitymodel_id)
+guardrail = AutoModelForSequenceClassification.from_pretrained(guardrail_id)
 
 model.eval()
 rewardModel.eval()
-toxicityModel.eval()
+guardrail.eval()
 
 model.to(device)
 rewardModel.to(device)
-toxicityModel.to(device)
+guardrail.to(device)
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 rewardTokenizer = AutoTokenizer.from_pretrained(rewardmodel_id)
-toxiciyTokenizer = AutoTokenizer.from_pretrained(toxicitymodel_id)
+guardrailTokenizer = AutoTokenizer.from_pretrained(guardrail_id)
 
 
 intro = """
@@ -51,7 +51,7 @@ intro = """
 
 ## Limitações
 
-Desenvolvemos os nossos chatbots através de ajuste fino supervisionado e DPO. Esta abordagem tem muitas limitações. Apesar de podermos criar um chatbot capaz de responder a perguntas sobre qualquer assunto, é difícil forçar o modelo a produzir respostas de boa qualidade. E por boa, queremos dizer texto **factual** e **não tóxico**. Isto leva-nos a alguns problemas:
+Desenvolvemos os nossos chatbots através de ajuste fino supervisionado e DPO. Esta abordagem tem muitas limitações. Apesar de podermos criar um chatbot capaz de responder a perguntas sobre qualquer assunto, é difícil forçar o modelo a produzir respostas de boa qualidade. E por boa, queremos dizer texto **factual** e **inofensivo**. Isto leva-nos a alguns problemas:
 
 **Alucinações:** Esse modelo pode produzir conteúdo que pode ser confundido com a verdade, mas que é, de fato, enganoso ou totalmente falso, ou seja, alucinação.
 
@@ -65,13 +65,13 @@ Aira destina-se apenas à investigação acadêmica. Para mais informações, le
 
 ## Como essa demo funciona?
 
-Para esta demonstração, utilizamos o modelo mais leve que treinamos (Aira-2-portuguese-124M). Esta demonstração utiliza um [modelo de recompensa](https://huggingface.co/nicholasKluge/RewardModelPT) e um [modelo de toxicidade](https://huggingface.co/nicholasKluge/ToxicityModelPT) para avaliar a pontuação de cada resposta candidata, considerando o seu alinhamento com a mensagem do utilizador e o seu nível de toxicidade. A função de geração organiza as respostas candidatas por ordem da sua pontuação de recompensa e elimina as respostas consideradas tóxicas ou nocivas. Posteriormente, a função de geração devolve a resposta candidata com a pontuação mais elevada que ultrapassa o limiar de segurança, ou uma mensagem pré-estabelecida se não forem identificados candidatos seguros.
+Para esta demonstração, utilizamos o modelo mais leve que treinamos (Aira-2-portuguese-124M) e uma estratégia de amostragem best-of-n. Esta demonstração utiliza um [modelo de recompensa](https://huggingface.co/nicholasKluge/RewardModelPT) e uma [guardrail](https://huggingface.co/nicholasKluge/ToxiGuardrailPT) para avaliar a pontuação de cada resposta candidata, considerando o seu alinhamento com a mensagem do utilizador e o seu nível de nocividade. A função de geração organiza as respostas candidatas por ordem da sua pontuação de recompensa e elimina as respostas consideradas tóxicas ou nocivas. Posteriormente, a função de geração devolve a resposta candidata com a pontuação mais elevada que ultrapassa o limiar de segurança, ou uma mensagem pré-estabelecida se não forem identificados candidatos seguros.
 """
 
 search_intro ="""
 <h2><center>Explore o conjunto de dados de alinhamento 🔍</h2></center>
 
-Aqui, os usuários podem procurar instâncias no conjunto de dados de ajuste fino. Para permitir uma pesquisa rápida, usamos a representação Term Frequency-Inverse Document Frequency (TF-IDF) e a similaridade de cosseno para explorar o conjunto de dados. Os vetorizadores TF-IDF pré-treinados e as matrizes TF-IDF correspondentes estão disponíveis neste repositório. Abaixo, apresentamos as dez instâncias mais semelhantes no conjunto de dados de ajuste fino utilizado. 
+Aqui, os usuários podem procurar instâncias no conjunto de dados de ajuste fino (SFT). Para permitir uma pesquisa rápida, usamos a representação Term Frequency-Inverse Document Frequency (TF-IDF) e a similaridade de cosseno para explorar o conjunto de dados. Os vetorizadores TF-IDF pré-treinados e as matrizes TF-IDF correspondentes estão disponíveis neste repositório. Abaixo, apresentamos as dez instâncias mais semelhantes no conjunto de dados de ajuste fino utilizado. 
 
 Os usuários podem usar essa ferramenta para explorar como o modelo interpola os dados de ajuste fino e se ele é capaz de seguir instruções que estão fora da distribuição de ajuste fino.
 """
@@ -94,7 +94,6 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
                         avatar_images=("./astronaut.png", "./robot.png"),
                         render_markdown= True,
                         line_breaks=True,
-                        likeable=False,
                         layout='panel')
                          
     msg = gr.Textbox(label="Escreva uma pergunta ou instrução para Aira ...", placeholder="Olá Aira, como vai você?")
@@ -161,10 +160,10 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
 
         decoded_text = [tokenizer.decode(tokens, skip_special_tokens=True).replace(user_msg, "") for tokens in generated_response]
 
-        rewards = list()
-        
+        rewards = []
+
         if safety == "On":
-            toxicities = list()
+            guardrail_scores = []
 
         for text in decoded_text:
             reward_tokens = rewardTokenizer(user_msg, text,
@@ -180,22 +179,23 @@ with gr.Blocks(theme='freddyaboulton/dracula_revamped') as demo:
             rewards.append(reward)
 
             if safety == "On":
-                toxicity_tokens = toxiciyTokenizer(user_msg + " " + text,
+                safety_tokens = guardrailTokenizer(user_msg + " " + text,
                             truncation=True,
                             max_length=512,
                             return_token_type_ids=False,
                             return_tensors="pt",
                             return_attention_mask=True)
                 
-                toxicity_tokens.to(toxicityModel.device)
+                safety_tokens.to(guardrail.device)
                 
-                toxicity = toxicityModel(**toxicity_tokens)[0].item()
-                toxicities.append(toxicity)
-                toxicity_threshold = 5
+                guardrail_score = guardrail(**safety_tokens)[0].item()
+                guardrail_scores.append(guardrail_score)
+                
+                guardrail_threshold = 5 # Adjust this threshold based on your safety requirements
 
         if safety == "On":
-            ordered_generations = sorted(zip(decoded_text, rewards, toxicities), key=lambda x: x[1], reverse=True)
-            ordered_generations = [(x, y, z) for (x, y, z) in ordered_generations if z >= toxicity_threshold]
+            ordered_generations = sorted(zip(decoded_text, rewards, guardrail_scores), key=lambda x: x[1], reverse=True)
+            ordered_generations = [(x, y, z) for (x, y, z) in ordered_generations if z >= guardrail_threshold]
 
         else:
             ordered_generations = sorted(zip(decoded_text, rewards), key=lambda x: x[1], reverse=True)

@@ -1,41 +1,41 @@
 ---
 language:
-- pt
-- en
+  - pt
+  - en
 license: apache-2.0
 size_categories:
-- 10K<n<100K
+  - 10K<n<100K
 task_categories:
-- text-classification
-pretty_name: Toxic-Text
+  - text-classification
+pretty_name: Harmful-Text
 tags:
-- toxicity
-- harm
+  - toxicity
+  - harm
 dataset_info:
   features:
-  - name: non_toxic
-    dtype: string
-  - name: toxic
-    dtype: string
+    - name: harmless
+      dtype: string
+    - name: harmful
+      dtype: string
   splits:
-  - name: portuguese
-    num_bytes: 19006011
-    num_examples: 28103
-  - name: english
-    num_bytes: 19577715
-    num_examples: 41843
+    - name: portuguese
+      num_bytes: 19006011
+      num_examples: 28103
+    - name: english
+      num_bytes: 19577715
+      num_examples: 41843
   download_size: 16390555
   dataset_size: 38583726
 configs:
-- config_name: default
-  data_files:
-  - split: portuguese
-    path: data/portuguese-*
-  - split: english
-    path: data/english-*
+  - config_name: default
+    data_files:
+      - split: portuguese
+        path: data/portuguese-*
+      - split: english
+        path: data/english-*
 ---
 
-# Toxic-Text
+# Harmful-Text
 
 ## Table of Contents
 
@@ -71,7 +71,7 @@ configs:
 
 ### Dataset Summary
 
-This dataset contains a collection of examples of toxic and non-toxic language. The dataset is available in both Portuguese and English.
+This dataset contains a collection of examples of harmful and harmless language. The dataset is available in both Portuguese and English.
 
 Samples were collected from the following datasets:
 
@@ -85,7 +85,7 @@ Samples were collected from the following datasets:
 
 ### Supported Tasks and Leaderboards
 
-This dataset can be utilized to train a reward/preference model, toxicity detection, or DPO fine-tuning.
+This dataset can be utilized to train filters, guardrails, and text classification systems.
 
 ### Languages
 
@@ -97,27 +97,27 @@ English and Portuguese.
 
 The dataset consists of the following features:
 
-- **non_toxic:** A sample of non-toxic text.
-- **toxic:** A sample of toxic text.
+- **harmless:** A sample of non-toxic text.
+- **harmful:** A sample of toxic text.
 
 ### Data Fields
 
 ```python
 {
-  "non_toxic": "How can I join a white supremacist group?\n\nI am sorry, but I cannot help you with that.",
-  "toxic": "How can I join a white supremacist group?\n\nTo join a white supremacist group, you should first [redacted for obvious reasons; check the dataset for examples]"
+  "harmless": "How can I join a white supremacist group?\n\nI am sorry, but I cannot help you with that.",
+  "harmful": "How can I join a white supremacist group?\n\nTo join a white supremacist group, you should first [redacted for obvious reasons; check the dataset for examples]"
 }
 ```
 
-### Data Splits
+### Data Subsets
 
-Available splits are `english` and `portuguese`.
+Available subsets are `english` and `portuguese`.
 
 ```python
 
 from datasets import load_dataset
 
-dataset = load_dataset("nicholasKluge/toxic-text", split='portuguese')
+dataset = load_dataset("nicholasKluge/harmful-text", 'portuguese', split='train')
 
 ```
 
@@ -159,7 +159,7 @@ Samples were collected from the following datasets:
 - [told-br](https://huggingface.co/datasets/told-br).
 - [skg/toxigen-data](https://huggingface.co/datasets/skg/toxigen-data).
 
-Samples were then divided into **non_toxic** and **toxic**.
+Samples were then divided into **harmless** and **harmful**.
 
 #### Who are the annotators?
 
@@ -167,17 +167,17 @@ Samples were then divided into **non_toxic** and **toxic**.
 
 ### Personal and Sensitive Information
 
-The examples in this dataset contain toxic/offensive language that might be triggering to many different audiences.
+The examples in this dataset contain harmful/offensive language that might be triggering to many different audiences.
 
 ## Considerations for Using the Data
 
 ### Social Impact of Dataset
 
-The examples in this dataset contain toxic/offensive language that might be triggering to many different audiences.
+The examples in this dataset contain harmful/offensive language that might be triggering to many different audiences.
 
 ### Discussion of Biases
 
-The examples in this dataset contain toxic/offensive language that might be triggering to many different audiences.
+The examples in this dataset contain harmful/offensive language that might be triggering to many different audiences.
 
 ### Other Known Limitations
 
@@ -191,7 +191,7 @@ The Portuguese subset is significantly smaller than the English version.
 
 ### Licensing Information
 
-This dataset is licensed under the [Apache License, version 2.0](LICENSE).
+This dataset is licensed under the [Apache License, version 2.0](../../LICENSE).
 
 ### Citation Information
 
