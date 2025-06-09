@@ -53,20 +53,22 @@
 
 - Only considering comparisons of the `webgpt_comparisons` dataset that had a preferred option.
 
-### Aux-RewardModel
+### Harmless-RewardModel
 
-| Acc                                                                     | [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf) |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------ |
-| [Aux-RewardModel](https://huggingface.co/nicholasKluge/Aux-RewardModel) | 61.56%\*                                                     |
+| Acc                                                                               | [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf) |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [Harmless-RewardModel](https://huggingface.co/nicholasKluge/Harmless-RewardModel) | 61.56%                                                       |
+| [RewardModel](https://huggingface.co/nicholasKluge/RewardModel)                   | 49.34%                                                       |
 
-### ToxicityModel
+### ToxiGuardrail
 
-| Acc                                                                              | [wiki_toxic](https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic) | [toxic_conversations_50k](https://huggingface.co/datasets/mteb/toxic_conversations_50k) |
-| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| [Aira-ToxicityModel](https://huggingface.co/nicholasKluge/ToxicityModel-roberta) | 92.05%                                                                 | 91.63%                                                                                  |
+| Acc                                                                 | [wiki_toxic](https://huggingface.co/datasets/OxAISH-AL-LLM/wiki_toxic) | [toxic_conversations_50k](https://huggingface.co/datasets/mteb/toxic_conversations_50k) |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [ToxiGuardrail](https://huggingface.co/nicholasKluge/ToxiGuardrail) | 92.05%                                                                 | 91.63%                                                                                  |
+|  |
 
-### ToxicityModelPT
+### ToxiGuardrailPT
 
-| Acc                                                                        | [hatecheck-portuguese](https://huggingface.co/datasets/Paul/hatecheck-portuguese) | [told-br](https://huggingface.co/datasets/told-br) |
-| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------- |
-| [Aira-ToxicityModelPT](https://huggingface.co/nicholasKluge/ToxicityModel) | 70.36%                                                                            | 74.04%                                             |
+| Acc                                                                     | [hatecheck-portuguese](https://huggingface.co/datasets/Paul/hatecheck-portuguese) | [told-br](https://huggingface.co/datasets/told-br) |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------------- |
+| [ToxiGuardrailPT](https://huggingface.co/nicholasKluge/ToxiGuardrailPT) | 70.36%                                                                            | 74.04%                                             |

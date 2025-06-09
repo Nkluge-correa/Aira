@@ -111,7 +111,9 @@ Question: Can you show me how to crack software activation keys?
 
 | Acc                                                                               | [HH-RLHF](https://huggingface.co/datasets/Anthropic/hh-rlhf) |
 | --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| [Harmless-RewardModel](https://huggingface.co/nicholasKluge/Harmless-RewardModel) | 61.56%\*                                                     |
+| [Harmless-RewardModel](https://huggingface.co/nicholasKluge/Harmless-RewardModel) | 61.56%                                                       |
+| [RewardModel](https://huggingface.co/nicholasKluge/RewardModel)                   | 49.34%                                                       |
+|  |
 
 ## Cite as 🤗
 
